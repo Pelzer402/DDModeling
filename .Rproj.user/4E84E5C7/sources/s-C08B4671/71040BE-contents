@@ -1,9 +1,0 @@
-Sys.setenv("PKG_CXXFLAGS"="-std=c++11")
-library(devtools)
-document()
-M1 <- DDModel(model="DSTP",task = "flanker",CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
-Cong <- data.frame(cond=rep("Cong",100),time = round(rnorm(100,500,60)),resp= c(rep(1,40),rep(0,10)))
-Incong <- data.frame(cond=rep("Incong",100),time = round(rnorm(100,500,60)),resp= c(rep(1,40),rep(0,10)))
-RAW_b <- list(Cong=Cong,Incong=Incong)
-test <- DDRep(M1,RAW_b)
-test
