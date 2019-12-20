@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1576848495702.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4274461586",
+    "id" : "6D92B939",
+    "lastKnownWriteTime" : 1576849084,
+    "last_content_update" : 1576849084406,
+    "path" : "~/Uni/Psychologie/Software/DDModeling/src/DDRep_cpp.cpp",
+    "project_path" : "src/DDRep_cpp.cpp",
+    "properties" : {
+        "cursorPosition" : "35,4",
+        "scrollLine" : "22"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}
