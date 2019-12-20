@@ -13,6 +13,7 @@ Imports: Rcpp (>= 1.0.2), parallel, RSAGA
 LinkingTo: Rcpp
 RoxygenNote: 6.1.1
 Collate: 
+    'package-DDModeling.R'
     'DDModel.R'
     'DDRep.R'
     'DDFitPar.R'
@@ -20,6 +21,5 @@ Collate:
     'Sim_DDModel.R'
     'Fit_DDModel.R'
     'Get_Grid.R'
-    'package-DDModeling.R'
     'Get_DDRep.R'
     'RcppExports.R'

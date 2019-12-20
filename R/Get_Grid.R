@@ -3,11 +3,11 @@
 #' @name GetGrid
 #'
 Get_Grid <- function(model = NULL, wd = NULL){
-  steps <- rep(1,ncol(model@DOMAIN))
+  steps <- rep(1,ncol(model@DM))
   cat("Please define the step sizes of all parameters:")
   for (i in 1:length(steps))
   {
-    steps[i] <- as.integer(readline(prompt = paste0(colnames(model@DOMAIN)[i],": ")))
+    steps[i] <- as.integer(readline(prompt = paste0(colnames(model@DM)[i],": ")))
   }
   grid_path <- paste(wd,"GRID",sep = "/")
   dir.create(grid_path,showWarnings = FALSE)
