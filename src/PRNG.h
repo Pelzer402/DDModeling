@@ -5,6 +5,5 @@ double urand(double lb, double up);
 void seed_nrand(unsigned int seed);
 void jump_nrand();
 double nrand();
-// TEST COMMIT
 
 
