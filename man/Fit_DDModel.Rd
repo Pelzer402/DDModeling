@@ -11,7 +11,7 @@ Fit_DDModel(model = NULL, rep = NULL, grid_path = NULL)
 
 \item{rep}{\code{DDRep} object}
 
-\item{grid}{optional \code{path} to a direcotey containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.}
+\item{grid_path}{\code{path} to a direcotey containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.}
 }
 \value{
 \code{DDFit} object

@@ -10,9 +10,9 @@ An S4 class to represent a drift diffusion model
 \section{Slots}{
 
 \describe{
-\item{\code{INP_P}}{\code{data.frame} containing the fitted parameter}
+\item{\code{INP_P}}{\code{data.frame} containing the to be fitted parameter}
 
-\item{\code{FIT_P}}{\code{numeric} representing the value of the Fit}
+\item{\code{FIT_P}}{\code{data.frame} containing the fitted parameter}
 
 \item{\code{FIT_V}}{\code{numeric} representing the value of the Fit}
 
