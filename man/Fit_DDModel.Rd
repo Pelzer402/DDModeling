@@ -4,7 +4,7 @@
 \alias{Fit_DDModel}
 \title{Function to fit  a given DDRep to a given DDModel}
 \usage{
-Fit_DDModel(model = NULL, rep = NULL, grid = NULL)
+Fit_DDModel(model = NULL, rep = NULL, grid_path = NULL)
 }
 \arguments{
 \item{model}{\code{DDModel} object}

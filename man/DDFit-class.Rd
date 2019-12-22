@@ -10,12 +10,12 @@ An S4 class to represent a Fit of a given DDRep to a model
 \section{Slots}{
 
 \describe{
-\item{\code{Input_Rep}}{\code{DDRep} object containing the to be fitted data}
+\item{\code{INP_REP}}{\code{DDRep} object containing the to be fitted data}
 
-\item{\code{Fit_Rep}}{\code{DDRep} object containing the fitted data}
+\item{\code{FIT_REP}}{\code{DDRep} object containing the fitted data}
 
-\item{\code{Model}}{\code{DDModel} object containing the model that was used in the fit}
+\item{\code{MODEL}}{\code{DDModel} object containing the model that was used in the fit}
 
-\item{\code{Fit}}{\code{DDFitPar} object containing information regarding the fit}
+\item{\code{FIT}}{\code{DDFitPar} object containing information regarding the fit}
 }}
 

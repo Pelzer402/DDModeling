@@ -216,6 +216,6 @@ public:
   std::vector<std::vector<RAW_format>> RAW; //[condition][data]
   std::vector<std::vector<double>> RF;  // 0: CDF, 1: CAF
   //functions
-  Rcpp::S4 Convert_to_S4(int RAW_flag);
+  Rcpp::S4 Convert_to_S4();
   Rcpp::List Convert_FORM_to_List();
 };

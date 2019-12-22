@@ -258,11 +258,11 @@ void Simulation::FitCrit_Get(int Set)
   {
     tmp = 0.0;
     n_cdf_tbf= 0.0;
-    for (int i = 0; i<tbf_REP.CAF[c].size();++i )
+    for (int i = 0; i<TBF.Rep.CAF[c].size();++i )
     {
-      n_cdf_tbf += tbf_REP.CAF[c][i].N_A;
+      n_cdf_tbf += TBF.Rep.CAF[c][i].N_A;
     }
-    if (n_cdf_tbf < tbf_REP.CDF[c].size())
+    if (n_cdf_tbf < TBF.Rep.CDF[c].size())
     {
     }
     else
@@ -272,25 +272,25 @@ void Simulation::FitCrit_Get(int Set)
       {
         n_cdf_eval += EVAL[Set].Rep.CAF[c][i].N_A;
       }
-      for (int p = 0; p < tbf_REP.CDF[c].size(); ++p)
+      for (int p = 0; p < TBF.Rep.CDF[c].size(); ++p)
       {
-        prop_sim = (double)EVAL[Set].Rep.CDF[c][p].time/ (double)tbf_REP.CDF[c][p].time;
+        prop_sim = (double)EVAL[Set].Rep.CDF[c][p].time/ (double)TBF.Rep.CDF[c][p].time;
         tmp += pow((1 - prop_sim), 2.0);
       }
-      prop_sim2 = ((double)EVAL[Set].Rep.CDF[c][0].N /(double)n_cdf_eval)/((double)tbf_REP.CDF[c][0].N/(double)n_cdf_tbf);
+      prop_sim2 = ((double)EVAL[Set].Rep.CDF[c][0].N /(double)n_cdf_eval)/((double)TBF.Rep.CDF[c][0].N/(double)n_cdf_tbf);
       if (prop_sim2 == 0.0)
       {
         prop_sim2 = 1.0;
       }
-      tmp += (tbf_REP.CDF[c].size() * pow((1 - prop_sim2), 2.0));
+      tmp += (TBF.Rep.CDF[c].size() * pow((1 - prop_sim2), 2.0));
     }
     tmp_FitCrit += tmp;
     tmp = 0.0;
-    for (int p = 0; p < tbf_REP.CAF[c].size(); ++p)
+    for (int p = 0; p < TBF.Rep.CAF[c].size(); ++p)
     {
-      if (tbf_REP.CAF[c][p].acc == 0.0)
+      if (TBF.Rep.CAF[c][p].acc == 0.0)
       {
-        prop_sim = (double)EVAL[Set].Rep.CAF[c][p].time/(double)tbf_REP.CAF[c][p].time;
+        prop_sim = (double)EVAL[Set].Rep.CAF[c][p].time/(double)TBF.Rep.CAF[c][p].time;
         prop_sim2 = (double)EVAL[Set].Rep.CAF[c][p].acc/ 0.001;
         if (prop_sim2 == 0.0)
         {
@@ -299,8 +299,8 @@ void Simulation::FitCrit_Get(int Set)
       }
       else
       {
-        prop_sim = (double)EVAL[Set].Rep.CAF[c][p].time/(double)tbf_REP.CAF[c][p].time;
-        prop_sim2 = (double)EVAL[Set].Rep.CAF[c][p].acc/(double)tbf_REP.CAF[c][p].acc;
+        prop_sim = (double)EVAL[Set].Rep.CAF[c][p].time/(double)TBF.Rep.CAF[c][p].time;
+        prop_sim2 = (double)EVAL[Set].Rep.CAF[c][p].acc/(double)TBF.Rep.CAF[c][p].acc;
       }
       tmp += pow((1 - prop_sim), 2.0) + pow((1 - prop_sim2), 2.0);
     }
@@ -311,41 +311,53 @@ void Simulation::FitCrit_Get(int Set)
 
 Rcpp::S4 Simulation::Get_DDFit_EVAL(int Set){
   Rcpp::S4 DDFit_buff("DDFit");
-  DDFit_buff.slot("Input_Rep") = tbf_REP.Convert_to_S4(0);
-  DDFit_buff.slot("Fit_Rep") = EVAL[Set].Rep.Convert_to_S4(0);
+  DDFit_buff.slot("INP_REP") = TBF.Rep.Convert_to_S4();
+  DDFit_buff.slot("FIT_REP") = EVAL[Set].Rep.Convert_to_S4();
   Rcpp::S4 DDFitPar_buff("DDFitPar");
-  Rcpp::DataFrame Parameter_frame =   Rcpp::DataFrame::create();
+  Rcpp::DataFrame Parameter_frame_e =   Rcpp::DataFrame::create();
   for ( int i = 0; i<EVAL[Set].Parameter.size();++i)
   {
-    Parameter_frame.push_back(EVAL[Set].Parameter[i]);
+    Parameter_frame_e.push_back(EVAL[Set].Parameter[i]);
   }
-  Parameter_frame.names() = Model.Parameter;
-  Parameter_frame = Rcpp::as<Rcpp::DataFrame>(Parameter_frame);
-  DDFitPar_buff.slot("Parameter") =Parameter_frame;
-  DDFitPar_buff.slot("Fit") = EVAL[Set].Fit;
-  DDFitPar_buff.slot("nFit") = 40;
-  DDFit_buff.slot("Model") = Model.Convert_to_S4();
-  DDFit_buff.slot("Fit") = DDFitPar_buff;
+  Parameter_frame_e.names() = Model.Parameter;
+  Rcpp::DataFrame Parameter_frame_i =   Rcpp::DataFrame::create();
+  for ( int i = 0; i<TBF.Parameter.size();++i)
+  {
+    Parameter_frame_i.push_back(TBF.Parameter[i]);
+  }
+  Parameter_frame_i.names() = Model.Parameter;
+  DDFitPar_buff.slot("INP_P") =Parameter_frame_i;
+  DDFitPar_buff.slot("FIT_P") =Parameter_frame_e;
+  DDFitPar_buff.slot("FIT_V") = EVAL[Set].Fit;
+  DDFitPar_buff.slot("FIT_N") = 40;
+  DDFit_buff.slot("MODEL") = Model.Convert_to_S4();
+  DDFit_buff.slot("FIT") = DDFitPar_buff;
   return(DDFit_buff);
 }
 
 Rcpp::S4 Simulation::Get_DDFit_RESULT(int Set){
   Rcpp::S4 DDFit_buff("DDFit");
-  DDFit_buff.slot("Input_Rep") = tbf_REP.Convert_to_S4(0);
-  DDFit_buff.slot("Fit_Rep") = RESULT[Set].Rep.Convert_to_S4(0);
+  DDFit_buff.slot("INP_REP") = TBF.Rep.Convert_to_S4();
+  DDFit_buff.slot("FIT_REP") = RESULT[Set].Rep.Convert_to_S4();
   Rcpp::S4 DDFitPar_buff("DDFitPar");
-  Rcpp::DataFrame Parameter_frame =   Rcpp::DataFrame::create();
+  Rcpp::DataFrame Parameter_frame_e =   Rcpp::DataFrame::create();
   for ( int i = 0; i<RESULT[Set].Parameter.size();++i)
   {
-    Parameter_frame.push_back(RESULT[Set].Parameter[i]);
+    Parameter_frame_e.push_back(RESULT[Set].Parameter[i]);
   }
-  Parameter_frame.names() = Model.Parameter;
-  Parameter_frame = Rcpp::as<Rcpp::DataFrame>(Parameter_frame);
-  DDFitPar_buff.slot("Parameter") =Parameter_frame;
-  DDFitPar_buff.slot("Fit") = RESULT[Set].Fit;
-  DDFitPar_buff.slot("nFit") = 40;
-  DDFit_buff.slot("Model") = Model.Convert_to_S4();
-  DDFit_buff.slot("Fit") = DDFitPar_buff;
+  Parameter_frame_e.names() = Model.Parameter;
+  Rcpp::DataFrame Parameter_frame_i =   Rcpp::DataFrame::create();
+  for ( int i = 0; i<TBF.Parameter.size();++i)
+  {
+    Parameter_frame_i.push_back(TBF.Parameter[i]);
+  }
+  Parameter_frame_i.names() = Model.Parameter;
+  DDFitPar_buff.slot("INP_P") =Parameter_frame_i;
+  DDFitPar_buff.slot("FIT_P") =Parameter_frame_e;
+  DDFitPar_buff.slot("FIT_V") = RESULT[Set].Fit;
+  DDFitPar_buff.slot("FIT_N") = 40;
+  DDFit_buff.slot("MODEL") = Model.Convert_to_S4();
+  DDFit_buff.slot("FIT") = DDFitPar_buff;
   return(DDFit_buff);
 }
 
@@ -389,7 +401,7 @@ void Simulation::GRID_Get(int depth, std::vector<std::vector<double>> & SEARCH, 
   }
 }
 
-void Simulation::GRID_Split(int nS)
+void Simulation::GRID_Split(int nS,std::string name)
 {
   int range = (int)RESULT.size();
   int steps = range / nS;
@@ -398,7 +410,7 @@ void Simulation::GRID_Split(int nS)
   int lB;
   for (int t = 0; t < nS; ++t)
   {
-    std::ofstream of_Grid((Dir + "\\" + "GRID_" + std::to_string(t+1) +".ParComb").c_str());
+    std::ofstream of_Grid((Dir + "\\" + name + "_" + std::to_string(t+1) +".ParComb").c_str());
     if (t == nS - 1)
     {
       uB = steps * (t + 1) + mod;
@@ -424,48 +436,48 @@ void Simulation::GRID_Split(int nS)
     }
   }
 }
-/*
-void Simulation::GRID_Read(std::ifstream &grid)
+
+void Simulation::GRID_IN(std::ifstream &grid)
 {
-  for (int cond = 0; cond < Set.PAR_sim.nCond; ++cond)
+  int i_trash = 0;
+  for (int cond = 0; cond < EVAL[0].Rep.CDF.size(); ++cond)
   {
-    for (int type = 0; type < Set.PAR_sim.nRespType; ++type)
+    for (int bin = 0; bin < EVAL[0].Rep.CDF[cond].size(); ++bin)
     {
-      for (int bin = 0; bin < Set.PAR_sim.nCDF; ++bin)
-      {
-        grid >> MODEL.CDF_t[cond][type][bin];			// [cond][type][bin] (type=0=correct, type=1=incrorrect) time of bin
-        grid >> MODEL.CDF_perc[cond][type][bin];			// [cond][type][bin] (type=0=correct, type=1=incrorrect) percentil information
-        grid >> MODEL.CDF_n[cond][type][bin];			// [cond][type][bin] (type=0=correct, type=1=incrorrect) number of responses in bin
-      }
-
+      grid >> EVAL[0].Rep.CDF[cond][bin].time;
+      grid >> EVAL[0].Rep.CDF[cond][bin].perc;
+      grid >> EVAL[0].Rep.CDF[cond][bin].N;
     }
   }
-  for (int cond = 0; cond < Set.PAR_sim.nCond; ++cond)
+  for (int cond = 0; cond < EVAL[0].Rep.CAF.size(); ++cond)
   {
-    for (int bin = 0; bin < Set.PAR_sim.nCAF; ++bin)
+    for (int bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
     {
-      grid >> MODEL.CAF_t[cond][bin];								// [cond][bin] time of bin
-      grid >> MODEL.CAF_p[cond][bin];								// [cond][bin] percentage of correct responses
-      for (int type = 0; type < Set.PAR_sim.nRespType; ++type)
-      {
-        grid >> MODEL.CAF_n[cond][type][bin];					// [cond][type][bin] number of (type=0 correct, type=1incorrect) responses in bin
-      }
+      grid >> EVAL[0].Rep.CAF[cond][bin].time;
+      grid >> EVAL[0].Rep.CAF[cond][bin].perc;
+      grid >> EVAL[0].Rep.CAF[cond][bin].acc;
+      grid >> EVAL[0].Rep.CAF[cond][bin].N_A;
+      grid >> EVAL[0].Rep.CAF[cond][bin].N_B;
     }
   }
-  for (int cond = 0; cond < Set.PAR_sim.nCond; ++cond)
+  for (int cond = 0; cond < EVAL[0].Rep.CAF.size(); ++cond)
   {
-    for (int type = 0; type < Set.PAR_sim.nRespType; ++type)
-    {
-      grid >> MODEL.CDF_nR[cond][type];							// [cond][type] number of total responses
-    }
+    grid >> i_trash;
+    grid >> i_trash;
   }
-
-  for (int par = 0; par < Set.PAR_sim.nPar; ++par)
+  for (int par = 0; par < Model.Parameter.length(); ++par)
   {
-    grid >> Set.PAR_MAT[0][par];
+    grid >> EVAL[0].Parameter[par];
+  }
+  FitCrit_Get(0);
+  RESULT.push_back(EVAL[0]);
+  if (RESULT.size()>20) //MAGIC NUMBER
+  {
+    std::sort(RESULT.begin(), RESULT.end());
+    RESULT.pop_back();
   }
 }
-*/
+
 void Simulation::GRID_Read_ParComb(std::ifstream &pc)
 {
   long n_pc = 0;
@@ -523,5 +535,20 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream)
       outstream << EVAL[0].Parameter[par] << " ";
     }
     outstream << std::endl;
+  }
+}
+
+void Simulation::GRID_Read(std::vector<std::string> grid_parts)
+{
+  for ( int i = 0; i<grid_parts.size(); ++i)
+  {
+    std::ifstream grid_in(grid_parts[i].c_str());
+
+    int n_grid = 0;
+    grid_in >> n_grid;
+    for ( int j = 0; j<n_grid;++j)
+    {
+      GRID_IN(grid_in);
+    }
   }
 }

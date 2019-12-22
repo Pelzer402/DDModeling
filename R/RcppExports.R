@@ -9,15 +9,15 @@
     .Call('_DDModeling_Fit_observed_data_rnd', PACKAGE = 'DDModeling', DDModel_, DDRep_)
 }
 
-.Fit_DDModel_grid <- function(DDModel_, DDRep_, gridpath) {
-    .Call('_DDModeling_Fit_observed_data_grid', PACKAGE = 'DDModeling', DDModel_, DDRep_, gridpath)
+.Fit_DDModel_grid <- function(DDModel_, DDRep_, grid_parts) {
+    .Call('_DDModeling_Fit_observed_data_grid', PACKAGE = 'DDModeling', DDModel_, DDRep_, grid_parts)
 }
 
-.Get_ParComb <- function(DDModel_, wd, steps, nSplit) {
-    invisible(.Call('_DDModeling_Calculate_Parameter_Combinations', PACKAGE = 'DDModeling', DDModel_, wd, steps, nSplit))
+.Get_ParComb_cpp <- function(DDModel_, wd, name, steps, nSplit) {
+    invisible(.Call('_DDModeling_Calculate_Parameter_Combinations', PACKAGE = 'DDModeling', DDModel_, wd, name, steps, nSplit))
 }
 
-.Get_GRID <- function(calc_cluster) {
+.Get_GRID_cpp <- function(calc_cluster) {
     invisible(.Call('_DDModeling_Grid_calc', PACKAGE = 'DDModeling', calc_cluster))
 }
 

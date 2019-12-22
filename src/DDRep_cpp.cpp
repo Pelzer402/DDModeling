@@ -1,6 +1,6 @@
 #include "DDRep_cpp.h"
 
-Rcpp::S4 DDRep_cpp::Convert_to_S4(int RAW_flag){
+Rcpp::S4 DDRep_cpp::Convert_to_S4(){
   Rcpp::List RAW_List;
   Rcpp::List RF_List;
   Rcpp::List CDF_List;
@@ -75,6 +75,7 @@ Rcpp::S4 DDRep_cpp::Convert_to_S4(int RAW_flag){
   REP_List.push_back(CDF_List);
   REP_List.push_back(CAF_List);
   REP_List.names() = Rcpp::CharacterVector({"CDF","CAF"});
+  RAW_List.names() = cond_names_buff;
   Rcpp::S4 DDREP_buff("DDRep");
   DDREP_buff.slot("RAW") = RAW_List;
   DDREP_buff.slot("REP") = REP_List;

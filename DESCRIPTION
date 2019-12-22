@@ -21,5 +21,4 @@ Collate:
     'Sim_DDModel.R'
     'Fit_DDModel.R'
     'Get_Grid.R'
-    'Get_DDRep.R'
     'RcppExports.R'

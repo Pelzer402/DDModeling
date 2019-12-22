@@ -9,24 +9,14 @@
 Sim_DDModel <- function(model = NULL, trials = NULL){
   Flag <- 1
   Check <- ArgumentCheck::newArgCheck()
-  if (is.null(model))
+  if (is.null(model) || !is(model,"DDModel"))
   {
-    ArgumentCheck::addError(msg = "'model' is missing!",argcheck = Check)
+    ArgumentCheck::addError(msg = "'model' is missing or in the wrong format!",argcheck = Check)
     Flag <- 99
   }
-  if (!isS4(model))
+  if (is.null(trials) || !is.numeric(trials))
   {
-    ArgumentCheck::addError(msg = "'model' must be an DDModel object!",argcheck = Check)
-    Flag <- 99
-  }
-  if (is.null(trials))
-  {
-    ArgumentCheck::addError(msg = "'trials' is missing!",argcheck = Check)
-    Flag <- 99
-  }
-  if(!is.numeric(trials))
-  {
-    ArgumentCheck::addError(msg = "'trilas' must be a numeric!",argcheck = Check)
+    ArgumentCheck::addError(msg = "'trials' is missing or in the wrong format!",argcheck = Check)
     Flag <- 99
   }
   ArgumentCheck::finishArgCheck(Check)

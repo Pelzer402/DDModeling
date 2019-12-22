@@ -4,31 +4,35 @@
 #'
 #' @param model \code{DDModel} object
 #' @param rep   \code{DDRep} object
-#' @param grid  optional \code{path} to a direcotey containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.
+#' @param grid_path  \code{path} to a direcotey containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.
 #'
 #' @return \code{DDFit} object
-Fit_DDModel <- function(model = NULL, rep = NULL, grid = NULL){
+Fit_DDModel <- function(model = NULL, rep = NULL, grid_path = NULL){
   Flag <- 1
   Check <- ArgumentCheck::newArgCheck()
-  if (is.null(model))
+  if (is.null(model) || !is(model,"DDModel"))
   {
-    ArgumentCheck::addError(msg = "'model' is missing!",argcheck = Check)
+    ArgumentCheck::addError(msg = "'model' is missing or in the wrong format!",argcheck = Check)
     Flag <- 99
   }
-  if (!isS4(model))
+  if (is.null(rep) || !is(rep,"DDRep"))
   {
-    ArgumentCheck::addError(msg = "'model' must be a DDModel object!",argcheck = Check)
+    ArgumentCheck::addError(msg = "'rep' is missing or in the wrong format!",argcheck = Check)
     Flag <- 99
   }
-  if (is.null(rep))
+  if (is.null(grid_path))
   {
-    ArgumentCheck::addError(msg = "'rep' is missing!",argcheck = Check)
+    ArgumentCheck::addError(msg = "'grid_path' is missing!",argcheck = Check)
     Flag <- 99
   }
-  if(!isS4(rep))
+  else
   {
-    ArgumentCheck::addError(msg = "'rep' must be a DDRep object!",argcheck = Check)
-    Flag <- 99
+    Grid_model <- readRDS(list.files(grid_path,full.names = TRUE,pattern = ".Gcfg"))
+    if (!identical(Grid_model,model))
+    {
+      ArgumentCheck::addError(msg = "The grid under 'grid_path' does not comform to the model under 'model'!",argcheck = Check)
+      Flag <- 99
+    }
   }
   ArgumentCheck::finishArgCheck(Check)
   if (Flag == 99)
@@ -37,17 +41,8 @@ Fit_DDModel <- function(model = NULL, rep = NULL, grid = NULL){
   }
   else
   {
-    if (is.null(grid))
-    {
-      model@FORM <- rep@FORM
-      return(.Fit_DDModel(model,rep))
-    }
-    else
-    {
-      model@FORM <- rep@FORM
-      return(.Fit_DDModel(model,rep))
-    }
-
+      Grid_parts <- list.files(grid_path,full.names = TRUE,pattern = ".GRID")
+      return(.Fit_DDModel_grid(model,rep,Grid_parts))
   }
 }
 

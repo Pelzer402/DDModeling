@@ -2,6 +2,8 @@
 #include "DDModel_cpp.h"
 #include "DDRep_cpp.h"
 #include <fstream>
+#include <iostream>
+
 class EVAL_format
 {
 public:
@@ -51,7 +53,8 @@ public:
     {
       EVAL[i] = EVAL_format(DDModel_cpp_);
     }
-    tbf_REP = DDRep_cpp(DDRep_);
+    TBF = EVAL_format(DDModel_cpp_);
+    TBF.Rep = DDRep_cpp(DDRep_);
     trials = 5000;
   }
   // variables
@@ -61,7 +64,7 @@ public:
   RAW_format                        response;     // Eine Antwort [0]=Zeit, [1] = resp einer Trial
   std::vector<double>               PAR_Model;    // Ueberfuehrte PAR zu MPAR
   std::vector<EVAL_format>          EVAL;         //Matrix von PAR [Set][Parameter]
-  DDRep_cpp                         tbf_REP;      //to be fitted Rep (i.e. Input data)
+  EVAL_format                       TBF;
   std::vector<EVAL_format>          RESULT;
   // functions
   void Simulate(int Set);
@@ -78,9 +81,10 @@ public:
   void SIMPLEX_TransformSimplex_star2_beta(int ihi, double fac);
   void SIMPLEX_TransformSimplex_star2_gamma(int ihi, double fac);
   void GRID_Get_ParComb(std::vector<int> maxes);
-  void GRID_Split(int nS);
+  void GRID_Split(int nS,std::string name);
   void GRID_Get(int depth, std::vector<std::vector<double>> & SEARCH, std::vector<double> & INIT, std::vector<int> & maxes);
-  void GRID_Read(std::ifstream &grid);
+  void GRID_IN(std::ifstream &grid);
+  void GRID_Read(std::vector<std::string> grid_parts);
   void GRID_Read_ParComb(std::ifstream &pc);
   void GRID_Simulate_ParComb(std::ofstream& outstream);
   Rcpp::S4 Get_DDFit_EVAL(int Set);
