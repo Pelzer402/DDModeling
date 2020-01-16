@@ -79,7 +79,7 @@ void Simulation::SIMPLEX()
     {
       if (i != ihi)
       {
-        rtol += pow((EVAL[i].Fit - (EVAL[Model.Parameter.size()+1].Fit / Model.Parameter.size())), 2.0) / Model.Parameter.size();
+        rtol += std::pow((EVAL[i].Fit - (EVAL[Model.Parameter.size()+1].Fit / Model.Parameter.size())), 2.0) / Model.Parameter.size();
       }
     }
 
