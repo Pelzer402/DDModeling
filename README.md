@@ -9,7 +9,7 @@ The DDModeling_0.1.0.pdf contains the work in progress documentation for the pac
 
 **Milestones:**
 <<<<<<< HEAD
-[x] January   2020:   Complete implementation of all models (i.e. DSTP, DMC and SSP; for now DSTP only) DONE
-[ ] February  2020:   Finishing up existing structures and documentation 
-[ ] March     2020:   Adding intutive method for model evaluation (i.e. determining etas and correlations)
+- [x] January   2020:   Complete implementation of all models (i.e. DSTP, DMC and SSP; for now DSTP only) DONE
+- [ ] February  2020:   Finishing up existing structures and documentation 
+- [ ] March     2020:   Adding intutive method for model evaluation (i.e. determining etas and correlations)
 
