@@ -201,7 +201,7 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     conditions <- c("Cong","Incong")
                     parameter <- c("Ter","a","zeta","alpha","mu_c","tau")
                     dt <- 0.001
-                    sigma <- 0.1
+                    sigma <- 4
                     mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 6,ncol = length(parameter))
                     rownames(x) <- c("Ter","a","zeta","alpha","mu_c","tau")
                     colnames(x) <- parameter
@@ -228,9 +228,9 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                   },
                   SSP={
                     conditions <- c("Cong","Incong")
-                    parameter <- c("Ter","a","P","sda","rdM")
+                    parameter <- c("Ter","a","P","sda","rd")
                     dt <- 0.001
-                    sigma <- 4
+                    sigma <- 0.1
                     mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 5,ncol = length(parameter))
                     rownames(x) <- c("Ter","a","P","sda","rd")
                     colnames(x) <- parameter
@@ -249,7 +249,7 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     mm$Incong["a",]   <- c(0,1,0,0,0)
                     mm$Incong["P",]   <- c(0,0,-1,0,0)
                     mm$Incong["sda",] <- c(0,0,0,1,0)
-                    mm$Incong["P",]   <- c(0,0,0,0,1)
+                    mm$Incong["rd",]   <- c(0,0,0,0,1)
                     dm["Upper_Limit",] <- c(0.45,0.19,0.55,2.6,0.026)
                     dm["Lower_Limit",] <- c(0.15,0.07,0.2,1,0.01)
                   }

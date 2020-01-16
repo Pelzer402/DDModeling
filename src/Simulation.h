@@ -1,8 +1,21 @@
-#pragma once
 #include "DDModel_cpp.h"
 #include "DDRep_cpp.h"
 #include <fstream>
 #include <iostream>
+#include <math.h>
+
+const double pi = 3.14159265;
+
+class NormalDistribution
+{
+public:
+  NormalDistribution(double _mu, double _sigma) : mu(_mu), sigma(_sigma) {}
+  inline double pdf(double x);
+  double cdf(double x);
+private:
+  double mu;
+  double sigma;
+};
 
 class EVAL_format
 {
@@ -28,7 +41,7 @@ public:
   Simulation(DDModel_cpp DDModel_cpp_) :Model{DDModel_cpp_}
   {
     PAR_Model.resize(Model.ModelParameter.length());
-    trials=1000;
+    trials=10000;
     EVAL.resize(Model.Parameter.length()+4); // +4 ==  4 additional buffer points for SIMPLEX
     for (int i = 0; i<EVAL.size();++i)
     {
@@ -55,7 +68,7 @@ public:
     }
     TBF = EVAL_format(DDModel_cpp_);
     TBF.Rep = DDRep_cpp(DDRep_);
-    trials = 5000;
+    trials = 10000;
   }
   // variables
   std::string                       Dir;
@@ -75,6 +88,8 @@ public:
   void PAR_Init_Man(std::vector<double> PAR_);
   void PAR_Init_from_Result(int ind);
   void response_DSTP();
+  void response_DMC();
+  void response_SSP();
   void REP_Get(int Set);
   void SIMPLEX();
   void SIMPLEX_TransformSimplex(int ihi, double fac);
@@ -85,8 +100,6 @@ public:
   void GRID_Get(int depth, std::vector<std::vector<double>> & SEARCH, std::vector<double> & INIT, std::vector<int> & maxes);
   void GRID_IN(std::ifstream &grid);
   void GRID_Read(std::vector<std::string> grid_parts);
-  void GRID_Read_ParComb(std::ifstream &pc);
-  void GRID_Simulate_ParComb(std::ofstream& outstream);
-  Rcpp::S4 Get_DDFit_EVAL(int Set);
-  Rcpp::S4 Get_DDFit_RESULT(int Set);
+  void GRID_Simulate_ParComb(std::ofstream& outstream, std::ifstream &instream);
+  Rcpp::S4 Get_DDFit(EVAL_format &EF);
 };

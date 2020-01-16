@@ -29,7 +29,7 @@ Rcpp::List Fit_observed_data_rnd(Rcpp::S4 DDModel_,Rcpp::S4 DDRep_){
   Rcpp::List RES;
   for ( int i = 0;i<S.RESULT.size();++i)
   {
-    RES.push_back(S.Get_DDFit_RESULT(i));
+    RES.push_back(S.Get_DDFit(S.RESULT[i]));
   }
   return(RES);
 }
@@ -44,8 +44,7 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::S4 DDModel_,Rcpp::S4 DDRep_, std::vector<s
     std::replace(grid_parts[i].begin(),grid_parts[i].end(),'/','\\');
   }
   S.GRID_Read(grid_parts);
-  /*
-  for ( int j = 0;j<S.RESULT.size();++j)
+  for ( int j = 0;j<20;++j)
   {
     S.PAR_Init_from_Result(j);
     for (int i = 0; i <S.Model.Parameter.size()+1;++i)
@@ -64,9 +63,8 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::S4 DDModel_,Rcpp::S4 DDRep_, std::vector<s
     }
     S.SIMPLEX();
   }
-  */
   std::sort(S.RESULT.begin(), S.RESULT.end());
-  return(S.Get_DDFit_RESULT(0));
+  return(S.Get_DDFit(S.RESULT[0]));
 }
 
 // Functions for Grid Calculation:
@@ -91,14 +89,13 @@ void Grid_calc(Rcpp::List calc_cluster)
   std::replace(out_path.begin(), out_path.end(), '/', '\\');
   DDModel_cpp M(DDModel_);
   Simulation S(M);
+  S.trials = 10000;
   std::ifstream ParComb_in(pc_path.c_str());
-  S.GRID_Read_ParComb(ParComb_in);
   std::ofstream out(out_path.c_str());
   Rcpp::NumericVector CDF_RF = Rcpp::as<Rcpp::NumericVector>(S.Model.RF["CDF"]);
   Rcpp::NumericVector CAF_RF = Rcpp::as<Rcpp::NumericVector>(S.Model.RF["CDF"]);
-  out << S.RESULT.size();
-  out << std::endl;
-  S.GRID_Simulate_ParComb(out);
+
+  S.GRID_Simulate_ParComb(out,ParComb_in);
 }
 
 // Fnctions for DDRep calculation

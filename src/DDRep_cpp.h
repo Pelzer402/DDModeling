@@ -7,7 +7,7 @@
 
 struct RAW_format
 {
-  long time;
+  double time;
   int  resp;
   std::string  cond;
   bool operator<(const RAW_format& rhs) const

@@ -3,7 +3,7 @@
 void Simulation::Simulate(int Set){
   for(int c = 0; c<Model.Conditions.length();++c)
   {
-    EVAL[Set].Rep.RAW[c].clear();
+   EVAL[Set].Rep.RAW[c].clear();
    PAR_Model_Get(Set,c);
     response.cond = Model.Conditions[c];
     for (int t=0; t<trials;++t)
@@ -15,11 +15,13 @@ void Simulation::Simulate(int Set){
       }
       else if (Model.ID == "DMC")
       {
-
+        response_DMC();
+        EVAL[Set].Rep.RAW[c].push_back(response);
       }
       else if (Model.ID == "SSP")
       {
-
+        response_SSP();
+        EVAL[Set].Rep.RAW[c].push_back(response);
       }
     }
     std::sort(EVAL[Set].Rep.RAW[c].begin(),EVAL[Set].Rep.RAW[c].end());
@@ -122,6 +124,120 @@ void Simulation::response_DSTP(){
   }
   response.time = t + Ter;
 }
+
+void Simulation::response_DMC()
+{
+  int ready;											// Pseudo bool for loop exit
+  long t = 0;
+  double I = 0; // x0
+  double a          = PAR_Model[1];
+  double A          = I + a/2.0;
+  double B          = I - a/2.0;
+  double zeta       = PAR_Model[2];
+  double alpha      = PAR_Model[3];
+  double mu_c       = PAR_Model[4];
+  double tau        = PAR_Model[5];
+  double dt         = Model.dt;
+  double sqrt_dt    = std::sqrt(dt);
+  double sigma      = Model.sigma;
+  long   Ter        = (long)(PAR_Model[0]);  //Parameter Ter is in milliseconds
+  ready = 0;
+  while (!ready)
+  {
+    I += zeta * (exp(-(t + 1) / tau)* std::pow(exp(1)*(t + 1) / ((alpha - 1)*tau), alpha - 1)*((alpha - 1) / (t + 1) - 1 / tau)) + mu_c + sigma*nrand();												// Iterate Process
+    t++;												// Add 1 time quant to the overall time
+
+    // Evaluation of the exit condition
+    if (I >= A)
+    {
+      ready = 1;
+      response.resp = 1;
+    }
+    else if (I <= B)
+    {
+      ready = 1;
+      response.resp = 0;
+    }
+  }
+  response.time = t + Ter;
+}
+
+inline double NormalDistribution::pdf(double x)
+{  //Standard gaussian function
+  return exp(-1 * (x - mu) * (x - mu) / (2 * sigma * sigma)) / (sigma * sqrt(2 * pi));
+}
+double NormalDistribution::cdf(double x)
+{
+  return 0.5 * (1 + std::erf((x - mu) / (sigma * sqrt(2.))));
+}
+void Simulation::response_SSP()
+{
+  int ready;											// Pseudo bool for loop exit
+  long t = 0;
+  double I = 0; // x0
+  double a          = PAR_Model[1];
+  double A          = I + a/2;
+  double B          = I - a/2;
+  double P          = PAR_Model[2];
+  double sda        = PAR_Model[3];
+  double rd         = PAR_Model[4];
+  double dt         = Model.dt;
+  double sqrt_dt    = std::sqrt(dt);
+  double sigma      = Model.sigma;
+  long   Ter        = (long)(PAR_Model[0]/dt);  //Parameter Ter is in milliseconds
+  double tar = 2.5;									// Location of Target
+  double inner, outer, cent;
+
+  ready = 0;
+  while (!ready)
+  {
+    if ((sda - rd * (t + 1)) < 0.001)
+    {
+      NormalDistribution Gauss1(tar, 0.001);		// Make a normal distribution (mu = tar, sigma = sda-rd*(i+1))
+      inner = 2.0*(Gauss1.cdf(2.0) - Gauss1.cdf(1.0));
+      cent = Gauss1.cdf(3.0) - Gauss1.cdf(2.0);
+      outer = 1 - inner - cent;
+      I += (inner*P + outer * P + cent * std::abs(P))*dt + sigma*sqrt_dt*nrand();
+      t++;												// Add 1 time quant to the overall time
+      // Evaluation of the exit condition
+      if (I >= A)
+      {
+        ready = 1;
+        response.resp = 1;
+      }
+      else if (I <= B)
+      {
+        ready = 1;
+        response.resp = 0;
+      }
+     // Rcpp::Rcout << "Drift_m: " << P << " VALUE: "<<inner*P + outer * P + cent * std::abs(P) << std::endl;
+    }
+    else
+    {
+      NormalDistribution Gauss1(tar, sda - rd * (t + 1));		// Make a normal distribution (mu = tar, sigma = sda-rd*(i+1))
+      inner = 2.0*(Gauss1.cdf(2.0) - Gauss1.cdf(1.0));
+      cent = Gauss1.cdf(3.0) - Gauss1.cdf(2.0);
+      outer = 1 - inner - cent;
+      I += (inner*P + outer * P + cent * std::abs(P))*dt + sigma*sqrt_dt*nrand();
+      t++;												// Add 1 time quant to the overall time
+      // Evaluation of the exit condition
+      if (I >= A)
+      {
+        ready = 1;
+        response.resp = 1;
+      }
+      else if (I <= B)
+      {
+        ready = 1;
+        response.resp = 0;
+      }
+      //Rcpp::Rcout << "Drift: " << P << " VALUE: "<<inner*P + outer*P  + cent*std::abs(P)  << std::endl;
+    }
+  }
+  response.time = t + Ter;
+}
+
+
 
 void Simulation::PAR_Model_Get(int Set, int cond){
   double buff;
@@ -275,14 +391,14 @@ void Simulation::FitCrit_Get(int Set)
       for (int p = 0; p < TBF.Rep.CDF[c].size(); ++p)
       {
         prop_sim = (double)EVAL[Set].Rep.CDF[c][p].time/ (double)TBF.Rep.CDF[c][p].time;
-        tmp += pow((1 - prop_sim), 2.0);
+        tmp += std::pow((1 - prop_sim), 2.0);
       }
       prop_sim2 = ((double)EVAL[Set].Rep.CDF[c][0].N /(double)n_cdf_eval)/((double)TBF.Rep.CDF[c][0].N/(double)n_cdf_tbf);
       if (prop_sim2 == 0.0)
       {
         prop_sim2 = 1.0;
       }
-      tmp += (TBF.Rep.CDF[c].size() * pow((1 - prop_sim2), 2.0));
+      tmp += (TBF.Rep.CDF[c].size() * std::pow((1 - prop_sim2), 2.0));
     }
     tmp_FitCrit += tmp;
     tmp = 0.0;
@@ -302,22 +418,22 @@ void Simulation::FitCrit_Get(int Set)
         prop_sim = (double)EVAL[Set].Rep.CAF[c][p].time/(double)TBF.Rep.CAF[c][p].time;
         prop_sim2 = (double)EVAL[Set].Rep.CAF[c][p].acc/(double)TBF.Rep.CAF[c][p].acc;
       }
-      tmp += pow((1 - prop_sim), 2.0) + pow((1 - prop_sim2), 2.0);
+      tmp += std::pow((1 - prop_sim), 2.0) + std::pow((1 - prop_sim2), 2.0);
     }
     tmp_FitCrit += tmp;
   }
   EVAL[Set].Fit = tmp_FitCrit;
 }
 
-Rcpp::S4 Simulation::Get_DDFit_EVAL(int Set){
+Rcpp::S4 Simulation::Get_DDFit(EVAL_format &EF){
   Rcpp::S4 DDFit_buff("DDFit");
   DDFit_buff.slot("INP_REP") = TBF.Rep.Convert_to_S4();
-  DDFit_buff.slot("FIT_REP") = EVAL[Set].Rep.Convert_to_S4();
+  DDFit_buff.slot("FIT_REP") = EF.Rep.Convert_to_S4();
   Rcpp::S4 DDFitPar_buff("DDFitPar");
   Rcpp::DataFrame Parameter_frame_e =   Rcpp::DataFrame::create();
-  for ( int i = 0; i<EVAL[Set].Parameter.size();++i)
+  for ( int i = 0; i<EF.Parameter.size();++i)
   {
-    Parameter_frame_e.push_back(EVAL[Set].Parameter[i]);
+    Parameter_frame_e.push_back(EF.Parameter[i]);
   }
   Parameter_frame_e.names() = Model.Parameter;
   Rcpp::DataFrame Parameter_frame_i =   Rcpp::DataFrame::create();
@@ -328,38 +444,13 @@ Rcpp::S4 Simulation::Get_DDFit_EVAL(int Set){
   Parameter_frame_i.names() = Model.Parameter;
   DDFitPar_buff.slot("INP_P") =Parameter_frame_i;
   DDFitPar_buff.slot("FIT_P") =Parameter_frame_e;
-  DDFitPar_buff.slot("FIT_V") = EVAL[Set].Fit;
+  DDFitPar_buff.slot("FIT_V") = EF.Fit;
   DDFitPar_buff.slot("FIT_N") = 40;
   DDFit_buff.slot("MODEL") = Model.Convert_to_S4();
   DDFit_buff.slot("FIT") = DDFitPar_buff;
   return(DDFit_buff);
 }
 
-Rcpp::S4 Simulation::Get_DDFit_RESULT(int Set){
-  Rcpp::S4 DDFit_buff("DDFit");
-  DDFit_buff.slot("INP_REP") = TBF.Rep.Convert_to_S4();
-  DDFit_buff.slot("FIT_REP") = RESULT[Set].Rep.Convert_to_S4();
-  Rcpp::S4 DDFitPar_buff("DDFitPar");
-  Rcpp::DataFrame Parameter_frame_e =   Rcpp::DataFrame::create();
-  for ( int i = 0; i<RESULT[Set].Parameter.size();++i)
-  {
-    Parameter_frame_e.push_back(RESULT[Set].Parameter[i]);
-  }
-  Parameter_frame_e.names() = Model.Parameter;
-  Rcpp::DataFrame Parameter_frame_i =   Rcpp::DataFrame::create();
-  for ( int i = 0; i<TBF.Parameter.size();++i)
-  {
-    Parameter_frame_i.push_back(TBF.Parameter[i]);
-  }
-  Parameter_frame_i.names() = Model.Parameter;
-  DDFitPar_buff.slot("INP_P") =Parameter_frame_i;
-  DDFitPar_buff.slot("FIT_P") =Parameter_frame_e;
-  DDFitPar_buff.slot("FIT_V") = RESULT[Set].Fit;
-  DDFitPar_buff.slot("FIT_N") = 40;
-  DDFit_buff.slot("MODEL") = Model.Convert_to_S4();
-  DDFit_buff.slot("FIT") = DDFitPar_buff;
-  return(DDFit_buff);
-}
 
 void Simulation::GRID_Get_ParComb(std::vector<int> maxes)
 {
@@ -478,26 +569,19 @@ void Simulation::GRID_IN(std::ifstream &grid)
   }
 }
 
-void Simulation::GRID_Read_ParComb(std::ifstream &pc)
+void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &instream)
 {
   long n_pc = 0;
-  pc >> n_pc;
-  for (int it = 0; it < n_pc; ++it)
+  instream >> n_pc;
+  outstream << n_pc;
+  outstream << std::endl;
+  for (int i = 0; i<n_pc;++i)
   {
-    EVAL_format tmp(Model);
     for (int ip = 0; ip < Model.Parameter.length(); ++ip)
     {
-      pc >> tmp.Parameter[ip];
+      instream >> EVAL[0].Parameter[ip];
     }
-    RESULT.push_back(tmp);
-  }
-}
-
-void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream)
-{
-  for (int i = 0; i<RESULT.size();++i)
-  {
-    PAR_Init_from_Result(i);
+    //PAR_Init_from_Result(i);
     Simulate(0);
     for (int cond = 0; cond < Model.Conditions.length() ; ++cond)
     {
@@ -543,7 +627,6 @@ void Simulation::GRID_Read(std::vector<std::string> grid_parts)
   for ( int i = 0; i<grid_parts.size(); ++i)
   {
     std::ifstream grid_in(grid_parts[i].c_str());
-
     int n_grid = 0;
     grid_in >> n_grid;
     for ( int j = 0; j<n_grid;++j)
@@ -551,4 +634,5 @@ void Simulation::GRID_Read(std::vector<std::string> grid_parts)
       GRID_IN(grid_in);
     }
   }
+  std::sort(RESULT.begin(), RESULT.end());
 }
