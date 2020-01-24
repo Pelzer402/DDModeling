@@ -9,8 +9,8 @@
     .Call('_DDModeling_Fit_observed_data_rnd', PACKAGE = 'DDModeling', DDModel_, DDRep_)
 }
 
-.Fit_DDModel_grid <- function(DDModel_, DDRep_, grid_parts) {
-    .Call('_DDModeling_Fit_observed_data_grid', PACKAGE = 'DDModeling', DDModel_, DDRep_, grid_parts)
+.Fit_DDModel_grid <- function(calc_cluster) {
+    .Call('_DDModeling_Fit_observed_data_grid', PACKAGE = 'DDModeling', calc_cluster)
 }
 
 .Get_ParComb_cpp <- function(DDModel_, wd, name, steps, nSplit) {

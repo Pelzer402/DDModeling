@@ -29,9 +29,29 @@ void Simulation::Simulate(int Set){
   REP_Get(Set);
 }
 
+void Simulation::Simulation_Sampling(int Set, int max_trials){
+
+}
+
+
 void Simulation::Simulate_and_Fit(int Set){
-  Simulate(Set);
-  FitCrit_Get(Set);
+  if (S_Sampling)
+  {
+    std::vector<EVAL_format> E_buff;
+    for (int i = 0; i<n_s_sample;++i)
+    {
+      Simulate(Set);
+      FitCrit_Get(Set);
+      E_buff.push_back(EVAL[Set]);
+    }
+    std::sort(E_buff.begin(),E_buff.end());
+    EVAL[Set] = E_buff[0];
+  }
+  else
+  {
+    Simulate(Set);
+    FitCrit_Get(Set);
+  }
 }
 
 void Simulation::response_DSTP(){
@@ -277,6 +297,18 @@ void Simulation::PAR_Init_Man(std::vector<double> PAR_)
   {
     EVAL[0].Parameter[i] = PAR_[i];
   }
+  std::vector<double> t;
+  t.resize(Model.Parameter.length());
+  t[0] = 0.05;
+  for (int sp = 1; sp < Model.Parameter.length()+1; ++sp)
+  {
+    for (int cp = 0; cp < Model.Parameter.length(); ++cp)
+    {
+      EVAL[sp].Parameter[cp] = EVAL[0].Parameter[cp]*(1.0+t[cp]);
+    }
+    t.insert(t.begin(), t[t.size() - 1]);
+    t.erase(t.end() - 1);
+  }
 }
 
 void Simulation::PAR_Init_from_Result(int ind)
@@ -284,6 +316,18 @@ void Simulation::PAR_Init_from_Result(int ind)
   for (int i = 0; i < Model.Parameter.length(); ++i)
   {
     EVAL[0].Parameter[i] = RESULT[ind].Parameter[i];
+  }
+  std::vector<double> t;
+  t.resize(Model.Parameter.length());
+  t[0] = 0.05;
+  for (int sp = 1; sp < Model.Parameter.length()+1; ++sp)
+  {
+    for (int cp = 0; cp < Model.Parameter.length(); ++cp)
+    {
+      EVAL[sp].Parameter[cp] = EVAL[0].Parameter[cp]*(1.0+t[cp]);
+    }
+    t.insert(t.begin(), t[t.size() - 1]);
+    t.erase(t.end() - 1);
   }
 }
 
@@ -562,7 +606,7 @@ void Simulation::GRID_IN(std::ifstream &grid)
   }
   FitCrit_Get(0);
   RESULT.push_back(EVAL[0]);
-  if (RESULT.size()>20) //MAGIC NUMBER
+  if (RESULT.size()>20) //MAGIC NUMBER only respect the 20 best parameter combinations of a given grid
   {
     std::sort(RESULT.begin(), RESULT.end());
     RESULT.pop_back();
@@ -581,7 +625,6 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
     {
       instream >> EVAL[0].Parameter[ip];
     }
-    //PAR_Init_from_Result(i);
     Simulate(0);
     for (int cond = 0; cond < Model.Conditions.length() ; ++cond)
     {

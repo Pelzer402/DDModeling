@@ -47,6 +47,7 @@ public:
     {
       EVAL[i] = EVAL_format(DDModel_cpp_);
     }
+    S_Sampling = false;
   }
   Simulation(DDModel_cpp DDModel_cpp_, long trials_) :Model{DDModel_cpp_}
   {
@@ -57,6 +58,7 @@ public:
       EVAL[i] = EVAL_format(DDModel_cpp_);
     }
     trials = trials_;
+    S_Sampling = false;
   }
   Simulation(DDModel_cpp DDModel_cpp_,Rcpp::S4 DDRep_) :Model{DDModel_cpp_}
   {
@@ -69,6 +71,7 @@ public:
     TBF = EVAL_format(DDModel_cpp_);
     TBF.Rep = DDRep_cpp(DDRep_);
     trials = 10000;
+    S_Sampling = false;
   }
   // variables
   std::string                       Dir;
@@ -79,9 +82,13 @@ public:
   std::vector<EVAL_format>          EVAL;         //Matrix von PAR [Set][Parameter]
   EVAL_format                       TBF;
   std::vector<EVAL_format>          RESULT;
+  bool                              S_Sampling;    //Super_Sampling
+  int                               n_s_sample;    //Number of super samples
+  int                               n_s_trials;    //Trials inside a super sample
   // functions
   void Simulate(int Set);
   void Simulate_and_Fit(int Set);
+  void Simulation_Sampling(int Set,int max_trials);
   void FitCrit_Get(int Set);
   void PAR_Model_Get(int Set, int cond);
   void PAR_Init_Rnd();

@@ -35,8 +35,13 @@ Rcpp::List Fit_observed_data_rnd(Rcpp::S4 DDModel_,Rcpp::S4 DDRep_){
 }
 
 // [[Rcpp::export(.Fit_DDModel_grid)]]
-Rcpp::S4 Fit_observed_data_grid(Rcpp::S4 DDModel_,Rcpp::S4 DDRep_, std::vector<std::string> grid_parts){
+Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
   seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());
+  Rcpp::S4 DDModel_ = Rcpp::as<Rcpp::S4>(calc_cluster[0]);
+  Rcpp::S4 DDRep_   = Rcpp::as<Rcpp::S4>(calc_cluster[1]);
+  std::vector<std::string> grid_parts =Rcpp::as<std::vector<std::string>>(calc_cluster[2]);
+  bool S_Sampling = Rcpp::as<bool>(calc_cluster[3]);
+  int m_trials = Rcpp::as<int>(calc_cluster[4]);
   DDModel_cpp M(DDModel_);
   Simulation S(M,DDRep_);
   for ( int i = 0; i<grid_parts.size();++i)
@@ -44,6 +49,23 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::S4 DDModel_,Rcpp::S4 DDRep_, std::vector<s
     std::replace(grid_parts[i].begin(),grid_parts[i].end(),'/','\\');
   }
   S.GRID_Read(grid_parts);
+  S.S_Sampling = S_Sampling;
+  if (S_Sampling == false)
+  {
+    S.trials = m_trials;
+  }
+  else
+  {
+    S.n_s_trials = m_trials;
+    S.trials = 0;
+    for (int p = 0; p<S.TBF.Rep.CAF[0].size();++p)
+    {
+      S.trials += S.TBF.Rep.CAF[0][p].N_A + S.TBF.Rep.CAF[0][p].N_B;
+    }
+    S.n_s_sample = S.n_s_trials/S.trials;
+  }
+  Rcpp::Rcout<<S.n_s_sample;
+  Rcpp::Rcout<<S.n_s_trials;
   for ( int j = 0;j<20;++j)
   {
     S.PAR_Init_from_Result(j);
@@ -92,13 +114,10 @@ void Grid_calc(Rcpp::List calc_cluster)
   S.trials = 10000;
   std::ifstream ParComb_in(pc_path.c_str());
   std::ofstream out(out_path.c_str());
-  Rcpp::NumericVector CDF_RF = Rcpp::as<Rcpp::NumericVector>(S.Model.RF["CDF"]);
-  Rcpp::NumericVector CAF_RF = Rcpp::as<Rcpp::NumericVector>(S.Model.RF["CDF"]);
-
   S.GRID_Simulate_ParComb(out,ParComb_in);
 }
 
-// Fnctions for DDRep calculation
+// Functions for DDRep calculation
 // [[Rcpp::export(.DDRep_cpp)]]
 Rcpp::S4 Generate_DDRep(Rcpp::S4 DDModel_,Rcpp::List RAW_){
   DDModel_cpp M(DDModel_);
@@ -108,4 +127,6 @@ Rcpp::S4 Generate_DDRep(Rcpp::S4 DDModel_,Rcpp::List RAW_){
   S.REP_Get(0);
   return(S.EVAL[0].Rep.Convert_to_S4());
 }
+
+
 

@@ -4,14 +4,19 @@
 \alias{Fit_DDModel}
 \title{Function to fit  a given DDRep to a given DDModel}
 \usage{
-Fit_DDModel(model = NULL, rep = NULL, grid_path = NULL)
+Fit_DDModel(model = NULL, rep = NULL, grid_path = NULL,
+  s_sampling = FALSE, trials = 10000)
 }
 \arguments{
 \item{model}{\code{DDModel} object}
 
-\item{rep}{\code{DDRep} object}
+\item{rep}{\code{DDRep} object or list of \code{DDRep} objects}
 
 \item{grid_path}{\code{path} to a direcotey containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.}
+
+\item{s_sampling}{\code{bool} indicating super sampling while fitting}
+
+\item{trials}{\code{integer} indicating the number of trials used while fitting (s_sampling = FALSE) or the maximum number of trials used while super sampling (s_sampling = TRUE)}
 }
 \value{
 \code{DDFit} object

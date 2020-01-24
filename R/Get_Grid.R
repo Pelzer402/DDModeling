@@ -56,6 +56,7 @@ Get_Grid <- function(model = NULL, path = NULL, name = NULL){
     clust <- parallel::makeCluster(ncores)
     parallel::clusterApply(clust, COMP_List, .Get_GRID_cpp)
     unlink(pc_paths)
+    parallel::stopCluster(clust)
   }
   else
   {
