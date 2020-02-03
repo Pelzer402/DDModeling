@@ -82,62 +82,26 @@ void Simulation::SIMPLEX()
         rtol += std::pow((EVAL[i].Fit - (EVAL[Model.Parameter.size()+1].Fit / Model.Parameter.size())), 2.0) / Model.Parameter.size();
       }
     }
-
-    // Test display ??
-
-   // Rcpp::Rcout << std::endl;
-   // Rcpp::Rcout << "Funktion Call:  " << nfunk << ", Fit:  " << rtol << endl << endl;
-   // std::setprecision(5);
-    int wd = 15;
-    for (int ok = 0; ok < Model.Parameter.size()+1; ++ok)
-    {
-     // Rcpp::Rcout<< std::setw(5) << std::left << ok << std::setw(wd) << std::left << EVAL[ok].Fit;
-      for (int it = 0; it < Model.Parameter.size(); ++it)
-      {
-       // Rcpp::Rcout << std::setw(wd) << std::left << EVAL[ok].Parameter[it];
-      }
-      //Rcpp::Rcout << std::endl;
-    }
-   // Rcpp::Rcout << endl << "---------- DETAILS ----------" << endl << endl;
-    //Rcpp::Rcout << "Nr. of Space Shrink:  " << Sr_count << endl << endl;
-    //Rcpp::Rcout << "B Chi2:  " << ilo << "   " <<EVAL[ilo].Fit << endl << endl;
-    //Rcpp::Rcout << "W Chi2:  " << ihi << "   " <<EVAL[ihi].Fit << endl << endl;
-   // Rcpp::Rcout << "------------------------------------------------------------" << endl << endl;
-
-    // Test Display ??
-
     if (rtol < 0.000000000001)
     {
-      //std::cout << " Simplex terminated!" << endl;
-      //If returning, put best point and value in slot 0.
-      std::swap(EVAL[0].Fit, EVAL[ilo].Fit);
-      std::swap(EVAL[0].Parameter, EVAL[ilo].Parameter);
-      //std::swap(SIMPLEX_FINAL[0], SIMPLEX_FINAL[ilo]);
-      //std::swap(SIMPLEX_FINAL[0], SIMPLEX_FINAL[ilo]);
+      // Simplex terminated
+      std::swap(EVAL[0], EVAL[ilo]);
       break;
     }
 
     if (nfunk >= 120)
     {
-      //std::cout << "Number of function calls exceeded!" << endl;
-      std::swap(EVAL[0].Fit, EVAL[ilo].Fit);
-      std::swap(EVAL[0].Parameter, EVAL[ilo].Parameter);
-      //std::swap(SIMPLEX_FINAL[0], SIMPLEX_FINAL[ilo]);
-      //std::swap(SIMPLEX_FINAL[0], SIMPLEX_FINAL[ilo]);
+      // Number of function calls exceeded
+      std::swap(EVAL[0], EVAL[ilo]);
       break;
     }
     if (Sr_count >3 )
     {
-      //std::cout << "Shrink count exceeded!" << endl;
-      std::swap(EVAL[0].Fit, EVAL[ilo].Fit);
-      std::swap(EVAL[0].Parameter, EVAL[ilo].Parameter);
-      //std::swap(SIMPLEX_FINAL[0], SIMPLEX_FINAL[ilo]);
-      //std::swap(SIMPLEX_FINAL[0], SIMPLEX_FINAL[ilo]);
+      // Shrink count exceeded
+      std::swap(EVAL[0], EVAL[ilo]);
       break;
     }
     //Begin a new iteration.
-
-
     //First reflexion by a factor alpha=1 through the face of the simplex across from the high point, i.e. reflect the simplex from the high point.
     SIMPLEX_TransformSimplex( ihi, 1.0);
 
@@ -221,13 +185,7 @@ void Simulation::SIMPLEX()
     }
 
     nfunk++;
-  }// Go back for the test of doneness , iteration.
-  //Set.E_BUFFER.push_back(SIMPLEX_FINAL[0]);
-  //std::cout << " Funktion Calls:  " << nfunk << ", Final Chi2:  " << Set.FitCrit[0] << endl;
-  //EVAL_BUFFER tmp;
-  //tmp.FIT = Set.FitCrit[0];
-  //tmp.PAR = Set.PAR_MAT[0];
-  //Set.E_BUFFER.push_back(tmp);
+  }
   RESULT.push_back(EVAL[0]);
 }
 

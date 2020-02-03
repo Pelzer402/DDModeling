@@ -1,5 +1,4 @@
-#' An S4 class to represent a drift diffusion model
-#'
+#' \code{DDFitPar} class definition
 #' @name DDFitPar-class
 #' @rdname DDFitPar-class
 #' @slot INP_P      \code{data.frame} containing the to be fitted parameter

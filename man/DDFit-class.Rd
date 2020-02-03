@@ -3,9 +3,9 @@
 \docType{class}
 \name{DDFit-class}
 \alias{DDFit-class}
-\title{An S4 class to represent a Fit of a given DDRep to a model}
+\title{\code{DDFit} class definition}
 \description{
-An S4 class to represent a Fit of a given DDRep to a model
+\code{DDFit} class definition
 }
 \section{Slots}{
 

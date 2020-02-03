@@ -3,9 +3,9 @@
 \docType{class}
 \name{DDModel-class}
 \alias{DDModel-class}
-\title{An S4 class to represent a drift diffusion model}
+\title{\code{DDModel} class definition}
 \description{
-An S4 class to represent a drift diffusion model
+\code{DDModel} class definition
 }
 \section{Slots}{
 

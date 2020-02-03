@@ -10,6 +10,5 @@
 #' @title DDModeling Pakage
 #' @author Thomas Pelzer
 #' @useDynLib DDModeling
-#' @import Rcpp
 NULL
 

@@ -3,14 +3,14 @@
 \docType{class}
 \name{DDRep-class}
 \alias{DDRep-class}
-\title{An S4 class to represent a representation of a drift diffusion simulation}
+\title{\code{DDRep} class definition}
 \description{
-An S4 class to represent a representation of a drift diffusion simulation
+\code{DDRep} class definition
 }
 \section{Slots}{
 
 \describe{
-\item{\code{RAW}}{\code{list} of data.frames that contain the RAW data (i.e. 3 coloumns: $cond $Resp $time)}
+\item{\code{RAW}}{\code{list} of data.frames that contain the RAW data (i.e. 3 coloumns: $cond $resp $time)}
 
 \item{\code{REP}}{\code{list} of data.frames that contain data representations (CDF and CAF)}
 

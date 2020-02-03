@@ -2,18 +2,26 @@
 % Please edit documentation in R/Sim_DDModel.R
 \name{Sim_DDModel}
 \alias{Sim_DDModel}
-\title{Function to simulate a given DDModel by initializing with random parameters}
+\title{Function to simulate a given DDModel}
 \usage{
 Sim_DDModel(model = NULL, trials = NULL)
 }
 \arguments{
-\item{model}{\code{DDModel} Object}
+\item{model}{\code{\linkS4class{DDModel}} object to be used in the simulation.}
 
-\item{trials}{\code{Numeric} specifying the number of trials per condition}
+\item{trials}{\code{Numeric} specifying the number of trials per condition.}
 }
 \value{
-\code{DDRep} object
+\code{DDRep} object.
 }
 \description{
-Function to simulate a given DDModel by initializing with random parameters
+Function to simulate a given DDModel
+}
+\details{
+For now this function will only initialize a given model with randomly drawn parameters from the domains specified in the DDModel object.
+}
+\examples{
+M1 <- DDModel(model="DSTP",task = "flanker",
+          CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+R1 <- Sim_DDModel(M1,10000)
 }

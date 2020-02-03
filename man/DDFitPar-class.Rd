@@ -3,9 +3,9 @@
 \docType{class}
 \name{DDFitPar-class}
 \alias{DDFitPar-class}
-\title{An S4 class to represent a drift diffusion model}
+\title{\code{DDFitPar} class definition}
 \description{
-An S4 class to represent a drift diffusion model
+\code{DDFitPar} class definition
 }
 \section{Slots}{
 

@@ -1,12 +1,11 @@
-#' An S4 class to represent a drift diffusion model
-#'
+#' \code{DDModel} class definition
 #' @name DDModel-class
 #' @rdname DDModel-class
-#' @slot ID \code{character} that represents the name of the model to be used (i.e. "DSTP","DMC","SSP")
+#' @slot ID   \code{character} that represents the name of the model to be used (i.e. "DSTP","DMC","SSP")
 #' @slot MM   \code{list} of \code{matrix} that contain values which map custom parameters to correspondend modelparameters
-#' @slot DM  \code{matrix} that contains the domain of all custom parameters (and grid size steps)
-#' @slot SP  \code{matrix} that contains a set of simulation-parameters important for simulation
-#' @slot RF \code{list} of numeric vectors that contain the percentiles of the representation.
+#' @slot DM   \code{matrix} that contains the domain of all custom parameters (and grid size steps)
+#' @slot SP   \code{matrix} that contains a set of simulation-parameters important for simulation
+#' @slot RF   \code{list} of numeric vectors that contain the percentiles of the representation.
 setClass("DDModel",
          slots      = list(
            ID       = "character",
@@ -18,20 +17,32 @@ setClass("DDModel",
 )
 
 
-#' Function to generate a DDModel S4 class object
-#'
+#' Constructor for \link{DDModel-class}
+#' @include DDModel.R
 #' @name DDModel
-#'
-#' @param model \code{character} of the name of the Model to be used (legitamite choices are "DSTP","DMC","SSP")
-#' @param task \code{character} specifying a specific predefined modelstructure ("flanker")
-#' @param conditions \code{character} vector of the names of conditions
-#' @param parameter \code{character} vector of the names of custom parameters
-#' @param dt \code{numeric} representing the integration constant of the diffusion process
-#' @param sigma \code{numeric} representing the diffusion constant of the diffusion process
-#' @param CDF_perc \code{Numeric} vector specifying the CDF percentiles (note: numbers equal to absolut percentiles!)
-#' @param CAF_perc \code{Numeric}  vector specifying the CAF percentiles (note: numbers equal to boarders of segments!)
-#'
-#' @return \code{DDMODEL} object
+#' @description Userfriendly function for the construction of a \link{DDModel-class}.
+#' @param model       \code{character} of the name of the Model to be used (choices are "DSTP","DMC","SSP")
+#' @param task        \code{character} specifying a specific predefined modelstructure ("flanker","custom)
+#' @param conditions  \code{character} vector of the names of conditions
+#' @param parameter   \code{character} vector of the names of custom parameters
+#' @param dt          \code{numeric} representing the integration constant of the diffusion process
+#' @param sigma       \code{numeric} representing the diffusion constant of the diffusion process
+#' @param CDF_perc    \code{Numeric} vector specifying the CDF percentiles (note: numbers equal to absolut percentiles!)
+#' @param CAF_perc    \code{Numeric} vector specifying the CAF percentiles (note: numbers equal to boarders of segments!)
+#' @return \code{\link{DDModel-class}}.
+#' @details The constructor allows for the usage of handy defaults for specific tasks. Choosing task = "flanker" will configure the corresponding model in a way, that is
+#' in correspondance to present litretature. Only the type of data representation (i.e. CDF and CAF quantiles) need further specification. If however, one wants to define
+#' customized applications of the models, the task = "custom" preset can be choosen. It is important to emphazise that in this case there are several more parameters needed
+#' in the constructor (see usage or examples). Moreso after model construction one must specify the parameter domains and model matrizes manually! Be sure to double check
+#' your model befor computation. Custom models should only be used, if one knows exactly what he is doing!
+#' @examples M_DSTP <- DDModel(model="DSTP",task = "flanker",
+#'           CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+#' M_DMC  <- DDModel(model="DMC",task = "flanker",
+#'           CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+#' M_Custom <- DDModel(model="DSTP",task="custom",
+#'           CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0),
+#'           conditions="single",parameter=c("par_1","par_2"),dt=0.001,sigma=0.1)
+#' @export
 DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=NULL,sigma = NULL,CDF_perc = NULL, CAF_perc = NULL){
   Flag <- NULL
   Check <- ArgumentCheck::newArgCheck()
@@ -162,7 +173,8 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                   }
            )
            sp <- as.matrix(data.frame(dt=dt,sigma=sigma))
-           return(methods::new("DDModel",ID=model,MM=mm,DM=dm,SP=sp))
+           rf <- list(CDF=CDF_perc,CAF=CAF_perc)
+           return(methods::new("DDModel",ID=model,MM=mm,DM=dm,SP=sp,RF=rf))
          },
          flanker={
            switch(EXPR = model,
@@ -256,21 +268,21 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
            )
            sp <- as.matrix(data.frame(dt=dt,sigma=sigma))
            rf <- list(CDF=CDF_perc,CAF=CAF_perc)
-           return(methods::new("DDModel",ID=model,MM=mm,DM=dm,SP=sp,RF = rf))
+           return(methods::new("DDModel",ID=model,MM=mm,DM=dm,SP=sp,RF=rf))
          }
   )
 }
 
 setMethod("show","DDModel",function(object){
-  cat("S4 DD.MODEL Object: \n\n",
-      "Model: ", object@ID,"\n\n",
-      "ModelMatrix: \n")
+  cat("DDModel Object: \n",
+      "\nModel: ", object@ID,"\n",
+      "\nModelMatrix: \n")
   print(object@MM)
-  cat(" Parameter Domain: \n")
+  cat("Parameter Domain: \n")
   print(object@DM)
-  cat("\n Simulation Parameter: \n")
+  cat("\nSimulation Parameter: \n")
   print(object@SP)
-  cat("\n Form of Representation: \n")
+  cat("\nForm of Representation: \n")
   print(object@RF)
 })
 

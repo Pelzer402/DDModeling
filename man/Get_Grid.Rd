@@ -2,9 +2,16 @@
 % Please edit documentation in R/Get_Grid.R
 \name{Get_Grid}
 \alias{Get_Grid}
-\title{Function to generate a Grid from a given DDModel}
+\title{Generates a Grid from a given DDModel}
 \usage{
 Get_Grid(model = NULL, path = NULL, name = NULL)
+}
+\arguments{
+\item{model}{\code{DDModel} object}
+
+\item{path}{\code{character} that specifies the full path to the directory in which the Grid should be saved}
+
+\item{name}{\code{character} that represents the name (and subdirectory in path) of the Grid}
 }
 \value{
 No direct return value inside of the R-session. The calculated Grid will be saved in the specified path!
@@ -15,13 +22,3 @@ After calling the function the user will be instructed to enter the step sizes c
               Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
               Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.
 }
-\section{Slots}{
-
-\describe{
-\item{\code{model}}{\code{DDModel} object}
-
-\item{\code{path}}{\code{character} that specifies the full path to the directory in which the Grid should be saved}
-
-\item{\code{name}}{\code{character} that represents the name (and subdirectory in path) of the Grid}
-}}
-

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Fit_DDModel.R
 \name{Fit_DDModel}
 \alias{Fit_DDModel}
-\title{Function to fit  a given DDRep to a given DDModel}
+\title{Function to fit a given DDRep to a given DDModel}
 \usage{
 Fit_DDModel(model = NULL, rep = NULL, grid_path = NULL,
   s_sampling = FALSE, trials = 10000)
@@ -22,5 +22,5 @@ Fit_DDModel(model = NULL, rep = NULL, grid_path = NULL,
 \code{DDFit} object
 }
 \description{
-Function to fit  a given DDRep to a given DDModel
+Function to fit a given DDRep to a given DDModel
 }

@@ -2,16 +2,16 @@
 % Please edit documentation in R/DDModel.R
 \name{DDModel}
 \alias{DDModel}
-\title{Function to generate a DDModel S4 class object}
+\title{Constructor for \link{DDModel-class}}
 \usage{
 DDModel(model = NULL, task = NULL, conditions = NULL,
   parameter = NULL, dt = NULL, sigma = NULL, CDF_perc = NULL,
   CAF_perc = NULL)
 }
 \arguments{
-\item{model}{\code{character} of the name of the Model to be used (legitamite choices are "DSTP","DMC","SSP")}
+\item{model}{\code{character} of the name of the Model to be used (choices are "DSTP","DMC","SSP")}
 
-\item{task}{\code{character} specifying a specific predefined modelstructure ("flanker")}
+\item{task}{\code{character} specifying a specific predefined modelstructure ("flanker","custom)}
 
 \item{conditions}{\code{character} vector of the names of conditions}
 
@@ -23,11 +23,27 @@ DDModel(model = NULL, task = NULL, conditions = NULL,
 
 \item{CDF_perc}{\code{Numeric} vector specifying the CDF percentiles (note: numbers equal to absolut percentiles!)}
 
-\item{CAF_perc}{\code{Numeric}  vector specifying the CAF percentiles (note: numbers equal to boarders of segments!)}
+\item{CAF_perc}{\code{Numeric} vector specifying the CAF percentiles (note: numbers equal to boarders of segments!)}
 }
 \value{
-\code{DDMODEL} object
+\code{\link{DDModel-class}}.
 }
 \description{
-Function to generate a DDModel S4 class object
+Userfriendly function for the construction of a \link{DDModel-class}.
+}
+\details{
+The constructor allows for the usage of handy defaults for specific tasks. Choosing task = "flanker" will configure the corresponding model in a way, that is
+in correspondance to present litretature. Only the type of data representation (i.e. CDF and CAF quantiles) need further specification. If however, one wants to define
+customized applications of the models, the task = "custom" preset can be choosen. It is important to emphazise that in this case there are several more parameters needed
+in the constructor (see usage or examples). Moreso after model construction one must specify the parameter domains and model matrizes manually! Be sure to double check
+your model befor computation. Custom models should only be used, if one knows exactly what he is doing!
+}
+\examples{
+M_DSTP <- DDModel(model="DSTP",task = "flanker",
+          CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+M_DMC  <- DDModel(model="DMC",task = "flanker",
+          CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+M_Custom <- DDModel(model="DSTP",task="custom",
+          CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0),
+          conditions="single",parameter=c("par_1","par_2"),dt=0.001,sigma=0.1)
 }

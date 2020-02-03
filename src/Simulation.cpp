@@ -1,5 +1,5 @@
 #include "Simulation.h"
-
+#include "Distributions.h"
 void Simulation::Simulate(int Set){
   for(int c = 0; c<Model.Conditions.length();++c)
   {
@@ -28,11 +28,6 @@ void Simulation::Simulate(int Set){
   }
   REP_Get(Set);
 }
-
-void Simulation::Simulation_Sampling(int Set, int max_trials){
-
-}
-
 
 void Simulation::Simulate_and_Fit(int Set){
   if (S_Sampling)
@@ -180,15 +175,6 @@ void Simulation::response_DMC()
     }
   }
   response.time = t + Ter;
-}
-
-inline double NormalDistribution::pdf(double x)
-{  //Standard gaussian function
-  return exp(-1 * (x - mu) * (x - mu) / (2 * sigma * sigma)) / (sigma * sqrt(2 * pi));
-}
-double NormalDistribution::cdf(double x)
-{
-  return 0.5 * (1 + std::erf((x - mu) / (sigma * sqrt(2.))));
 }
 void Simulation::response_SSP()
 {
@@ -408,7 +394,6 @@ void Simulation::FitCrit_Get(int Set)
 {
   double tmp_FitCrit;																	// Final return Criterium
   double tmp;																			// Tmp buffer
-  double prop_data;																	// proportion of the input
   double prop_sim, prop_sim2;															// proportions of the simulation
   double n_cdf_tbf = 0.0;
   double n_cdf_eval = 0.0;
@@ -468,6 +453,7 @@ void Simulation::FitCrit_Get(int Set)
   }
   EVAL[Set].Fit = tmp_FitCrit;
 }
+
 
 Rcpp::S4 Simulation::Get_DDFit(EVAL_format &EF){
   Rcpp::S4 DDFit_buff("DDFit");
@@ -574,35 +560,44 @@ void Simulation::GRID_Split(int nS,std::string name)
 
 void Simulation::GRID_IN(std::ifstream &grid)
 {
-  int i_trash = 0;
+  char ichar[64];
   for (int cond = 0; cond < EVAL[0].Rep.CDF.size(); ++cond)
   {
     for (int bin = 0; bin < EVAL[0].Rep.CDF[cond].size(); ++bin)
     {
-      grid >> EVAL[0].Rep.CDF[cond][bin].time;
-      grid >> EVAL[0].Rep.CDF[cond][bin].perc;
-      grid >> EVAL[0].Rep.CDF[cond][bin].N;
+      grid >> ichar;
+      EVAL[0].Rep.CDF[cond][bin].time = atof(ichar);
+      grid >> ichar;
+      EVAL[0].Rep.CDF[cond][bin].perc = atof(ichar);
+      grid >> ichar;
+      EVAL[0].Rep.CDF[cond][bin].N = atof(ichar);
     }
   }
   for (int cond = 0; cond < EVAL[0].Rep.CAF.size(); ++cond)
   {
     for (int bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
     {
-      grid >> EVAL[0].Rep.CAF[cond][bin].time;
-      grid >> EVAL[0].Rep.CAF[cond][bin].perc;
-      grid >> EVAL[0].Rep.CAF[cond][bin].acc;
-      grid >> EVAL[0].Rep.CAF[cond][bin].N_A;
-      grid >> EVAL[0].Rep.CAF[cond][bin].N_B;
+      grid >> ichar;
+      EVAL[0].Rep.CAF[cond][bin].time= atof(ichar);
+      grid >> ichar;
+      EVAL[0].Rep.CAF[cond][bin].perc= atof(ichar);
+      grid >> ichar;
+      EVAL[0].Rep.CAF[cond][bin].acc = atof(ichar);
+      grid >> ichar;
+      EVAL[0].Rep.CAF[cond][bin].N_A = atol(ichar);
+      grid >> ichar;
+      EVAL[0].Rep.CAF[cond][bin].N_B= atol(ichar);
     }
   }
   for (int cond = 0; cond < EVAL[0].Rep.CAF.size(); ++cond)
   {
-    grid >> i_trash;
-    grid >> i_trash;
+    grid >> ichar;
+    grid >> ichar;
   }
   for (int par = 0; par < Model.Parameter.length(); ++par)
   {
-    grid >> EVAL[0].Parameter[par];
+    grid >> ichar;
+    EVAL[0].Parameter[par] = atof(ichar);
   }
   FitCrit_Get(0);
   RESULT.push_back(EVAL[0]);
@@ -672,10 +667,11 @@ void Simulation::GRID_Read(std::vector<std::string> grid_parts)
     std::ifstream grid_in(grid_parts[i].c_str());
     int n_grid = 0;
     grid_in >> n_grid;
-    for ( int j = 0; j<n_grid;++j)
+    for ( int k = 0; k<n_grid;++k)
     {
       GRID_IN(grid_in);
     }
+    grid_in.close();
   }
   std::sort(RESULT.begin(), RESULT.end());
 }

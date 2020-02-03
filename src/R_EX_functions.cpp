@@ -1,6 +1,8 @@
 #include "Simulation.h"
 #include "PRNG.h"
 
+// Here functions for the export in the R-environment are listed
+
 // [[Rcpp::export(.Sim_DDModel)]]
 Rcpp::S4 Generate_Modelprediction_rnd(Rcpp::S4 DDModel_,long trials_){
   seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());
@@ -48,7 +50,11 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
   {
     std::replace(grid_parts[i].begin(),grid_parts[i].end(),'/','\\');
   }
+  //auto start = std::chrono::system_clock::now();//DEL
   S.GRID_Read(grid_parts);
+  //auto end = std::chrono::system_clock::now();//DEL
+  //std::chrono::duration<double> elapsed_seconds = end-start; //DEL
+  //Rcpp::Rcout << "Finished grid read. Time: " << elapsed_seconds.count() << "s\n";//DEL
   S.S_Sampling = S_Sampling;
   if (S_Sampling == false)
   {
@@ -64,8 +70,7 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
     }
     S.n_s_sample = S.n_s_trials/S.trials;
   }
-  Rcpp::Rcout<<S.n_s_sample;
-  Rcpp::Rcout<<S.n_s_trials;
+  //start = std::chrono::system_clock::now(); //DEL
   for ( int j = 0;j<20;++j)
   {
     S.PAR_Init_from_Result(j);
@@ -86,6 +91,10 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
     S.SIMPLEX();
   }
   std::sort(S.RESULT.begin(), S.RESULT.end());
+  //end = std::chrono::system_clock::now(); //DEL
+  //elapsed_seconds = end-start;//DEL
+  //Rcpp::Rcout << "Finished Simplex. Time: " << elapsed_seconds.count() << "s\n";//DEL
+  S.RESULT.push_back(S.TBF);
   return(S.Get_DDFit(S.RESULT[0]));
 }
 
