@@ -4,9 +4,16 @@
 \alias{DDModel}
 \title{Constructor for \link{DDModel-class}}
 \usage{
-DDModel(model = NULL, task = NULL, conditions = NULL,
-  parameter = NULL, dt = NULL, sigma = NULL, CDF_perc = NULL,
-  CAF_perc = NULL)
+DDModel(
+  model = NULL,
+  task = NULL,
+  conditions = NULL,
+  parameter = NULL,
+  dt = NULL,
+  sigma = NULL,
+  CDF_perc = NULL,
+  CAF_perc = NULL
+)
 }
 \arguments{
 \item{model}{\code{character} of the name of the Model to be used (choices are "DSTP","DMC","SSP")}
