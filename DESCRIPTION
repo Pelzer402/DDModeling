@@ -23,3 +23,9 @@ Collate:
     'RcppExports.R'
     'Sim_DDModel.R'
     'package-DDModeling.R'
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/Pelzer402/DDModeling
+BugReports: https://github.com/Pelzer402/DDModeling/issues
