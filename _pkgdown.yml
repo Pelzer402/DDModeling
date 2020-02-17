@@ -1,0 +1,15 @@
+destination: docs
+reference:
+  - title: "S4-Classes"
+    contents:
+      - ends_with("class")
+  - title: "Simulation and Fit"
+    contents:
+      - -ends_with("class")
+      - -ends_with("_DATA")
+  - title: "Datasets"
+    contents:
+      - ends_with("_DATA")
+authors:
+  Thomas Pelzer:
+    href: https://github.com/Pelzer402
