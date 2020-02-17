@@ -3,7 +3,9 @@ Type: Package
 Title: A package for the easy simulation of drift diffusion processes in cognitive psychology
 Version: 0.0.1.0
 Author: Thomas Pelzer
-Maintainer: <thomas.pelzer.arbeit@gmail.com>
+Maintainer: Thomas Pelzer <thomas.pelzer.arbeit@gmail.com>
+NeedsCompilation: Yes
+Lang: en-US
 Description: A package for the easy simulation of drift diffusion processes in cognitive psychology.
    It grands access to easy modelling and fitting.
 License: GPL-2
