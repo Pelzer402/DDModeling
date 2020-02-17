@@ -86,12 +86,17 @@
 <div id="first-things-first" class="section level1">
 <h1 class="hasAnchor">
 <a href="#first-things-first" class="anchor"></a>First things first</h1>
-<p>In order to use the package you have to install and load it,</p>
+<p>In order to use the package you have to install and load it</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co"># devtools::install_github("Pelzer402/DDModeling")</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DDModeling)</a></code></pre></div>
 </div>
 <div id="defining-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#defining-models" class="anchor"></a>Defining models</h1>
-<p>Model definition in DDModeling is straightforward using the  function.</p>
+<p>Model definition in DDModeling is straightforward using the <em>DDModel</em> function.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">DSTP_M1 &lt;-<span class="st">  </span><span class="kw"><a href="../reference/DDModel.html">DDModel</a></span>(<span class="dt">model=</span><span class="st">"DSTP"</span>,<span class="dt">task=</span><span class="st">"flanker"</span>,</a>
+<a class="sourceLine" id="cb2-2" title="2">                    <span class="dt">CDF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.9</span>),<span class="dt">CAF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.0</span>,<span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">0.6</span>,<span class="fl">0.8</span>,<span class="fl">1.0</span>))</a></code></pre></div>
 <p>Note that the function can be used with specific task presets (as of DDModeling 0.0.1.0 only flanker is available), which will lessen the needed input of the function tremendously.</p>
 </div>
   </div>
