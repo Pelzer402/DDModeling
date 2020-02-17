@@ -2,8 +2,7 @@ Package: DDModeling
 Type: Package
 Title: A package for the easy simulation of drift diffusion processes in cognitive psychology
 Version: 0.0.1.0
-Author: Thomas Pelzer
-Maintainer: Thomas Pelzer <thomas.pelzer.arbeit@gmail.com>
+Authors@R: person("Thomas", "Pelzer", email = "thomas.pelzer.arbeit@gmail.com", role = c("aut", "cre"))
 NeedsCompilation: Yes
 Lang: en-US
 Description: A package for the easy simulation of drift diffusion processes in cognitive psychology.

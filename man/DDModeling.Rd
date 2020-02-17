@@ -3,7 +3,7 @@
 \docType{package}
 \name{DDModeling}
 \alias{DDModeling}
-\title{DDModeling Pakage}
+\title{DDModeling}
 \description{
 DDModeling pakage
 }

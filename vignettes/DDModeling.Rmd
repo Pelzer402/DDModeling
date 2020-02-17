@@ -19,13 +19,65 @@ In order to use the package you have to install and load it
 # devtools::install_github("Pelzer402/DDModeling")
 library(DDModeling)
 ```
-
 # Defining models
 Model definition in DDModeling is straightforward using the _DDModel_ function.
-
 ```{r}
 DSTP_M1 <-  DDModel(model="DSTP",task="flanker",
                     CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
 ```
+Note that the function can be used with specific task presets (as of DDModeling 0.0.1.0 only flanker is available), which will lessen the needed input of the function tremendously. Since _DDModel_ returns a S4-class object, you can access (and modify by override) it's slots by using the "@" operator. For explaination of the slots please see the DDModel-class help. 
+```{r echo=TRUE}
+DSTP_M1@DM
+```
+# Simulating a model
+The function _Sim_DDModel_ will generate model simulations (as of DDModeling 0.0.1.0 this will only return a simulation for a randomly drawn parameterset of the domain specified in the model).
+```{r include=FALSE}
+Sim_1 <- Sim_DDModel(model = DSTP_M1,trials = 10000)
+Sim_1
+```
+# Fitting data
+Suppose you did an experiment and want to fit the data to your model. Here is what needs to be done.
 
-Note that the function can be used with specific task presets (as of DDModeling 0.0.1.0 only flanker is available), which will lessen the needed input of the function tremendously.
+## Read and format data
+
+For demonstraion purposes the DDModeling package includes a dataset called FLANKER_DATA which constitudes 64 subjects who were part of a flanker task experiment. We will now use one of these samples:
+```{r}
+Subj1 <- FLANKER_DATA[[2]]
+```
+Then we can generate a representation (i.e. CDF/CAF) from this by using the _DDRep_ function.
+```{r}
+Subj1_Rep <- DDRep(model = DSTP_M1,raw = Subj1)
+Subj1_Rep
+```
+Note that in order for this to work, your data (i.e. Subj1) has to be formated in a very specific way! Make sure that your data
+
+* is represented in a data.frame 
+* contains **only three** coulmns with the **specific** names _cond_, _resp_ and _time_ (for explaination what each coulmn refers to and how it should be formated see the DDRep help page)
+* the factor levels of the _cond_ coulmn corresond to the conditions specified in your model
+
+## Generate a grid
+
+DDModeling uses a combination of grid-search and downhill simplex in order to fit a given model. Therefore there is a need to calculate a grid before fitting. This can be done with the _Get_Grid_ function:
+```{r eval=FALSE}
+Grid1 <- Get_Grid(model = DSTP_M1, path = getwd(), name = "Grid1")
+```
+Several notes for this functions are needed:
+
+* You will be asked to specify the dimensions of the grid when calling the function. These refer to the number of equally spaced evaluation points on the domains for each parameter specified in the model. We suggest to consider the computational cost of choosing high grid dimension in combination with a highly parameterized model, as there will be the need of model simulations equal to the product of all specified dimensions!
+* As of DDModeling 0.0.1.0 all grid simulations will be conducted using 10000 trials
+* The calculation will be multi-threaded to the number of threads minus one of a given system
+* The progress bar (as of DDModeling 0.0.1.0) is only a placeholder
+* Since the grid can be, depending on the dimensions, quiete large, it will be saved to disc
+* The return value of the functions is not a grid per definition, but rather the path to the grid saved on disc
+
+## Fit
+Finally we can fit the data using the _Fit_DDModel_ function
+```{r eval=FALSE}
+Subj1_Fit <- Fit_DDModel(model = DSTP_M1,rep = Subj1_Rep,grid_path = Grid1,s_sampling=FALSE,trials=10000)
+```
+There are several things to note here, which will be discussed with further development.
+
+# Note of interest
+
+Since this package is still in early stages of development (and not yet submitted to CRAN), many of the functions and theire handling are subject to change. However the functionality described on this site will allways be part of the final product.
+

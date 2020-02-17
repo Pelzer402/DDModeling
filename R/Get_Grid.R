@@ -10,6 +10,7 @@
 #'               Step size should allways be of an integer value, as they represent the number of evaluation points per parameter that are used in the grid.
 #'               Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
 #'               Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.
+#' @export
 Get_Grid <- function(model = NULL, path = NULL, name = NULL){
   Flag <- NULL
   Check <- ArgumentCheck::newArgCheck()
@@ -41,7 +42,7 @@ Get_Grid <- function(model = NULL, path = NULL, name = NULL){
     dir.create(grid_path,showWarnings = FALSE)
     saveRDS(model,file = paste0(grid_path,"/",name,".Gcfg"))
     ncores <- parallel::detectCores() - 1
-    .Get_ParComb_cpp(model,grid_path,name,steps,100) #ncores instead of 100
+    .Get_ParComb_cpp(model,grid_path,name,steps,ncores)
     pc_paths <- list.files(grid_path,full.names = TRUE,pattern = ".ParComb")
     out_paths <- pc_paths
     for (i in 1:length(out_paths))
@@ -57,6 +58,7 @@ Get_Grid <- function(model = NULL, path = NULL, name = NULL){
     ParallelLogger::clusterApply(clust, COMP_List, .Get_GRID_cpp)
     unlink(pc_paths)
     ParallelLogger::stopCluster(clust)
+    return(grid_path)
   }
   else
   {
