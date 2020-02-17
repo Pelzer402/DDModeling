@@ -40,3 +40,6 @@ DSTP_M1 <-  DDModel(model="DSTP",task="flanker",
 # Now simulate some data
 R1 <- Sim_DDModel(model = DSTP_M1,trials = 10000)
 ```
+
+## More Information
+For more information visit the projects website [here](https://pelzer402.github.io/DDModeling/)
