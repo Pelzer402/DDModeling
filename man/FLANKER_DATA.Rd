@@ -8,7 +8,7 @@
 \describe{
   \item{cond}{flanker condition [Cong==congurent, Incong==incongruent]}
   \item{time}{reaction time of a trial}
-  \item{resp}{response for a trial [1==correct,=00incorrect]}
+  \item{resp}{response for a trial [1==correct,0==incorrect]}
 }}
 \source{
 The data is a summation of multiple classical flanker task studies undergone
