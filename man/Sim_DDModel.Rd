@@ -16,10 +16,14 @@ Sim_DDModel(model = NULL, trials = NULL, simulations = 1, parameter = NULL)
 \item{parameter}{\code{Data.frame} containing parameters that should be simulated}
 }
 \value{
-\code{DDRep} object.
+\code{DDRep} object or \code{list} of \code{DDRep} depending on the input
 }
 \description{
 Function to simulate a given DDModel
+}
+\details{
+If 'parameter' is specified the function will undergo nrow(parameter) times simulation calls.
+Depending on the input the return value will be either a \code{DDRep}, \code{list} or \code{list} of \code{lists}.
 }
 \examples{
 # Define a Model
