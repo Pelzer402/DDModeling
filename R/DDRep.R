@@ -4,11 +4,13 @@
 #' @slot RAW  \code{list} of data.frames that contain the RAW data (i.e. 3 coloumns: $cond $resp $time)
 #' @slot REP  \code{list} of data.frames that contain data representations (CDF and CAF)
 #' @slot RF   \code{list} of numeric vectors that contain the percentiles of the representation.
+#' @slot PAR  \code{data.frame} containing the parameters associated with the representation
 setClass("DDRep",
          slots      = list(
            RAW      = "list",
            REP      = "list",
-           RF       = "list"
+           RF       = "list",
+           PAR      = "data.frame"
          )
 )
 
@@ -87,6 +89,6 @@ setMethod("show","DDRep",function(object){
   print(object@REP$CDF)
   cat("\nCAF: \n")
   print(object@REP$CAF)
-  cat("\nForm: \n")
-  print(object@RF)
+  cat("\nParameter: \n")
+  print(object@PAR)
 })

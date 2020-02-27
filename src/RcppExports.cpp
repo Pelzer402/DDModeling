@@ -17,6 +17,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Generate_Modelprediction_par
+Rcpp::S4 Generate_Modelprediction_par(Rcpp::S4 DDModel_, long trials_, std::vector<double> param_);
+RcppExport SEXP _DDModeling_Generate_Modelprediction_par(SEXP DDModel_SEXP, SEXP trials_SEXP, SEXP param_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::S4 >::type DDModel_(DDModel_SEXP);
+    Rcpp::traits::input_parameter< long >::type trials_(trials_SEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type param_(param_SEXP);
+    rcpp_result_gen = Rcpp::wrap(Generate_Modelprediction_par(DDModel_, trials_, param_));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Fit_observed_data_rnd
 Rcpp::List Fit_observed_data_rnd(Rcpp::S4 DDModel_, Rcpp::S4 DDRep_);
 RcppExport SEXP _DDModeling_Fit_observed_data_rnd(SEXP DDModel_SEXP, SEXP DDRep_SEXP) {
@@ -79,6 +92,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DDModeling_Generate_Modelprediction_rnd", (DL_FUNC) &_DDModeling_Generate_Modelprediction_rnd, 2},
+    {"_DDModeling_Generate_Modelprediction_par", (DL_FUNC) &_DDModeling_Generate_Modelprediction_par, 3},
     {"_DDModeling_Fit_observed_data_rnd", (DL_FUNC) &_DDModeling_Fit_observed_data_rnd, 2},
     {"_DDModeling_Fit_observed_data_grid", (DL_FUNC) &_DDModeling_Fit_observed_data_grid, 1},
     {"_DDModeling_Calculate_Parameter_Combinations", (DL_FUNC) &_DDModeling_Calculate_Parameter_Combinations, 5},

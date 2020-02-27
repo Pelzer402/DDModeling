@@ -76,10 +76,17 @@ Rcpp::S4 DDRep_cpp::Convert_to_S4(){
   REP_List.push_back(CAF_List);
   REP_List.names() = Rcpp::CharacterVector({"CDF","CAF"});
   RAW_List.names() = cond_names_buff;
+  Rcpp::DataFrame PAR_frame = Rcpp::DataFrame::create();
+  for (int i = 0; i<PAR_v.size();++i)
+  {
+    PAR_frame.push_back(PAR_v[i]);
+  }
+  PAR_frame.names() = PAR_n;
   Rcpp::S4 DDREP_buff("DDRep");
   DDREP_buff.slot("RAW") = RAW_List;
   DDREP_buff.slot("REP") = REP_List;
   DDREP_buff.slot("RF") = RF_List;
+  DDREP_buff.slot("PAR") = Rcpp::as<Rcpp::DataFrame>(PAR_frame);
   return(DDREP_buff);
 }
 Rcpp::List DDRep_cpp::Convert_FORM_to_List(){

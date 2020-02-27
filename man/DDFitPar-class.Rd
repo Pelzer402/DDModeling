@@ -10,10 +10,6 @@
 \section{Slots}{
 
 \describe{
-\item{\code{INP_P}}{\code{data.frame} containing the to be fitted parameter}
-
-\item{\code{FIT_P}}{\code{data.frame} containing the fitted parameter}
-
 \item{\code{FIT_V}}{\code{numeric} representing the value of the Fit}
 
 \item{\code{FIT_N}}{\code{numeric} representing the number of evaluation points used in the fit}

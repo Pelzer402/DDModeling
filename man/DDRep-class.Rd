@@ -15,5 +15,7 @@
 \item{\code{REP}}{\code{list} of data.frames that contain data representations (CDF and CAF)}
 
 \item{\code{RF}}{\code{list} of numeric vectors that contain the percentiles of the representation.}
+
+\item{\code{PAR}}{\code{data.frame} containing the parameters associated with the representation}
 }}
 

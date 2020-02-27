@@ -11,8 +11,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 <!-- badges: end -->
-
-The goal of DDModeling is to give researchers access to an easy to use toolset for simulating and fitting drift diffusion models in cognitive psychology.
+DDModeling is a R-package. It's goal is to give researchers access to an easy to use toolset for simulating and fitting drift diffusion models in cognitive psychology.
 
 ## Installation
 

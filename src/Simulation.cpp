@@ -387,6 +387,10 @@ void Simulation::REP_Get(int Set){
       EVAL[Set].Rep.CAF[c][b].acc = EVAL[Set].Rep.CAF[c][b].N_A / (double)(EVAL[Set].Rep.CAF[c][b].N_A+EVAL[Set].Rep.CAF[c][b].N_B);
       EVAL[Set].Rep.CAF[c][b].perc = (f_end+f_start)/2.0;
     }
+    for (int i = 0; i<Model.Parameter.length();++i)
+    {
+      EVAL[Set].Rep.PAR_v[i] = EVAL[Set].Parameter[i];
+    }
   }
 }
 
@@ -460,20 +464,6 @@ Rcpp::S4 Simulation::Get_DDFit(EVAL_format &EF){
   DDFit_buff.slot("INP_REP") = TBF.Rep.Convert_to_S4();
   DDFit_buff.slot("FIT_REP") = EF.Rep.Convert_to_S4();
   Rcpp::S4 DDFitPar_buff("DDFitPar");
-  Rcpp::DataFrame Parameter_frame_e =   Rcpp::DataFrame::create();
-  for ( int i = 0; i<EF.Parameter.size();++i)
-  {
-    Parameter_frame_e.push_back(EF.Parameter[i]);
-  }
-  Parameter_frame_e.names() = Model.Parameter;
-  Rcpp::DataFrame Parameter_frame_i =   Rcpp::DataFrame::create();
-  for ( int i = 0; i<TBF.Parameter.size();++i)
-  {
-    Parameter_frame_i.push_back(TBF.Parameter[i]);
-  }
-  Parameter_frame_i.names() = Model.Parameter;
-  DDFitPar_buff.slot("INP_P") =Parameter_frame_i;
-  DDFitPar_buff.slot("FIT_P") =Parameter_frame_e;
   DDFitPar_buff.slot("FIT_V") = EF.Fit;
   DDFitPar_buff.slot("FIT_N") = 40;
   DDFit_buff.slot("MODEL") = Model.Convert_to_S4();

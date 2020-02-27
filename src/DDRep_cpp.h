@@ -43,6 +43,11 @@ public:
     RF.resize(DDModel_cpp_.RF.length());
     Rcpp::NumericVector cdf_perc_in = Rcpp::as<Rcpp::NumericVector>(DDModel_cpp_.RF["CDF"]);
     Rcpp::NumericVector caf_perc_in = Rcpp::as<Rcpp::NumericVector>(DDModel_cpp_.RF["CAF"]);
+    for (int i = 0; i< DDModel_cpp_.Parameter.length();++i)
+    {
+      PAR_v.push_back(0.0);
+      PAR_n.push_back(Rcpp::as<std::string>(DDModel_cpp_.Parameter[i]));
+    }
     for (int i = 0; i<cdf_perc_in.size();++i)
     {
       RF[0].push_back(cdf_perc_in[i]);
@@ -84,6 +89,11 @@ public:
   DDRep_cpp(DDModel_cpp DDModel_cpp_,Rcpp::List RAW_)
   {
     RF.resize(DDModel_cpp_.RF.length());
+    for (int i = 0; i< DDModel_cpp_.Parameter.length();++i)
+    {
+      PAR_v.push_back(0.0);
+      PAR_n.push_back(Rcpp::as<std::string>(DDModel_cpp_.Parameter[i]));
+    }
     Rcpp::NumericVector cdf_perc_in = Rcpp::as<Rcpp::NumericVector>(DDModel_cpp_.RF["CDF"]);
     Rcpp::NumericVector caf_perc_in = Rcpp::as<Rcpp::NumericVector>(DDModel_cpp_.RF["CAF"]);
     for (int i = 0; i<cdf_perc_in.size();++i)
@@ -142,6 +152,13 @@ public:
     Rcpp::List CDF_buff = Rcpp::as<Rcpp::List>(DDRep_.slot("REP"))["CDF"];
     Rcpp::List CAF_buff = Rcpp::as<Rcpp::List>(DDRep_.slot("REP"))["CAF"];
     Rcpp::List RF_buff = Rcpp::as<Rcpp::List>(DDRep_.slot("RF"));
+    Rcpp::DataFrame PAR_buff = Rcpp::as<Rcpp::DataFrame>(DDRep_.slot("PAR"));
+    Rcpp::CharacterVector PAR_names = PAR_buff.names();
+    for (int i = 0; i<PAR_buff.length();++i)
+    {
+      PAR_v.push_back(Rcpp::as<double>(PAR_buff[i]));
+      PAR_n.push_back(Rcpp::as<std::string>(PAR_names[i]));
+    }
     Rcpp::CharacterVector cond_name_buff = CDF_buff.names();
     RF.resize(RF_buff.length());
     Rcpp::NumericVector cdf_perc_in = Rcpp::as<Rcpp::NumericVector>(RF_buff["CDF"]);
@@ -215,7 +232,10 @@ public:
   std::vector<std::vector<CAF_perc>> CAF; //[condition][percentile]
   std::vector<std::vector<RAW_format>> RAW; //[condition][data]
   std::vector<std::vector<double>> RF;  // 0: CDF, 1: CAF
+  std::vector<double> PAR_v;// Parameter values for the representation
+  std::vector<std::string> PAR_n;// Parameter names for the representation
   //functions
   Rcpp::S4 Convert_to_S4();
   Rcpp::List Convert_FORM_to_List();
 };
+

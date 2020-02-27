@@ -4,12 +4,22 @@
 // Here functions for the export in the R-environment are listed
 
 // Functions for Simulation
-// [[Rcpp::export(.Sim_DDModel)]]
+// [[Rcpp::export(.Sim_DDModel_rnd)]]
 Rcpp::S4 Generate_Modelprediction_rnd(Rcpp::S4 DDModel_,long trials_){
   seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());
   DDModel_cpp M(DDModel_);
   Simulation S(M,trials_);
   S.PAR_Init_Rnd();
+  S.Simulate(0);
+  return(S.EVAL[0].Rep.Convert_to_S4());
+}
+
+// [[Rcpp::export(.Sim_DDModel_par)]]
+Rcpp::S4 Generate_Modelprediction_par(Rcpp::S4 DDModel_,long trials_,std::vector<double> param_){
+  seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());
+  DDModel_cpp M(DDModel_);
+  Simulation S(M,trials_);
+  S.PAR_Init_Man(param_);
   S.Simulate(0);
   return(S.EVAL[0].Rep.Convert_to_S4());
 }
@@ -88,7 +98,6 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
     S.SIMPLEX();
   }
   std::sort(S.RESULT.begin(), S.RESULT.end());
-  S.RESULT.push_back(S.TBF);
   return(S.Get_DDFit(S.RESULT[0]));
 }
 
