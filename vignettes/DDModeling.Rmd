@@ -57,9 +57,9 @@ Note that in order for this to work, your data (i.e. Subj1) has to be formated i
 
 ## Generate a grid
 
-DDModeling uses a combination of grid-search and downhill simplex in order to fit a given model. Therefore there is a need to calculate a grid before fitting. This can be done with the _Get_Grid_ function:
+DDModeling uses a combination of grid-search and downhill simplex in order to fit a given model. Therefore there is a need to calculate a grid before fitting. This can be done with the _Generate_GRID_ function:
 ```{r eval=FALSE}
-Grid1 <- Get_Grid(model = DSTP_M1, path = getwd(), name = "Grid1")
+Grid1 <- Generate_GRID(model = DSTP_M1, path = getwd(), name = "Grid1")
 ```
 Several notes for this functions are needed:
 

@@ -14,3 +14,52 @@ setClass("DDFit",
            FIT          = "DDFitPar"
          )
 )
+
+setMethod("summary","DDFit",function(object){
+  if (all(object@INP_REP@PAR == 0))
+  {
+   eta_buff <- "Population parameters not known! No calculation possible."
+  }
+  else
+  {
+    ranges <- object@MODEL@DM
+    ranges <- ranges["Upper_Limit",] - ranges["Lower_Limit",]
+    eta_buff    <- abs(object@INP_REP@PAR - object@FIT_REP@PAR)/ranges
+  }
+  OUT <- list(INPUT_Par = object@INP_REP@PAR, FIT_Par = object@FIT_REP@PAR, Eta = eta_buff, Fit = object@FIT@FIT_V)
+  print(OUT)
+})
+
+setMethod("plot",signature(x="DDFit"),function(x){
+  CAF <- c()
+  CDF <- c()
+  for ( i in 1:length(x@MODEL@MM))
+  {
+    CAF <- rbind(CAF,cbind(x@INP_REP@REP$CAF[[i]],type="TBF"),cbind(x@FIT_REP@REP$CAF[[i]],type="FIT"))
+    CDF <- rbind(CDF,cbind(x@INP_REP@REP$CDF[[i]],type="TBF"),cbind(x@FIT_REP@REP$CDF[[i]],type="FIT"))
+  }
+  par(mfrow=c(3,1))
+  CAF_time <- ggplot2::ggplot(CAF,ggplot2::aes(x=perc,y=time,color=type,linetype=cond,shape=type)) +
+          ggplot2::geom_line() +
+          ggplot2::geom_point() +
+          ggplot2::labs(title = "CAF time",x = "percentile",y = "reaction time [ms]", linetype = "Condition", type = "Condition", color = "Data" ) +
+          ggplot2::theme(legend.position = "bottom")
+  L <- cowplot::get_legend(CAF_time)
+  CAF_time <- CAF_time + ggplot2::theme(legend.position = "none")
+  CAF_acc <- ggplot2::ggplot(CAF,ggplot2::aes(x=perc,y=acc,color=type,linetype=cond,shape=type)) +
+          ggplot2::geom_line() +
+          ggplot2::geom_point() +
+          ggplot2::labs(title = "CAF acc",x = "percentile",y = "accuracy") +
+          ggplot2::theme(legend.position = "none")
+  CDF <- ggplot2::ggplot(CDF,ggplot2::aes(x=perc,y=time,color=type,linetype=cond,shape=type)) +
+          ggplot2::geom_line() +
+          ggplot2::geom_point() +
+          ggplot2::labs(title = "CDF time",x = "percentile",y = "reaction time [ms]") +
+          ggplot2::theme(legend.position = "none")
+  C1 <- cowplot::plot_grid(CAF_time,CAF_acc,CDF,nrow = 1,ncol = 3,rel_heights = c(1,1,1))
+  cat("Fit: ")
+  cat(as.numeric(x@FIT@FIT_V))
+  cowplot::plot_grid(C1,L,nrow=2,ncol=1,rel_heights=c(9,1))
+})
+
+

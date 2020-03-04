@@ -56,17 +56,32 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
   std::vector<std::string> grid_parts =Rcpp::as<std::vector<std::string>>(calc_cluster[2]);
   bool S_Sampling = Rcpp::as<bool>(calc_cluster[3]);
   int m_trials = Rcpp::as<int>(calc_cluster[4]);
+  std::string grid_path = Rcpp::as<std::string>(calc_cluster[5]);
   DDModel_cpp M(DDModel_);
   Simulation S(M,DDRep_);
+  S.start_method = "Grid: " + grid_path;
+  S.SIMPLEX_struc = Rcpp::as<std::vector<int>>(calc_cluster[6]);
+  S.n_GRID = S.SIMPLEX_struc[0];
+  S.fit_method = "";
+  for (int i = 0; i<S.SIMPLEX_struc.size(); ++ i)
+  {
+    S.fit_method = S.fit_method + std::to_string(S.SIMPLEX_struc[i]) + " Simplex";
+    if (i<S.SIMPLEX_struc.size()-1)
+    {
+      S.fit_method =  S.fit_method  + " -> ";
+    }
+  }
   for ( int i = 0; i<grid_parts.size();++i)
   {
     std::replace(grid_parts[i].begin(),grid_parts[i].end(),'/','\\');
   }
-  S.GRID_Read(grid_parts);
+  S.GRID_Read(grid_parts,true);
   S.S_Sampling = S_Sampling;
   if (S_Sampling == false)
   {
     S.trials = m_trials;
+    S.n_s_sample = 1;
+    S.n_s_trials = S.trials;
   }
   else
   {
@@ -78,26 +93,19 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
     }
     S.n_s_sample = S.n_s_trials/S.trials;
   }
-  for ( int j = 0;j<20;++j)
+  for (int SORTING = 0; SORTING<S.SIMPLEX_struc.size(); ++SORTING)
   {
-    S.PAR_Init_from_Result(j);
-    for (int i = 0; i <S.Model.Parameter.size()+1;++i)
+    for ( int j = 0;j<S.SIMPLEX_struc[SORTING];++j)
     {
-      S.Simulate_and_Fit(i);
+      S.PAR_Init_from_Result(j);
+      for (int i = 0; i <S.Model.Parameter.size()+1;++i)
+      {
+        S.Simulate_and_Fit(i);
+      }
+      S.SIMPLEX();
     }
-    S.SIMPLEX();
+    std::sort(S.RESULT.begin(), S.RESULT.end());
   }
-  std::sort(S.RESULT.begin(), S.RESULT.end());
-  for (int j = 0; j<2;++j)
-  {
-    S.PAR_Init_from_Result(j);
-    for (int i = 0; i <S.Model.Parameter.size()+1;++i)
-    {
-      S.Simulate_and_Fit(i);
-    }
-    S.SIMPLEX();
-  }
-  std::sort(S.RESULT.begin(), S.RESULT.end());
   return(S.Get_DDFit(S.RESULT[0]));
 }
 
@@ -128,6 +136,30 @@ void Grid_calc(Rcpp::List calc_cluster)
   std::ofstream out(out_path.c_str());
   S.GRID_Simulate_ParComb(out,ParComb_in);
 }
+
+// [[Rcpp::export(.GRID_to_DDRep)]]
+Rcpp::List GRID_to_DDRep(Rcpp::List calc_cluster)
+{
+  Rcpp::S4 DDModel_ = Rcpp::as<Rcpp::S4>(calc_cluster[0]);
+  std::vector<std::string> grid_parts =Rcpp::as<std::vector<std::string>>(calc_cluster[1]);
+  for ( int i = 0; i<grid_parts.size();++i)
+  {
+    std::replace(grid_parts[i].begin(),grid_parts[i].end(),'/','\\');
+  }
+  DDModel_cpp M(DDModel_);
+  Simulation S(M);
+  S.n_GRID = Rcpp::as<int>(calc_cluster[2]);
+  S.GRID_Read(grid_parts,false);
+  Rcpp::Rcout << "hi1  ";
+  Rcpp::List OUT;
+  Rcpp::Rcout << "hi1  ";
+  for (int i = 0; i<S.RESULT.size();++i)
+  {
+    OUT.push_back(S.RESULT[i].Rep.Convert_to_S4());
+  }
+  return(OUT);
+}
+
 
 // Functions for DDRep calculation
 // [[Rcpp::export(.DDRep_cpp)]]

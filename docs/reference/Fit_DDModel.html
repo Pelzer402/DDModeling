@@ -125,7 +125,8 @@
   <span class='kw'>rep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>grid_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>s_sampling</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>trials</span> <span class='kw'>=</span> <span class='fl'>10000</span>
+  <span class='kw'>trials</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
+  <span class='kw'>simplex_struc</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>, <span class='fl'>2</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -141,7 +142,7 @@
     </tr>
     <tr>
       <th>grid_path</th>
-      <td><p><code>path</code> to a direcotey containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.</p></td>
+      <td><p><code>path</code> to a directory containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.</p></td>
     </tr>
     <tr>
       <th>s_sampling</th>
@@ -150,6 +151,10 @@
     <tr>
       <th>trials</th>
       <td><p><code>integer</code> indicating the number of trials used while fitting (s_sampling = FALSE) or the maximum number of trials used while super sampling (s_sampling = TRUE)</p></td>
+    </tr>
+    <tr>
+      <th>simplex_struc</th>
+      <td><p><code>numeric vector</code> containing the number of simplex iterations per sorting cycle.</p></td>
     </tr>
     </table>
 

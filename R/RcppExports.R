@@ -25,6 +25,10 @@
     invisible(.Call('_DDModeling_Grid_calc', PACKAGE = 'DDModeling', calc_cluster))
 }
 
+.GRID_to_DDRep <- function(calc_cluster) {
+    .Call('_DDModeling_GRID_to_DDRep', PACKAGE = 'DDModeling', calc_cluster)
+}
+
 .DDRep_cpp <- function(DDModel_, RAW_) {
     .Call('_DDModeling_Generate_DDRep', PACKAGE = 'DDModeling', DDModel_, RAW_)
 }

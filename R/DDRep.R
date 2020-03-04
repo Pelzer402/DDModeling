@@ -84,6 +84,24 @@ DDRep <- function(model = NULL,raw=NULL){
   }
 }
 
+# Internal converter function
+DDRep_wide <- function(rep = NULL){
+  OUT <- c()
+  for(c in 1:length(rep@RAW))
+  {
+    OUT <- c(OUT,rep@REP$CDF[[c]]$time)
+  }
+  for(c in 1:length(rep@RAW))
+  {
+    for(p in  1:length(rep@REP$CAF[[c]]$time))
+    {
+      OUT <- c(OUT,rep@REP$CAF[[c]]$time[p])
+      OUT <- c(OUT,rep@REP$CAF[[c]]$acc[p])
+    }
+  }
+  return(OUT)
+}
+
 setMethod("show","DDRep",function(object){
   cat("CDF: \n")
   print(object@REP$CDF)
@@ -92,3 +110,5 @@ setMethod("show","DDRep",function(object){
   cat("\nParameter: \n")
   print(object@PAR)
 })
+
+

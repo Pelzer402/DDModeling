@@ -152,14 +152,14 @@ void Simulation::response_DMC()
   double alpha      = PAR_Model[3];
   double mu_c       = PAR_Model[4];
   double tau        = PAR_Model[5];
-  double dt         = Model.dt;
+  double dt         = Model.dt*1000; // conversion!!
   double sqrt_dt    = std::sqrt(dt);
   double sigma      = Model.sigma;
   long   Ter        = (long)(PAR_Model[0]);  //Parameter Ter is in milliseconds
   ready = 0;
   while (!ready)
   {
-    I += zeta * (exp(-(t + 1) / tau)* std::pow(exp(1)*(t + 1) / ((alpha - 1)*tau), alpha - 1)*((alpha - 1) / (t + 1) - 1 / tau)) + mu_c + sigma*nrand();												// Iterate Process
+    I += zeta * (std::exp(-(t + 1) / tau)* std::pow(std::exp(1)*(t + 1) / ((alpha - 1)*tau), alpha - 1)*((alpha - 1) / (t + 1) - 1 / tau)) * dt + mu_c * dt + sqrt_dt *sigma*nrand();												// Iterate Process
     t++;												// Add 1 time quant to the overall time
 
     // Evaluation of the exit condition
@@ -253,7 +253,7 @@ void Simulation::PAR_Model_Get(int Set, int cond){
     buff = 0.0;
     for (int cp = 0; cp<Model.Parameter.length();++cp)
     {
-      buff +=MM(mp,cp)*EVAL[Set].Parameter[cp];
+      buff +=MM(mp,cp)*EVAL[Set].Rep.PAR_v[cp];
     }
     PAR_Model[mp]= buff;
   }
@@ -262,7 +262,7 @@ void Simulation::PAR_Model_Get(int Set, int cond){
 void Simulation::PAR_Init_Rnd(){
   for (int cp = 0; cp<Model.Parameter.length();++cp)
   {
-    EVAL[0].Parameter[cp] = urand(Model.DM(1,cp),Model.DM(0,cp));
+    EVAL[0].Rep.PAR_v[cp] = urand(Model.DM(1,cp),Model.DM(0,cp));
   }
   std::vector<double> t;
   t.resize(Model.Parameter.length());
@@ -271,7 +271,7 @@ void Simulation::PAR_Init_Rnd(){
   {
     for (int cp = 0; cp < Model.Parameter.length(); ++cp)
     {
-      EVAL[sp].Parameter[cp] = EVAL[0].Parameter[cp]*(1.0+t[cp]);
+      EVAL[sp].Rep.PAR_v[cp] = EVAL[0].Rep.PAR_v[cp]*(1.0+t[cp]);
     }
     t.insert(t.begin(), t[t.size() - 1]);
     t.erase(t.end() - 1);
@@ -281,7 +281,7 @@ void Simulation::PAR_Init_Man(std::vector<double> PAR_)
 {
   for (int i = 0; i < Model.Parameter.length(); ++i)
   {
-    EVAL[0].Parameter[i] = PAR_[i];
+    EVAL[0].Rep.PAR_v[i] = PAR_[i];
   }
   std::vector<double> t;
   t.resize(Model.Parameter.length());
@@ -290,7 +290,7 @@ void Simulation::PAR_Init_Man(std::vector<double> PAR_)
   {
     for (int cp = 0; cp < Model.Parameter.length(); ++cp)
     {
-      EVAL[sp].Parameter[cp] = EVAL[0].Parameter[cp]*(1.0+t[cp]);
+      EVAL[sp].Rep.PAR_v[cp] = EVAL[0].Rep.PAR_v[cp]*(1.0+t[cp]);
     }
     t.insert(t.begin(), t[t.size() - 1]);
     t.erase(t.end() - 1);
@@ -301,7 +301,7 @@ void Simulation::PAR_Init_from_Result(int ind)
 {
   for (int i = 0; i < Model.Parameter.length(); ++i)
   {
-    EVAL[0].Parameter[i] = RESULT[ind].Parameter[i];
+    EVAL[0].Rep.PAR_v[i] = RESULT[ind].Rep.PAR_v[i];
   }
   std::vector<double> t;
   t.resize(Model.Parameter.length());
@@ -310,7 +310,7 @@ void Simulation::PAR_Init_from_Result(int ind)
   {
     for (int cp = 0; cp < Model.Parameter.length(); ++cp)
     {
-      EVAL[sp].Parameter[cp] = EVAL[0].Parameter[cp]*(1.0+t[cp]);
+      EVAL[sp].Rep.PAR_v[cp] = EVAL[0].Rep.PAR_v[cp]*(1.0+t[cp]);
     }
     t.insert(t.begin(), t[t.size() - 1]);
     t.erase(t.end() - 1);
@@ -387,10 +387,6 @@ void Simulation::REP_Get(int Set){
       EVAL[Set].Rep.CAF[c][b].acc = EVAL[Set].Rep.CAF[c][b].N_A / (double)(EVAL[Set].Rep.CAF[c][b].N_A+EVAL[Set].Rep.CAF[c][b].N_B);
       EVAL[Set].Rep.CAF[c][b].perc = (f_end+f_start)/2.0;
     }
-    for (int i = 0; i<Model.Parameter.length();++i)
-    {
-      EVAL[Set].Rep.PAR_v[i] = EVAL[Set].Parameter[i];
-    }
   }
 }
 
@@ -465,7 +461,12 @@ Rcpp::S4 Simulation::Get_DDFit(EVAL_format &EF){
   DDFit_buff.slot("FIT_REP") = EF.Rep.Convert_to_S4();
   Rcpp::S4 DDFitPar_buff("DDFitPar");
   DDFitPar_buff.slot("FIT_V") = EF.Fit;
-  DDFitPar_buff.slot("FIT_N") = 40;
+  DDFitPar_buff.slot("FIT_N") = TBF.Rep.CDF.size()*TBF.Rep.CDF[0].size() + TBF.Rep.CAF.size()*TBF.Rep.CAF[0].size() * 2;
+  DDFitPar_buff.slot("S_SAMPLING") = S_Sampling;
+  DDFitPar_buff.slot("TRIALS_TOTAL") = n_s_sample*trials;
+  DDFitPar_buff.slot("TRIALS_SAMPLE") = trials;
+  DDFitPar_buff.slot("METHOD") = fit_method;
+  DDFitPar_buff.slot("START_VALUE") = start_method;
   DDFit_buff.slot("MODEL") = Model.Convert_to_S4();
   DDFit_buff.slot("FIT") = DDFitPar_buff;
   return(DDFit_buff);
@@ -507,7 +508,7 @@ void Simulation::GRID_Get(int depth, std::vector<std::vector<double>> & SEARCH, 
   {
     PAR_Init_Man(INIT);
     EVAL_format tmp;
-    tmp.Parameter = EVAL[0].Parameter;
+    tmp.Rep.PAR_v = EVAL[0].Rep.PAR_v;
     RESULT.push_back(tmp);
   }
 }
@@ -537,7 +538,7 @@ void Simulation::GRID_Split(int nS,std::string name)
     {
       for (int i = 0; i < Model.Parameter.length(); ++i)
       {
-        of_Grid << RESULT[it].Parameter[i];
+        of_Grid << RESULT[it].Rep.PAR_v[i];
         if (i < Model.Parameter.length() - 1)
         {
           of_Grid << " ";
@@ -548,7 +549,7 @@ void Simulation::GRID_Split(int nS,std::string name)
   }
 }
 
-void Simulation::GRID_IN(std::ifstream &grid)
+void Simulation::GRID_IN(std::ifstream &grid, bool eval)
 {
   char ichar[64];
   for (int cond = 0; cond < EVAL[0].Rep.CDF.size(); ++cond)
@@ -587,11 +588,14 @@ void Simulation::GRID_IN(std::ifstream &grid)
   for (int par = 0; par < Model.Parameter.length(); ++par)
   {
     grid >> ichar;
-    EVAL[0].Parameter[par] = atof(ichar);
+    EVAL[0].Rep.PAR_v[par] = atof(ichar);
   }
-  FitCrit_Get(0);
+  if(eval)
+  {
+    FitCrit_Get(0);
+  }
   RESULT.push_back(EVAL[0]);
-  if (RESULT.size()>20) //MAGIC NUMBER only respect the 20 best parameter combinations of a given grid
+  if (RESULT.size()>n_GRID)
   {
     std::sort(RESULT.begin(), RESULT.end());
     RESULT.pop_back();
@@ -608,7 +612,7 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
   {
     for (int ip = 0; ip < Model.Parameter.length(); ++ip)
     {
-      instream >> EVAL[0].Parameter[ip];
+      instream >> EVAL[0].Rep.PAR_v[ip];
     }
     Simulate(0);
     for (int cond = 0; cond < Model.Conditions.length() ; ++cond)
@@ -644,13 +648,13 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
     }
     for (int par = 0; par < Model.Parameter.length(); ++par)
     {
-      outstream << EVAL[0].Parameter[par] << " ";
+      outstream << EVAL[0].Rep.PAR_v[par] << " ";
     }
     outstream << std::endl;
   }
 }
 
-void Simulation::GRID_Read(std::vector<std::string> grid_parts)
+void Simulation::GRID_Read(std::vector<std::string> grid_parts, bool eval)
 {
   for ( int i = 0; i<grid_parts.size(); ++i)
   {
@@ -659,9 +663,12 @@ void Simulation::GRID_Read(std::vector<std::string> grid_parts)
     grid_in >> n_grid;
     for ( int k = 0; k<n_grid;++k)
     {
-      GRID_IN(grid_in);
+      GRID_IN(grid_in, eval);
     }
     grid_in.close();
   }
-  std::sort(RESULT.begin(), RESULT.end());
+  if (eval)
+  {
+    std::sort(RESULT.begin(), RESULT.end());
+  }
 }

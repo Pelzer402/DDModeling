@@ -3,6 +3,7 @@
 export(DDModel)
 export(DDRep)
 export(Fit_DDModel)
-export(Get_Grid)
+export(Generate_GRID)
+export(Import_GRID)
 export(Sim_DDModel)
 useDynLib(DDModeling)

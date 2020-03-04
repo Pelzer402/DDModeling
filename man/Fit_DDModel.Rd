@@ -9,7 +9,8 @@ Fit_DDModel(
   rep = NULL,
   grid_path = NULL,
   s_sampling = FALSE,
-  trials = 10000
+  trials = 10000,
+  simplex_struc = c(20, 2)
 )
 }
 \arguments{
@@ -17,11 +18,13 @@ Fit_DDModel(
 
 \item{rep}{\code{DDRep} object or list of \code{DDRep} objects}
 
-\item{grid_path}{\code{path} to a direcotey containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.}
+\item{grid_path}{\code{path} to a directory containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.}
 
 \item{s_sampling}{\code{bool} indicating super sampling while fitting}
 
 \item{trials}{\code{integer} indicating the number of trials used while fitting (s_sampling = FALSE) or the maximum number of trials used while super sampling (s_sampling = TRUE)}
+
+\item{simplex_struc}{\code{numeric vector} containing the number of simplex iterations per sorting cycle.}
 }
 \value{
 \code{DDFit} object

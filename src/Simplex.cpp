@@ -58,10 +58,10 @@ void Simulation::SIMPLEX()
       {
         if (i != ihi)
         {
-          sum += EVAL[i].Parameter[j];
+          sum += EVAL[i].Rep.PAR_v[j];
         }
       }
-      EVAL[Model.Parameter.size()+1].Parameter[j] = sum;
+      EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] = sum;
     }
 
     EVAL[Model.Parameter.size()+1].Fit = 0.0;
@@ -113,12 +113,12 @@ void Simulation::SIMPLEX()
       if (EVAL[Model.Parameter.size()+3].Fit <= EVAL[ilo].Fit)
       {
         EVAL[ihi].Fit = EVAL[Model.Parameter.size()+3].Fit;
-        EVAL[ihi].Parameter = EVAL[Model.Parameter.size()+3].Parameter;
+        EVAL[ihi].Rep.PAR_v = EVAL[Model.Parameter.size()+3].Rep.PAR_v;
       }
       else
       {
         EVAL[ihi].Fit = EVAL[Model.Parameter.size()+2].Fit;
-        EVAL[ihi].Parameter = EVAL[Model.Parameter.size()+2].Parameter;
+        EVAL[ihi].Rep.PAR_v = EVAL[Model.Parameter.size()+2].Rep.PAR_v;
       }
     }
     else if (EVAL[Model.Parameter.size()+2].Fit >= EVAL[inhi].Fit)
@@ -136,7 +136,7 @@ void Simulation::SIMPLEX()
             {
               for (j = 0; j < Model.Parameter.size(); ++j)
               {
-                EVAL[i].Parameter[j] = (double)(0.5*(EVAL[i].Parameter[j] + EVAL[ilo].Parameter[j]));
+                EVAL[i].Rep.PAR_v[j] = (double)(0.5*(EVAL[i].Rep.PAR_v[j] + EVAL[ilo].Rep.PAR_v[j]));
               }
               Simulate_and_Fit(i);
             }
@@ -146,13 +146,13 @@ void Simulation::SIMPLEX()
         else
         {
           EVAL[ihi].Fit = EVAL[Model.Parameter.size()+3].Fit;
-          EVAL[ihi].Parameter = EVAL[Model.Parameter.size()+3].Parameter;
+          EVAL[ihi].Rep.PAR_v = EVAL[Model.Parameter.size()+3].Rep.PAR_v;
         }
       }
       else
       {
         EVAL[ihi].Fit = EVAL[Model.Parameter.size()+2].Fit;
-        EVAL[ihi].Parameter = EVAL[Model.Parameter.size()+2].Parameter;
+        EVAL[ihi].Rep.PAR_v = EVAL[Model.Parameter.size()+2].Rep.PAR_v;
 
         SIMPLEX_TransformSimplex_star2_beta(ihi, 0.5);
 
@@ -164,7 +164,7 @@ void Simulation::SIMPLEX()
             {
               for (j = 0; j < Model.Parameter.size(); ++j)
               {
-                EVAL[i].Parameter[j] = (double)(0.5*(EVAL[i].Parameter[j] + EVAL[ilo].Parameter[j]));
+                EVAL[i].Rep.PAR_v[j] = (double)(0.5*(EVAL[i].Rep.PAR_v[j] + EVAL[ilo].Rep.PAR_v[j]));
               }
               Simulate_and_Fit(i);
             }
@@ -174,14 +174,14 @@ void Simulation::SIMPLEX()
         else
         {
           EVAL[ihi].Fit = EVAL[Model.Parameter.size()+3].Fit;
-          EVAL[ihi].Parameter = EVAL[Model.Parameter.size()+3].Parameter;
+          EVAL[ihi].Rep.PAR_v = EVAL[Model.Parameter.size()+3].Rep.PAR_v;
         }
       }
     }
     else
     {
       EVAL[ihi].Fit = EVAL[Model.Parameter.size()+2].Fit;
-      EVAL[ihi].Parameter = EVAL[Model.Parameter.size()+2].Parameter;
+      EVAL[ihi].Rep.PAR_v = EVAL[Model.Parameter.size()+2].Rep.PAR_v;
     }
 
     nfunk++;
@@ -206,14 +206,14 @@ void Simulation::SIMPLEX_TransformSimplex(int ihi, double fac)
   fac2 = -fac;
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
-    EVAL[Model.Parameter.size()+2].Parameter[j] = (EVAL[Model.Parameter.size()+1].Parameter[j]/Model.Parameter.size()) * fac1 + EVAL[ihi].Parameter[j] * fac2;
-    if (EVAL[Model.Parameter.size()+2].Parameter[j] < Model.DM(1,j))
+    EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j]/Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
+    if (EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] < Model.DM(1,j))
     {
-      EVAL[Model.Parameter.size()+2].Parameter[j] =  Model.DM(1,j);
+      EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] =  Model.DM(1,j);
     }
-    if (EVAL[Model.Parameter.size()+2].Parameter[j] > Model.DM(0,j))
+    if (EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] > Model.DM(0,j))
     {
-      EVAL[Model.Parameter.size()+2].Parameter[j] = Model.DM(0,j);
+      EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] = Model.DM(0,j);
     }
   }
 
@@ -229,14 +229,14 @@ void Simulation::SIMPLEX_TransformSimplex_star2_beta(int ihi, double fac)
   fac2 = fac;
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
-    EVAL[Model.Parameter.size()+3].Parameter[j] = (EVAL[Model.Parameter.size()+1].Parameter[j] / Model.Parameter.size()) * fac1 + EVAL[ihi].Parameter[j] * fac2;
-    if (EVAL[Model.Parameter.size()+3].Parameter[j] <  Model.DM(1,j))
+    EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] / Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
+    if (EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] <  Model.DM(1,j))
     {
-      EVAL[Model.Parameter.size()+3].Parameter[j] =  Model.DM(1,j);
+      EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] =  Model.DM(1,j);
     }
-    if (EVAL[Model.Parameter.size()+3].Parameter[j] > Model.DM(0,j))
+    if (EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] > Model.DM(0,j))
     {
-      EVAL[Model.Parameter.size()+3].Parameter[j] = Model.DM(0,j);
+      EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = Model.DM(0,j);
     }
   }
 
@@ -253,14 +253,14 @@ void Simulation::SIMPLEX_TransformSimplex_star2_gamma(int ihi, double fac)
   fac2 = fac+1.0;
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
-    EVAL[Model.Parameter.size()+3].Parameter[j] = (EVAL[Model.Parameter.size()+1].Parameter[j] / Model.Parameter.size()) * fac1 + EVAL[ihi].Parameter[j] * fac2;
-    if (EVAL[Model.Parameter.size()+3].Parameter[j] <  Model.DM(1,j))
+    EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] / Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
+    if (EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] <  Model.DM(1,j))
     {
-      EVAL[Model.Parameter.size()+3].Parameter[j] =  Model.DM(1,j);
+      EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] =  Model.DM(1,j);
     }
-    if (EVAL[Model.Parameter.size()+3].Parameter[j] >  Model.DM(0,j))
+    if (EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] >  Model.DM(0,j))
     {
-      EVAL[Model.Parameter.size()+3].Parameter[j] = Model.DM(0,j);
+      EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = Model.DM(0,j);
     }
   }
 

@@ -15,3 +15,11 @@ First package setup, including:
 * Added functionality to the Sim_DDModel function:
   * ability to calculate multiple simulations
   * ability to initialize a simulation with manually choosen parameters
+
+## DDModeling 0.0.1.2
+* Optimization
+* Added reference methods to DDFit objects:
+  * plot: plots CAF and CDF distributions for a given DDFit object
+  * summary: displays eta values (see [here](https://doi.org/10.3758/s13428-020-01366-8)) and booth input and fitted parameters
+* Added an import function for GRIDs: Import_GRID
+* Added fitting structure customization to Fit_DDModel through a new parameter 'symplex_struc'

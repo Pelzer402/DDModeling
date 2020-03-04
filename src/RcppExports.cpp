@@ -77,6 +77,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// GRID_to_DDRep
+Rcpp::List GRID_to_DDRep(Rcpp::List calc_cluster);
+RcppExport SEXP _DDModeling_GRID_to_DDRep(SEXP calc_clusterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type calc_cluster(calc_clusterSEXP);
+    rcpp_result_gen = Rcpp::wrap(GRID_to_DDRep(calc_cluster));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Generate_DDRep
 Rcpp::S4 Generate_DDRep(Rcpp::S4 DDModel_, Rcpp::List RAW_);
 RcppExport SEXP _DDModeling_Generate_DDRep(SEXP DDModel_SEXP, SEXP RAW_SEXP) {
@@ -97,6 +108,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DDModeling_Fit_observed_data_grid", (DL_FUNC) &_DDModeling_Fit_observed_data_grid, 1},
     {"_DDModeling_Calculate_Parameter_Combinations", (DL_FUNC) &_DDModeling_Calculate_Parameter_Combinations, 5},
     {"_DDModeling_Grid_calc", (DL_FUNC) &_DDModeling_Grid_calc, 1},
+    {"_DDModeling_GRID_to_DDRep", (DL_FUNC) &_DDModeling_GRID_to_DDRep, 1},
     {"_DDModeling_Generate_DDRep", (DL_FUNC) &_DDModeling_Generate_DDRep, 2},
     {NULL, NULL, 0}
 };
