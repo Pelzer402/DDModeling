@@ -9,5 +9,6 @@
 #' @title DDModeling
 #' @author Thomas Pelzer
 #' @useDynLib DDModeling
+#' @import Rcpp
 NULL
 
