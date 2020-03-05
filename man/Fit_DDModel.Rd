@@ -7,6 +7,7 @@
 Fit_DDModel(
   model = NULL,
   rep = NULL,
+  DL_model = NULL,
   grid_path = NULL,
   s_sampling = FALSE,
   trials = 10000,
@@ -17,6 +18,8 @@ Fit_DDModel(
 \item{model}{\code{DDModel} object}
 
 \item{rep}{\code{DDRep} object or list of \code{DDRep} objects}
+
+\item{DL_model}{\code{Model} in the form of a keras neural network model}
 
 \item{grid_path}{\code{path} to a directory containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.}
 

@@ -26,26 +26,63 @@ Rcpp::S4 Generate_Modelprediction_par(Rcpp::S4 DDModel_,long trials_,std::vector
 
 // Functions for fitting
 // [[Rcpp::export(.Fit_DDModel_rnd)]]
-Rcpp::List Fit_observed_data_rnd(Rcpp::S4 DDModel_,Rcpp::S4 DDRep_){
+Rcpp::S4 Fit_observed_data_rnd(Rcpp::List calc_cluster){
   seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());
+  Rcpp::S4 DDModel_ = Rcpp::as<Rcpp::S4>(calc_cluster[0]);
+  Rcpp::S4 DDRep_   = Rcpp::as<Rcpp::S4>(calc_cluster[1]);
+  bool S_Sampling = Rcpp::as<bool>(calc_cluster[2]);
+  int m_trials = Rcpp::as<int>(calc_cluster[3]);
   DDModel_cpp M(DDModel_);
   Simulation S(M,DDRep_);
-  for ( int j = 0;j<1;++j)
+  S.start_method = "Random";
+  S.SIMPLEX_struc = Rcpp::as<std::vector<int>>(calc_cluster[4]);
+  S.fit_method = "";
+  for (int i = 0; i<S.SIMPLEX_struc.size(); ++ i)
   {
-    S.PAR_Init_Rnd();
-    for (int i = 0; i <S.Model.Parameter.size()+1;++i)
+    S.fit_method = S.fit_method + std::to_string(S.SIMPLEX_struc[i]) + " Simplex";
+    if (i<S.SIMPLEX_struc.size()-1)
     {
-      S.Simulate_and_Fit(i);
+      S.fit_method =  S.fit_method  + " -> ";
     }
-    S.SIMPLEX();
   }
-  std::sort(S.RESULT.begin(), S.RESULT.end());
-  Rcpp::List RES;
-  for ( int i = 0;i<S.RESULT.size();++i)
+  S.S_Sampling = S_Sampling;
+  if (S_Sampling == false)
   {
-    RES.push_back(S.Get_DDFit(S.RESULT[i]));
+    S.trials = m_trials;
+    S.n_s_sample = 1;
+    S.n_s_trials = S.trials;
   }
-  return(RES);
+  else
+  {
+    S.n_s_trials = m_trials;
+    S.trials = 0;
+    for (int p = 0; p<S.TBF.Rep.CAF[0].size();++p)
+    {
+      S.trials += S.TBF.Rep.CAF[0][p].N_A + S.TBF.Rep.CAF[0][p].N_B;
+    }
+    S.n_s_sample = S.n_s_trials/S.trials;
+  }
+  for (int SORTING = 0; SORTING<S.SIMPLEX_struc.size(); ++SORTING)
+  {
+    for ( int j = 0;j<S.SIMPLEX_struc[SORTING];++j)
+    {
+      if (SORTING == 0)
+      {
+        S.PAR_Init_Rnd();
+      }
+      else
+      {
+        S.PAR_Init_from_Result(j);
+      }
+      for (int i = 0; i <S.Model.Parameter.size()+1;++i)
+      {
+        S.Simulate_and_Fit(i);
+      }
+      S.SIMPLEX();
+    }
+    std::sort(S.RESULT.begin(), S.RESULT.end());
+  }
+  return(S.Get_DDFit(S.RESULT[0]));
 }
 
 // [[Rcpp::export(.Fit_DDModel_grid)]]
@@ -108,6 +145,55 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
   }
   return(S.Get_DDFit(S.RESULT[0]));
 }
+// model,rep,s_sampling,trials,simplex_struc,PRE
+// [[Rcpp::export(.Fit_DDModel_DL)]]
+Rcpp::S4 Fit_observed_data_DL(Rcpp::List calc_cluster){
+  seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());
+  Rcpp::S4 DDModel_ = Rcpp::as<Rcpp::S4>(calc_cluster[0]);
+  Rcpp::S4 DDRep_   = Rcpp::as<Rcpp::S4>(calc_cluster[1]);
+  bool S_Sampling = Rcpp::as<bool>(calc_cluster[2]);
+  int m_trials = Rcpp::as<int>(calc_cluster[3]);
+  DDModel_cpp M(DDModel_);
+  Simulation S(M,DDRep_);
+  S.start_method = "DL Prediction";
+  S.SIMPLEX_struc = Rcpp::as<std::vector<int>>(calc_cluster[4]);
+  std::vector<double> PRE = Rcpp::as<std::vector<double>>(calc_cluster[5]);
+  S.fit_method = "";
+  for (int i = 0; i<S.SIMPLEX_struc.size(); ++ i)
+  {
+    S.fit_method = S.fit_method + std::to_string(S.SIMPLEX_struc[i]) + " Simplex";
+    if (i<S.SIMPLEX_struc.size()-1)
+    {
+      S.fit_method =  S.fit_method  + " -> ";
+    }
+  }
+  S.S_Sampling = S_Sampling;
+  if (S_Sampling == false)
+  {
+    S.trials = m_trials;
+    S.n_s_sample = 1;
+    S.n_s_trials = S.trials;
+  }
+  else
+  {
+    S.n_s_trials = m_trials;
+    S.trials = 0;
+    for (int p = 0; p<S.TBF.Rep.CAF[0].size();++p)
+    {
+      S.trials += S.TBF.Rep.CAF[0][p].N_A + S.TBF.Rep.CAF[0][p].N_B;
+    }
+    S.n_s_sample = S.n_s_trials/S.trials;
+  }
+  S.PAR_Init_Man(PRE);
+  for (int i = 0; i <S.Model.Parameter.size()+1;++i)
+  {
+    S.Simulate_and_Fit(i);
+  }
+  S.SIMPLEX();
+  std::sort(S.RESULT.begin(), S.RESULT.end());
+  return(S.Get_DDFit(S.RESULT[0]));
+}
+
 
 // Functions for Grid Calculation:
 // [[Rcpp::export(.Get_ParComb_cpp)]]

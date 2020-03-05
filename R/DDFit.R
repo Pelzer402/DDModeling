@@ -26,7 +26,7 @@ setMethod("summary","DDFit",function(object){
     ranges <- ranges["Upper_Limit",] - ranges["Lower_Limit",]
     eta_buff    <- abs(object@INP_REP@PAR - object@FIT_REP@PAR)/ranges
   }
-  OUT <- list(INPUT_Par = object@INP_REP@PAR, FIT_Par = object@FIT_REP@PAR, Eta = eta_buff, Fit = object@FIT@FIT_V)
+  OUT <- list(INPUT_Par = object@INP_REP@PAR, FIT_Par = object@FIT_REP@PAR, Eta = eta_buff, mean_Eta = mean(as.numeric(eta_buff)), Fit = object@FIT@FIT_V)
   print(OUT)
 })
 

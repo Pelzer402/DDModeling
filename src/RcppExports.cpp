@@ -31,14 +31,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // Fit_observed_data_rnd
-Rcpp::List Fit_observed_data_rnd(Rcpp::S4 DDModel_, Rcpp::S4 DDRep_);
-RcppExport SEXP _DDModeling_Fit_observed_data_rnd(SEXP DDModel_SEXP, SEXP DDRep_SEXP) {
+Rcpp::S4 Fit_observed_data_rnd(Rcpp::List calc_cluster);
+RcppExport SEXP _DDModeling_Fit_observed_data_rnd(SEXP calc_clusterSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::S4 >::type DDModel_(DDModel_SEXP);
-    Rcpp::traits::input_parameter< Rcpp::S4 >::type DDRep_(DDRep_SEXP);
-    rcpp_result_gen = Rcpp::wrap(Fit_observed_data_rnd(DDModel_, DDRep_));
+    Rcpp::traits::input_parameter< Rcpp::List >::type calc_cluster(calc_clusterSEXP);
+    rcpp_result_gen = Rcpp::wrap(Fit_observed_data_rnd(calc_cluster));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -50,6 +49,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type calc_cluster(calc_clusterSEXP);
     rcpp_result_gen = Rcpp::wrap(Fit_observed_data_grid(calc_cluster));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Fit_observed_data_DL
+Rcpp::S4 Fit_observed_data_DL(Rcpp::List calc_cluster);
+RcppExport SEXP _DDModeling_Fit_observed_data_DL(SEXP calc_clusterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type calc_cluster(calc_clusterSEXP);
+    rcpp_result_gen = Rcpp::wrap(Fit_observed_data_DL(calc_cluster));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -104,8 +114,9 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_DDModeling_Generate_Modelprediction_rnd", (DL_FUNC) &_DDModeling_Generate_Modelprediction_rnd, 2},
     {"_DDModeling_Generate_Modelprediction_par", (DL_FUNC) &_DDModeling_Generate_Modelprediction_par, 3},
-    {"_DDModeling_Fit_observed_data_rnd", (DL_FUNC) &_DDModeling_Fit_observed_data_rnd, 2},
+    {"_DDModeling_Fit_observed_data_rnd", (DL_FUNC) &_DDModeling_Fit_observed_data_rnd, 1},
     {"_DDModeling_Fit_observed_data_grid", (DL_FUNC) &_DDModeling_Fit_observed_data_grid, 1},
+    {"_DDModeling_Fit_observed_data_DL", (DL_FUNC) &_DDModeling_Fit_observed_data_DL, 1},
     {"_DDModeling_Calculate_Parameter_Combinations", (DL_FUNC) &_DDModeling_Calculate_Parameter_Combinations, 5},
     {"_DDModeling_Grid_calc", (DL_FUNC) &_DDModeling_Grid_calc, 1},
     {"_DDModeling_GRID_to_DDRep", (DL_FUNC) &_DDModeling_GRID_to_DDRep, 1},

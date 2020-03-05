@@ -9,12 +9,16 @@
     .Call('_DDModeling_Generate_Modelprediction_par', PACKAGE = 'DDModeling', DDModel_, trials_, param_)
 }
 
-.Fit_DDModel_rnd <- function(DDModel_, DDRep_) {
-    .Call('_DDModeling_Fit_observed_data_rnd', PACKAGE = 'DDModeling', DDModel_, DDRep_)
+.Fit_DDModel_rnd <- function(calc_cluster) {
+    .Call('_DDModeling_Fit_observed_data_rnd', PACKAGE = 'DDModeling', calc_cluster)
 }
 
 .Fit_DDModel_grid <- function(calc_cluster) {
     .Call('_DDModeling_Fit_observed_data_grid', PACKAGE = 'DDModeling', calc_cluster)
+}
+
+.Fit_DDModel_DL <- function(calc_cluster) {
+    .Call('_DDModeling_Fit_observed_data_DL', PACKAGE = 'DDModeling', calc_cluster)
 }
 
 .Get_ParComb_cpp <- function(DDModel_, wd, name, steps, nSplit) {

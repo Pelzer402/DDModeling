@@ -123,6 +123,7 @@
     <pre class="usage"><span class='fu'>Fit_DDModel</span>(
   <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>rep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>DL_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>grid_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>s_sampling</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>trials</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
@@ -139,6 +140,10 @@
     <tr>
       <th>rep</th>
       <td><p><code>DDRep</code> object or list of <code>DDRep</code> objects</p></td>
+    </tr>
+    <tr>
+      <th>DL_model</th>
+      <td><p><code>Model</code> in the form of a keras neural network model</p></td>
     </tr>
     <tr>
       <th>grid_path</th>
