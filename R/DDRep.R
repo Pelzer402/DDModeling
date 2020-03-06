@@ -102,6 +102,7 @@ DDRep_wide <- function(rep = NULL){
   return(OUT)
 }
 
+#' @export
 setMethod("show","DDRep",function(object){
   cat("CDF: \n")
   print(object@REP$CDF)

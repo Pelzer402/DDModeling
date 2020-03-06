@@ -145,7 +145,7 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
   }
   return(S.Get_DDFit(S.RESULT[0]));
 }
-// model,rep,s_sampling,trials,simplex_struc,PRE
+
 // [[Rcpp::export(.Fit_DDModel_DL)]]
 Rcpp::S4 Fit_observed_data_DL(Rcpp::List calc_cluster){
   seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());

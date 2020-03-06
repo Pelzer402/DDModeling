@@ -15,6 +15,7 @@ setClass("DDFit",
          )
 )
 
+#' @export
 setMethod("summary","DDFit",function(object){
   if (all(object@INP_REP@PAR == 0))
   {
@@ -30,6 +31,7 @@ setMethod("summary","DDFit",function(object){
   print(OUT)
 })
 
+#' @export
 setMethod("plot",signature(x="DDFit"),function(x){
   CAF <- c()
   CDF <- c()
