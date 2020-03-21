@@ -1,5 +1,5 @@
 ---
-title: "DDModeling"
+title: "Intro"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{DDModeling}

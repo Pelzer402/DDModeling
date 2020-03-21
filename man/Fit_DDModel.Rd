@@ -6,7 +6,7 @@
 \usage{
 Fit_DDModel(
   model = NULL,
-  rep = NULL,
+  data = NULL,
   DL_model = NULL,
   grid_path = NULL,
   s_sampling = FALSE,
@@ -17,7 +17,7 @@ Fit_DDModel(
 \arguments{
 \item{model}{\code{DDModel} object}
 
-\item{rep}{\code{DDRep} object or list of \code{DDRep} objects}
+\item{data}{\code{DDRep} object or list of \code{DDRep} objects}
 
 \item{DL_model}{\code{Model} in the form of a keras neural network model}
 

@@ -4,7 +4,7 @@
 \alias{Generate_GRID}
 \title{Generates a Grid from a given DDModel}
 \usage{
-Generate_GRID(model = NULL, path = NULL, name = NULL)
+Generate_GRID(model = NULL, path = NULL, name = NULL, eval_pts = NULL)
 }
 \arguments{
 \item{model}{\code{DDModel} object}
@@ -12,13 +12,14 @@ Generate_GRID(model = NULL, path = NULL, name = NULL)
 \item{path}{\code{character} that specifies the full path to the directory in which the Grid should be saved}
 
 \item{name}{\code{character} that represents the name (and subdirectory in path) of the Grid}
+
+\item{eval_pts}{\code{numeric} vector containing the step sizes for the grid}
 }
 \value{
 No direct return value inside of the R-session. The calculated Grid will be saved in the specified path!
 }
 \description{
-After calling the function the user will be instructed to enter the step sizes corresponding to the parameters listet in the used model.
-              Step size should allways be of an integer value, as they represent the number of evaluation points per parameter that are used in the grid.
-              Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
-              Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.
+Eval_pts specifies the number of evaluation points per parameter that are used in the grid, such the number of integers in
+eval_pts needs to match the number of parameters in the model. Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
+Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.
 }

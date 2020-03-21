@@ -1,4 +1,30 @@
 destination: docs
+navbar:
+  structure:
+      left: [home,intro,tuts,reference,articles,news]
+      right: [github]
+  components:
+    intro:
+      text: Setup
+      href: articles/Setup.html
+    articles: ~
+    tuts:
+      text: Tutorials
+      menu:
+      - text: 1. Defining models
+        href: articles/Tutorials/Model_definition.html
+      - text: 2. Simulating models
+        href: articles/Tutorials/Model_simulation.html
+      - text: 3. Importing data
+        href: articles/Tutorials/Import_data.html
+      - text: 4. Generating GRIDs
+        href: articles/Tutorials/Generate_GRIDs.html
+      - text: 5. Applying DL
+        href: articles/Tutorials/Applying_DL.html
+      - text: 6. Fitting models
+        href: articles/Tutorials/Fitting_models.html
+
+
 reference:
   - title: "S4-Classes"
     contents:

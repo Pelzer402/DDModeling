@@ -1,0 +1,33 @@
+---
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DDModeling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE, eval= TRUE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+In order to use any fitting procedure in DDModeling you have to generate a **GRID** beforehand. **GRIDs** can be understood as a kind of multidemensional net connecting the orthogonal axes spanned by the parameters of a given model to a given representation. Mathematicaly speaking a GRID portrays a number of domain - codomain connections for a given function/model. Graphically speaking, a **GRID** resembles the evaluation of a model at specific combinations of parameters.
+
+In DDModeling **GRIDs** are used for two kinds of purposes. First they help reducing starting value problems prior to local optimization procedures in fitting. Second they resemble datasets that are rather handy for the training of deep learning networks, which again can aid to improve local optimization procedures.
+
+GRID generation in DDModeling is easy. It is done by calling the `Generate_GRID()` function, which takes four arguments: **model**, **path**, **name** and **eval_pts**. The **model** takes a predefined **DDModel** object (see [here](Model_definition.html) for a tutorial). **path** specifies the directory in which the GRID should be saved. Because, meaningfull, GRIDs can be rather large DDModeling absteins from saving it in the R environment and saves them on your disc, such the specification of a directory is crucial. **name** determines the filename of the GRID and further the name of the created subdirectory in the **path**. Lastly **eval_pts** portrays the number of evaluation points per parameter, meaning that it takes a numeric vector of length equal to the number of parameters found in the **model**. It's values have to be natural numbers greater equal to 1! Let us take a look at an example:
+
+```{r eval=FALSE}
+library(DDModeling)
+DSTP <- DDModel(model="DSTP",task = "flanker", CDF_perc = c(0.1,0.3,0.5,0.7,0.9), CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+PTS <- rep(2,ncol(DSTP@DM))
+Grid_DSTP <- Generate_GRID(model = DSTP, path = getwd(), name = "DSTP_Flanker", eval_pts = PTS)
+```
+
+Here we constructed a GRID for a DSTP model. We used 2 evalutation points per parameter (see PTS). The GRID resultion from `Generate_GRID()` will allways be equally spaced, meaning that in the above example, Grid_DSTP will be constituted from the two parameter values per parameter that split the corresponding domain (specified in the **DDModel**) into three equally sized subsets. In a GRID every combination of all evaluation points will be simulated, resulting in the above example to 128 (2 to the power of 7) evalutaions. Note that you can specifiy `eval_pts` as you wish, but we strongly suggest to take the computational demand for larger specification into account. While the function will take advantage of all but one available thread of your computer, it may very well take a rather long time (for example on a Threadripper 1950X the above example with `eval_pts = rep(12,ncol(DSTP@DM)` takes about 7 days). Furthermore you may choose different values for different parameters:
+
+```{r eval=FALSE}
+PTS <- c(1,1,2,2,3,1,2)
+Grid_DSTP2 <- Generate_GRID(model = DSTP, path = getwd(), name = "DSTP_Flanker2", eval_pts = PTS)
+```
+
+Note that `Generate_GRID()` will return the path of the directory for the GRID, which in turn can be used for further practices in DDModeling, like [fitting](Fitting_models.html) or [deep learning](Applying_DL.html). 

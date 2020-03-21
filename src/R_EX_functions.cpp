@@ -46,42 +46,8 @@ Rcpp::S4 Fit_observed_data_rnd(Rcpp::List calc_cluster){
     }
   }
   S.S_Sampling = S_Sampling;
-  if (S_Sampling == false)
-  {
-    S.trials = m_trials;
-    S.n_s_sample = 1;
-    S.n_s_trials = S.trials;
-  }
-  else
-  {
-    S.n_s_trials = m_trials;
-    S.trials = 0;
-    for (int p = 0; p<S.TBF.Rep.CAF[0].size();++p)
-    {
-      S.trials += S.TBF.Rep.CAF[0][p].N_A + S.TBF.Rep.CAF[0][p].N_B;
-    }
-    S.n_s_sample = S.n_s_trials/S.trials;
-  }
-  for (int SORTING = 0; SORTING<S.SIMPLEX_struc.size(); ++SORTING)
-  {
-    for ( int j = 0;j<S.SIMPLEX_struc[SORTING];++j)
-    {
-      if (SORTING == 0)
-      {
-        S.PAR_Init_Rnd();
-      }
-      else
-      {
-        S.PAR_Init_from_Result(j);
-      }
-      for (int i = 0; i <S.Model.Parameter.size()+1;++i)
-      {
-        S.Simulate_and_Fit(i);
-      }
-      S.SIMPLEX();
-    }
-    std::sort(S.RESULT.begin(), S.RESULT.end());
-  }
+  S.SIM_Init_SS(m_trials);
+  S.Run_SIMPLEX_struc(true);
   return(S.Get_DDFit(S.RESULT[0]));
 }
 
@@ -98,7 +64,14 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
   Simulation S(M,DDRep_);
   S.start_method = "Grid: " + grid_path;
   S.SIMPLEX_struc = Rcpp::as<std::vector<int>>(calc_cluster[6]);
-  S.n_GRID = S.SIMPLEX_struc[0];
+  if (S.SIMPLEX_struc[0] == 0)
+  {
+    S.n_GRID = 1;
+  }
+  else
+  {
+    S.n_GRID = S.SIMPLEX_struc[0];
+  }
   S.fit_method = "";
   for (int i = 0; i<S.SIMPLEX_struc.size(); ++ i)
   {
@@ -114,35 +87,8 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
   }
   S.GRID_Read(grid_parts,true);
   S.S_Sampling = S_Sampling;
-  if (S_Sampling == false)
-  {
-    S.trials = m_trials;
-    S.n_s_sample = 1;
-    S.n_s_trials = S.trials;
-  }
-  else
-  {
-    S.n_s_trials = m_trials;
-    S.trials = 0;
-    for (int p = 0; p<S.TBF.Rep.CAF[0].size();++p)
-    {
-      S.trials += S.TBF.Rep.CAF[0][p].N_A + S.TBF.Rep.CAF[0][p].N_B;
-    }
-    S.n_s_sample = S.n_s_trials/S.trials;
-  }
-  for (int SORTING = 0; SORTING<S.SIMPLEX_struc.size(); ++SORTING)
-  {
-    for ( int j = 0;j<S.SIMPLEX_struc[SORTING];++j)
-    {
-      S.PAR_Init_from_Result(j);
-      for (int i = 0; i <S.Model.Parameter.size()+1;++i)
-      {
-        S.Simulate_and_Fit(i);
-      }
-      S.SIMPLEX();
-    }
-    std::sort(S.RESULT.begin(), S.RESULT.end());
-  }
+  S.SIM_Init_SS(m_trials);
+  S.Run_SIMPLEX_struc(false);
   return(S.Get_DDFit(S.RESULT[0]));
 }
 
@@ -168,22 +114,7 @@ Rcpp::S4 Fit_observed_data_DL(Rcpp::List calc_cluster){
     }
   }
   S.S_Sampling = S_Sampling;
-  if (S_Sampling == false)
-  {
-    S.trials = m_trials;
-    S.n_s_sample = 1;
-    S.n_s_trials = S.trials;
-  }
-  else
-  {
-    S.n_s_trials = m_trials;
-    S.trials = 0;
-    for (int p = 0; p<S.TBF.Rep.CAF[0].size();++p)
-    {
-      S.trials += S.TBF.Rep.CAF[0][p].N_A + S.TBF.Rep.CAF[0][p].N_B;
-    }
-    S.n_s_sample = S.n_s_trials/S.trials;
-  }
+  S.SIM_Init_SS(m_trials);
   S.PAR_Init_Man(PRE);
   for (int i = 0; i <S.Model.Parameter.size()+1;++i)
   {
@@ -236,9 +167,7 @@ Rcpp::List GRID_to_DDRep(Rcpp::List calc_cluster)
   Simulation S(M);
   S.n_GRID = Rcpp::as<int>(calc_cluster[2]);
   S.GRID_Read(grid_parts,false);
-  Rcpp::Rcout << "hi1  ";
   Rcpp::List OUT;
-  Rcpp::Rcout << "hi1  ";
   for (int i = 0; i<S.RESULT.size();++i)
   {
     OUT.push_back(S.RESULT[i].Rep.Convert_to_S4());

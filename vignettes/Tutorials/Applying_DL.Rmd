@@ -1,0 +1,60 @@
+---
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DDModeling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE, eval= TRUE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+One if not the fundamental problem with fitting drift diffusion models is given by their random nature, namely their diffusion. This makes it so that no functional connection between the domain (i.e the model parameters) and the codomain (i.e. data) can be stated. However this does not inherently predict that there is no pattern in the connection between the two. One way to tackle such problems is given by deep learning. However one would need a lot of data for such an endeavor. Luckily DDModeling got you covered!
+
+You can easily convert GRIDs to learning data (see [here](Generate_GRIDs.html) for a tutorial on GRID generation).
+
+```{r echo=TRUE ,results='hide'}
+library(DDModeling)
+DSTP <- DDModel(model="DSTP",task = "flanker", CDF_perc = c(0.1,0.3,0.5,0.7,0.9), CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+Grid_DSTP <- Generate_GRID(model = DSTP, path = getwd(), name = "DSTP_Flanker", eval_pts = rep(2,ncol(DSTP@DM)))
+DATA <- Import_GRID(grid_path = Grid_DSTP,to = "keras_data")
+```
+
+The `Import_GRID()` function takes two arguments **grid_path** and **to**. The former takes the path to the directory where the GRID is saved, the latter specifies to which format the import should take place. `to = "data_keras` will return a list containing an INPUT and OUTPUT, which can be used for deep learning.
+
+DDModeling is using Tensorflow and keras for deep learning, so make sure to install those beforehand!
+
+With the data setup lets build a quick model!
+
+```{r eval=FALSE}
+library(keras)
+model <- keras_model_sequential() %>%
+  layer_dense(input_shape=ncol(DATA$INPUT),units = 10, activation = "relu") %>%
+    layer_batch_normalization() %>%
+    layer_dropout(rate = 0.1) %>%
+    layer_dense(units = 20, activation = "relu") %>%
+    layer_batch_normalization() %>%
+    layer_dropout(rate = 0.2) %>%
+    layer_dense(units = ncol(DATA$OUTPUT),activation = "linear")
+
+model %>% compile(
+  loss = "mean_squared_error",
+  optimizer = "adam",
+  metrics = list("mae","mape")
+)
+
+model %>% fit(
+    x = DATA$INPUT, y = DATA$OUTPUT,
+    epochs = 50,
+    batch_size = 16,
+    verbose = 1,
+    validation_split = 0.1,
+    shuffle = TRUE,
+    callbacks = list(
+      callback_reduce_lr_on_plateau(factor = 0.05)
+    )
+)
+```
+
+You can either use this in your own code in any way you want or integrate it further for fitting in with DDModeling!

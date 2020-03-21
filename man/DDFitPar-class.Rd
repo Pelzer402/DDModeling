@@ -12,6 +12,8 @@
 \describe{
 \item{\code{FIT_V}}{\code{numeric} representing the value of the Fit}
 
+\item{\code{FIT_V_self}}{\code{numeric} representing the value of the Fit with the population (if specified)}
+
 \item{\code{FIT_N}}{\code{numeric} representing the number of evaluation points used in the fit}
 
 \item{\code{START_VALUE}}{\code{character} specifying the method used for the start value problem}
@@ -23,5 +25,7 @@
 \item{\code{TRIALS_TOAL}}{\code{numeric} specifying the total numbers of trials that were simulated}
 
 \item{\code{TRIALS_SAMPLE}}{\code{numeric} specifying the number of trials inside a given sample}
+
+\item{\code{PERF}}{\code{character} specifying the performance analysis error}
 }}
 

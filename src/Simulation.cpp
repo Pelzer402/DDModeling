@@ -259,6 +259,67 @@ void Simulation::PAR_Model_Get(int Set, int cond){
   }
 }
 
+void Simulation::Run_SIMPLEX_struc(bool rnd){
+  if (rnd)
+  {
+    for (int SORTING = 0; SORTING<SIMPLEX_struc.size(); ++SORTING)
+    {
+      for ( int j = 0;j<SIMPLEX_struc[SORTING];++j)
+      {
+        if (SORTING == 0)
+        {
+          PAR_Init_Rnd();
+        }
+        else
+        {
+          PAR_Init_from_Result(j);
+        }
+        for (int i = 0; i <Model.Parameter.size()+1;++i)
+        {
+          Simulate_and_Fit(i);
+        }
+        SIMPLEX();
+      }
+      std::sort(RESULT.begin(), RESULT.end());
+    }
+  }
+  else
+  {
+    for (int SORTING = 0; SORTING<SIMPLEX_struc.size(); ++SORTING)
+    {
+      for ( int j = 0;j<SIMPLEX_struc[SORTING];++j)
+      {
+        PAR_Init_from_Result(j);
+        for (int i = 0; i <Model.Parameter.size()+1;++i)
+        {
+          Simulate_and_Fit(i);
+        }
+        SIMPLEX();
+      }
+      std::sort(RESULT.begin(), RESULT.end());
+    }
+  }
+}
+
+void Simulation::SIM_Init_SS(int m_trials){
+  if (S_Sampling == false)
+  {
+    trials = m_trials;
+    n_s_sample = 1;
+    n_s_trials = trials;
+  }
+  else
+  {
+    n_s_trials = m_trials;
+    trials = 0;
+    for (int p = 0; p<TBF.Rep.CAF[0].size();++p)
+    {
+      trials += TBF.Rep.CAF[0][p].N_A + TBF.Rep.CAF[0][p].N_B;
+    }
+    n_s_sample = n_s_trials/trials;
+  }
+}
+
 void Simulation::PAR_Init_Rnd(){
   for (int cp = 0; cp<Model.Parameter.length();++cp)
   {
@@ -454,8 +515,63 @@ void Simulation::FitCrit_Get(int Set)
   EVAL[Set].Fit = tmp_FitCrit;
 }
 
+void Simulation::Performance_Analysis(EVAL_format &EF){
+  int flag = 0;
+  for (int i = 0; i<Model.Parameter.size();++i)
+  {
+    if (TBF.Rep.PAR_v[i] == 0.0)
+    {
+      flag += 1;
+    }
+  }
+  if (flag == 0)
+  {
+    PAR_Init_Man(TBF.Rep.PAR_v);
+    Simulate_and_Fit(0);
+    self_fit = EVAL[0].Fit;
+    bool eta = true;
+    double eta_buff = 0.0;
+    for (int i = 0; i<Model.Parameter.size();++i)
+    {
+      eta_buff = std::abs(TBF.Rep.PAR_v[i] - EF.Rep.PAR_v[i])/(Model.DM(0,i)-Model.DM(1,i));
+      if (eta_buff >0.05)
+      {
+        eta = false;
+      }
+    }
+    if (EF.Fit < self_fit)
+    {
+      if (eta)
+      {
+       perf_ana = "S";
+      }
+      else
+      {
+       perf_ana = "ME";
+      }
+    }
+    else
+    {
+      if (eta)
+      {
+        perf_ana = "S";
+      }
+      else
+      {
+        perf_ana = "FE";
+      }
+    }
+  }
+  else
+  {
+    self_fit = 9999;
+    perf_ana = "NA";
+  }
+}
+
 
 Rcpp::S4 Simulation::Get_DDFit(EVAL_format &EF){
+  Performance_Analysis(EF);
   Rcpp::S4 DDFit_buff("DDFit");
   DDFit_buff.slot("INP_REP") = TBF.Rep.Convert_to_S4();
   DDFit_buff.slot("FIT_REP") = EF.Rep.Convert_to_S4();
@@ -467,6 +583,8 @@ Rcpp::S4 Simulation::Get_DDFit(EVAL_format &EF){
   DDFitPar_buff.slot("TRIALS_SAMPLE") = trials;
   DDFitPar_buff.slot("METHOD") = fit_method;
   DDFitPar_buff.slot("START_VALUE") = start_method;
+  DDFitPar_buff.slot("FIT_V_self") = self_fit;
+  DDFitPar_buff.slot("PERF") = perf_ana;
   DDFit_buff.slot("MODEL") = Model.Convert_to_S4();
   DDFit_buff.slot("FIT") = DDFitPar_buff;
   return(DDFit_buff);
@@ -558,8 +676,8 @@ void Simulation::GRID_IN(std::ifstream &grid, bool eval)
     {
       grid >> ichar;
       EVAL[0].Rep.CDF[cond][bin].time = atof(ichar);
-      grid >> ichar;
-      EVAL[0].Rep.CDF[cond][bin].perc = atof(ichar);
+      // >> ichar;
+      //EVAL[0].Rep.CDF[cond][bin].perc = atof(ichar);
       grid >> ichar;
       EVAL[0].Rep.CDF[cond][bin].N = atof(ichar);
     }
@@ -570,8 +688,8 @@ void Simulation::GRID_IN(std::ifstream &grid, bool eval)
     {
       grid >> ichar;
       EVAL[0].Rep.CAF[cond][bin].time= atof(ichar);
-      grid >> ichar;
-      EVAL[0].Rep.CAF[cond][bin].perc= atof(ichar);
+      //grid >> ichar;
+      //EVAL[0].Rep.CAF[cond][bin].perc= atof(ichar);
       grid >> ichar;
       EVAL[0].Rep.CAF[cond][bin].acc = atof(ichar);
       grid >> ichar;
@@ -580,11 +698,13 @@ void Simulation::GRID_IN(std::ifstream &grid, bool eval)
       EVAL[0].Rep.CAF[cond][bin].N_B= atol(ichar);
     }
   }
+  /*
   for (int cond = 0; cond < EVAL[0].Rep.CAF.size(); ++cond)
   {
     grid >> ichar;
     grid >> ichar;
   }
+  */
   for (int par = 0; par < Model.Parameter.length(); ++par)
   {
     grid >> ichar;
@@ -620,7 +740,7 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
         for (int bin = 0; bin < EVAL[0].Rep.CDF[cond].size(); ++bin)
         {
           outstream << EVAL[0].Rep.CDF[cond][bin].time << " ";
-          outstream << EVAL[0].Rep.CDF[cond][bin].perc << " ";
+          //outstream << EVAL[0].Rep.CDF[cond][bin].perc << " ";
           outstream << EVAL[0].Rep.CDF[cond][bin].N	   << " ";
         }
     }
@@ -629,7 +749,7 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
       for (int bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
       {
         outstream << EVAL[0].Rep.CAF[cond][bin].time << " ";
-        outstream << EVAL[0].Rep.CAF[cond][bin].perc << " ";
+        //outstream << EVAL[0].Rep.CAF[cond][bin].perc << " ";
         outstream << EVAL[0].Rep.CAF[cond][bin].acc << " ";
         outstream << EVAL[0].Rep.CAF[cond][bin].N_A << " ";
         outstream << EVAL[0].Rep.CAF[cond][bin].N_B << " ";
@@ -644,7 +764,7 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
         NA_buff += EVAL[0].Rep.CAF[cond][bin].N_A;
         NB_buff += EVAL[0].Rep.CAF[cond][bin].N_B;
       }
-      outstream << NA_buff << " " << NB_buff << " ";
+      //outstream << NA_buff << " " << NB_buff << " ";
     }
     for (int par = 0; par < Model.Parameter.length(); ++par)
     {

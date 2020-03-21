@@ -5,13 +5,13 @@
 #' @param  model \code{DDModel} object
 #' @param path \code{character} that specifies the full path to the directory in which the Grid should be saved
 #' @param name \code{character} that represents the name (and subdirectory in path) of the Grid
+#' @param eval_pts \code{numeric} vector containing the step sizes for the grid
 #' @return No direct return value inside of the R-session. The calculated Grid will be saved in the specified path!
-#' @description  After calling the function the user will be instructed to enter the step sizes corresponding to the parameters listet in the used model.
-#'               Step size should allways be of an integer value, as they represent the number of evaluation points per parameter that are used in the grid.
-#'               Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
-#'               Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.
+#' @description  Eval_pts specifies the number of evaluation points per parameter that are used in the grid, such the number of integers in
+#' eval_pts needs to match the number of parameters in the model. Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
+#' Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.
 #' @export
-Generate_GRID <- function(model = NULL, path = NULL, name = NULL){
+Generate_GRID <- function(model = NULL, path = NULL, name = NULL, eval_pts = NULL){
   Flag <- NULL
   Check <- ArgumentCheck::newArgCheck()
   if (is.null(model) || !methods::is(model,"DDModel"))
@@ -29,15 +29,21 @@ Generate_GRID <- function(model = NULL, path = NULL, name = NULL){
     ArgumentCheck::addError(msg = "'name' is missing or in the wrong format!",argcheck = Check)
     Flag <- 1
   }
+  if (!all(eval_pts%%1 ==0) || ncol(model@DM) != length(eval_pts) || is.null(eval_pts))
+  {
+    ArgumentCheck::addError(msg = "'eval_pts' is missing or in the wrong format!",argcheck = Check)
+    Flag <- 1
+  }
   ArgumentCheck::finishArgCheck(Check)
   if (is.null(Flag))
   {
-    steps <- rep(1,ncol(model@DM))
-    cat("Please define the step sizes of all parameters:")
-    for (i in 1:length(steps))
-    {
-      steps[i] <- as.integer(readline(prompt = paste0(colnames(model@DM)[i],": ")))
-    }
+    #steps <- rep(1,ncol(model@DM))
+    #cat("Please define the step sizes of all parameters:")
+    #for (i in 1:length(steps))
+    #{
+    #  steps[i] <- as.integer(readline(prompt = paste0(colnames(model@DM)[i],": ")))
+    #}
+    steps <- eval_pts
     grid_path <- paste(path,name,sep = "/")
     dir.create(grid_path,showWarnings = FALSE)
     saveRDS(model,file = paste0(grid_path,"/",name,".Gcfg"))
@@ -95,7 +101,7 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
     for (cdf_p in 1:length(CDF_perc))
     {
       CN <- c(CN,paste0(conditions[c],"_CDF_RT_",CDF_perc[cdf_p]))
-      CN <- c(CN,paste0(conditions[c],"_CDF_PERC_",CDF_perc[cdf_p]))
+      #CN <- c(CN,paste0(conditions[c],"_CDF_PERC_",CDF_perc[cdf_p]))
       CN <- c(CN,paste0(conditions[c],"_CDF_N_",CDF_perc[cdf_p]))
     }
   }
@@ -104,7 +110,7 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
     for (caf_p in 1:length(CAF_perc))
     {
       CN <- c(CN,paste0(conditions[c],"_CAF_RT_",CAF_perc[caf_p]))
-      CN <- c(CN,paste0(conditions[c],"_CAF_PERC_",CAF_perc[caf_p]))
+      #CN <- c(CN,paste0(conditions[c],"_CAF_PERC_",CAF_perc[caf_p]))
       CN <- c(CN,paste0(conditions[c],"_CAF_ACC_",CAF_perc[caf_p]))
       CN <- c(CN,paste0(conditions[c],"_CAF_N_corr_",CAF_perc[caf_p]))
       CN <- c(CN,paste0(conditions[c],"_CAF_N_incorr_",CAF_perc[caf_p]))
@@ -112,19 +118,23 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
   }
   for ( c in 1:length(conditions))
   {
-    CN <- c(CN,paste0(conditions[c],"_TOTAL_corr"),paste0(conditions[c],"_TOTAL_incorr"))
+    #CN <- c(CN,paste0(conditions[c],"_TOTAL_corr"),paste0(conditions[c],"_TOTAL_incorr"))
   }
   CN <- c(CN,PAR)
-  IN <- as.data.frame(read.table(file = files[1],header = FALSE,skip = 1))
-  for (i in 2:length(files))
+  n_evals <- 0
+  for (i in 1:length(files))
   {
     n_evals <- n_evals + as.numeric(read.table(file = files[i],nrows = 1))
-    buff <- as.data.frame(read.table(file = files[i],header = FALSE,skip = 1))
-    IN <- rbind(IN,buff)
   }
-  colnames(IN) <- CN
   if(to == "frame")
   {
+    IN <- as.data.frame(read.table(file = files[1],header = FALSE,skip = 1))
+    for (i in 2:length(files))
+    {
+      buff <- as.data.frame(read.table(file = files[i],header = FALSE,skip = 1))
+      IN <- rbind(IN,buff)
+    }
+    colnames(IN) <- CN
     return(IN)
   }
   if(to == "keras_data")
@@ -145,10 +155,19 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
         CN_data <- c(CN_data,paste0(conditions[c],"_CAF_ACC_",CAF_perc[caf_p]))
       }
     }
-    return(list(INPUT = as.matrix(IN[,CN_data]), OUTPUT = as.matrix(IN[,PAR])))
+    IN <- c()
+    OUT <- c()
+    for (i in 1:length(files))
+    {
+      buff <- as.data.frame(read.table(file = files[i],header = FALSE,skip = 1))
+      colnames(buff) <- CN
+      IN <- rbind(IN,as.matrix(buff[,CN_data]))
+      OUT <- rbind(OUT,as.matrix(buff[,PAR]))
+    }
+    return(list(INPUT = IN, OUTPUT = OUT))
   }
   if (to == "DDRep")
   {
-   return(.GRID_to_DDRep(list(model,files,n_evals)))
+    return(.GRID_to_DDRep(list(model,files,n_evals)))
   }
 }

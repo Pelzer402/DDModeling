@@ -40,7 +40,6 @@ setMethod("plot",signature(x="DDFit"),function(x){
     CAF <- rbind(CAF,cbind(x@INP_REP@REP$CAF[[i]],type="TBF"),cbind(x@FIT_REP@REP$CAF[[i]],type="FIT"))
     CDF <- rbind(CDF,cbind(x@INP_REP@REP$CDF[[i]],type="TBF"),cbind(x@FIT_REP@REP$CDF[[i]],type="FIT"))
   }
-  par(mfrow=c(3,1))
   CAF_time <- ggplot2::ggplot(CAF,ggplot2::aes(x=perc,y=time,color=type,linetype=cond,shape=type)) +
           ggplot2::geom_line() +
           ggplot2::geom_point() +

@@ -1,0 +1,47 @@
+---
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DDModeling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r setup, include=FALSE, eval= TRUE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+# How to simulate in DDModeling
+In order to simulate data in DDModeling you need a specified **DDModel** (see [here](Model_definition.html) for a tutorial).
+
+```{r}
+library(DDModeling)
+DSTP <- DDModel(model="DSTP",task = "flanker",CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+```
+
+With that model simulation is straigthforward using `Sim_DDModel()`.
+
+```{r}
+some_data <- Sim_DDModel(model=DSTP,trials = 1000)
+```
+
+`Sim_DDModel()` takes at least two arguments **model** and **trials**. The former specifies a **DDModel** object, the latter the number of trials per condition that should be simulated. It then returns a **DDRep** object, which can be inspected by simply calling it
+
+```{r}
+some_data
+```
+
+or using `plot()`
+
+```{r}
+plot(some_data)
+```
+
+Note that `Sim_DDModel()` will initialize a simulation by random as the default, meaning that the parameters inside the model that are used for the simulation will be uniformly drawn from the parameter domains specified in the model. If you want to conduct a simulation using specific parameter values you need to specify the parameters under the **parameter** argument! This argument takes a data.frame, which coloumnnames need to be identical (in name and order!) to the parameters specified in the model!
+
+```{r}
+custom_parameter <- data.frame(Ter= 0.2, a= 0.17, c=0.18 ,mu_t= 0.08, mu_f= 0.09, mu_RS2= 0.29, mu_SS= 0.5)
+custom_data <- Sim_DDModel(model = DSTP,trials = 1000,parameter = custom_parameter)
+custom_data@PAR
+plot(custom_data)
+```
+
+If you want to conduct multiple simulations with different parameters simply add rows to your data.frame! If you need multiple samples of these simulations specifiy the **simulations** argument. Note however that `Sim_DDModel()` will return then a list of **DDRep** objects! Additionally, if you do not specify the **parameter** argument simulations=n>1 will lead to n randomly drawn parameter like in the above example, however if you do specify it, simulations=n will lead to n simulations for each parameter set!

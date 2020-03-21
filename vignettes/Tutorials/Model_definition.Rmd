@@ -1,0 +1,70 @@
+---
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DDModeling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE, eval= TRUE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+# How to define models
+In order to define a model you need to call the `DDModel()` function. There are at least four arguments that need to be specified in order to successfully define a model:
+
+* model
+* task
+* CDF_perc
+* CAF_perc
+
+The **model** parameter is relatively straightforward. There are currently three models supported in the package:  [DSTP](https://psycnet.apa.org/buy/2010-14834-002), [DMC](https://www.ncbi.nlm.nih.gov/pubmed/25909766) and [SSP](https://psycnet.apa.org/record/2011-23986-003). Simply specify one of these abreviations and this will set the mathamtical groundwork for your model:
+
+```{r }
+library(DDModeling)
+DSTP <- DDModel(model="DSTP",task = "flanker",CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+DMC  <- DDModel(model="DMC" ,task = "flanker",CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+SSP  <- DDModel(model="SSP" ,task = "flanker",CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+```
+
+Note that you need to specify at least these four arguments or the function will throw an error! The **task** argument specifies the experiment that will be modeled. For now we will keep this at `task = "flanker"` (for the flanker task), though in the end of this tutorial we will take a look at the `task = "custom"` flag, which will make the model definition rather complex. Next up are **CDF_perc** and **CAF_perc**. Both take a numeric vector, which will specifiy the representation of your data in terms of a cummulative distribution function (CDF) and conditional accuracy function (CAF) respectively. Note however that the values in booth parameters behave differently! While the **CDF_perc** values specify specific percentiles of the CDF, the **CAF_perc** values specifiy the boundaries of the quantiles. This means that in the above examples the data will be represented by five CDF percentiles (0.1, 0.3, 0.5, 0.7, 0.9) and five CAF quantiles (0.0<0.2, 0.2<0.4, 0.4<0.6, 0.6<0.8, 0.8<1.0) per condition.
+
+If you have specified your model you are able to inspect it by simply calling the object:
+
+```{r }
+DSTP
+```
+
+This will give you much inside to the model, like its mapping matrix (ModelMatrix) for different conditions, parameter domains or parameters important for the simulation (Simulation Parameter). You may think "wait, where did I specify all of this?". Well thats the beauty of the`task = "flanker"` preset! It was build in accordance to the newest existing research, so if you want to model a given flanker task there realy is nothing more for you to specifiy. If you do want to model something different however, take a look at the next section otherwise skip to the [simulation tutorial](Model_simulation.html).
+
+# Custom models
+Let us assume that we conducted an experiment where the task was to hit a button as fast as possible after an indication, like a flashing lightbulb etc., happend. We would argue that it is likely enough to model this task after a simplified version of the DSTP, where there is no parallel attention process happening since the subject will not be influenced by any interference and the attention is allways focsed on the indicator. In order to realize such a model we have to first set `task = "custom"`. With that there is a need for specification of four aditional arguments in the `DDModel()` function: **conditions**, **parameter**, **dt** and **sigma**. **Conditions** specifies the names of the conditions present in the model. Here we choose to name our singular conditon _hit_. **Parameter** refers to the names of the parameters we'd like to model after. In accordance to the above we choose to look for three parameters: Ter, a, mu. **dt** and **sigma** are simulation parameters for the model. The former quantifies the integration constant of the process and the later the diffusion coefficient. These have a rather large impact on the model! Because of that these values should be specified with caution! For the DSTP we adive to choose dt = 0.001 and sigma = 0.1 like in the `task = "flanker"` preset. With all this set and done we are left with a model as follows:
+
+```{r }
+DSTP_simple <- DDModel(model="DSTP",task = "custom",conditions = "hit",parameter = c("Ter","a","mu"),dt = 0.001,sigma = 0.1,CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+DSTP_simple
+```
+
+Seems good so far, however there is still some work to do! For starters the ModelMatrix only contains zeros, such a model wont go anywhere! We need to map our parameters (coloumns) to the model-parameters (rows). Here we have a simple 1:1 mapping:
+
+```{r }
+DSTP_simple@MM$hit[,"Ter"]<- c(1,0,0,0,0,0,0)
+DSTP_simple@MM$hit[,"a"]  <- c(0,1,0,0,0,0,0)
+DSTP_simple@MM$hit[,"mu"]  <- c(0,0,0,1,0,0,0)
+```
+
+Next up there are NAs in the Parameter Domain section! We need to specify an upper and lower limit for each of them:
+
+```{r }
+DSTP_simple@DM[,"Ter"] <- c(0.45,0.2)
+DSTP_simple@DM[,"a"]   <- c(0.15,0.005)
+DSTP_simple@DM[,"mu"]  <- c(0.12,0.05)
+```
+
+Now let us take a look at the model again
+
+```{r }
+DSTP_simple
+```
+
+Everything looks fine!  Time to do some [simulations](Model_simulation.html).

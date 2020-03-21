@@ -1,0 +1,33 @@
+---
+title: "How to setup DDModeling in R-Studio"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DDModeling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE, eval= TRUE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+# Requirements
+In order to garanty trust and functionality of the DDModeling package it is recommended to use an up to date installation of Windows 10 as the operating system of choice. While it may be possible to use the package under Linux or macOS, there was no testing for these platforms (or any other not directly named here) undertaken.
+
+# Installation prerequisites
+DDModeling will be distributed through means of GitHub. While a submission to CRAN is planned, it is rather low priority and may take some time. The most straightforward way of installing packages of GitHub is to use the _install_github_ function found in the **devtools** package. Therefore an installation of the **devtools** package is needed:
+
+```{r eval= FALSE}
+install.packages("devtools")
+```
+
+However, because the DDModeling package heavily relies on the use of C++ code, it will need to compile some of this code through the process of the installation. Therefore a C++ compiler is also needed. It is suggested to install the latest release version of [Rtools](https://cran.r-project.org/bin/windows/Rtools/) and adhere to a default installtion. This should garanty successfull c++ compilation not only for the DDModeling package, but for any other R package that uses C++ code.
+
+# Installation
+With all this set and done there is but one more line to be entered:
+
+```{r eval= FALSE}
+devtools::install_github("Pelzer402/DDModeling")
+```
+
+If the installation was successfull you are all setup to engage in all sorts of fancy modeling! Feel free to take a look at the tutorials tab at the top of this website to learn more about the usage of the DDModeling package.
