@@ -10,5 +10,7 @@
 #' @author Thomas Pelzer
 #' @useDynLib DDModeling
 #' @import Rcpp
+#' @importFrom stats predict time
+#' @importFrom utils read.table
 NULL
 
