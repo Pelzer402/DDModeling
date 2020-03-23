@@ -523,9 +523,19 @@ void Simulation::Performance_Analysis(EVAL_format &EF){
     {
       flag += 1;
     }
-    if (TBF.Rep.PAR_v.size() != TBF.Rep.PAR_v.size())
+  }
+  if (TBF.Rep.PAR_v.size() != EF.Rep.PAR_v.size())
+  {
+    flag += 1;
+  }
+  else
+  {
+    for (int i = 0; i<Model.Parameter.size();++i)
     {
-      flag += 1;
+      if (TBF.Rep.PAR_n[i].compare(EF.Rep.PAR_n[i]) != 0)
+      {
+        flag += 1;
+      }
     }
   }
   if (flag == 0)
