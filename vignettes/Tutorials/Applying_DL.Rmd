@@ -21,7 +21,7 @@ Grid_DSTP <- Generate_GRID(model = DSTP, path = getwd(), name = "DSTP_Flanker", 
 DATA <- Import_GRID(grid_path = Grid_DSTP,to = "keras_data")
 ```
 
-The `Import_GRID()` function takes two arguments **grid_path** and **to**. The former takes the path to the directory where the GRID is saved, the latter specifies to which format the import should take place. `to = "data_keras` will return a list containing an INPUT and OUTPUT, which can be used for deep learning.
+The `Import_GRID()` function takes two arguments **grid_path** and **to**. The former takes the path to the directory where the GRID is saved, the latter specifies to which format the import should take place. `to = "data_keras"` will return a list containing an INPUT and OUTPUT, which can be used for deep learning.
 
 DDModeling is using Tensorflow and keras for deep learning, so make sure to install those beforehand!
 
@@ -57,4 +57,4 @@ model %>% fit(
 )
 ```
 
-You can either use this in your own code in any way you want or integrate it further for fitting in with DDModeling!
+You can either use this in your own code in any way you want or integrate it further for fitting with DDModeling!

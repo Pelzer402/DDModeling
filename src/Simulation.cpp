@@ -523,6 +523,10 @@ void Simulation::Performance_Analysis(EVAL_format &EF){
     {
       flag += 1;
     }
+    if (TBF.Rep.PAR_v.size() != TBF.Rep.PAR_v.size())
+    {
+      flag += 1;
+    }
   }
   if (flag == 0)
   {

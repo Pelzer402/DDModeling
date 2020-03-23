@@ -31,3 +31,7 @@ devtools::install_github("Pelzer402/DDModeling")
 ```
 
 If the installation was successfull you are all setup to engage in all sorts of fancy modeling! Feel free to take a look at the tutorials tab at the top of this website to learn more about the usage of the DDModeling package.
+
+# Updating
+
+If you which to update your version of DDModeling you can do so by simply doing the above though I would advice to delete your former installation of DDModeling beforehand!
