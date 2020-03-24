@@ -159,10 +159,12 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
     OUT <- c()
     for (i in 1:length(files))
     {
-      buff <- as.data.frame(read.table(file = files[i],header = FALSE,skip = 1))
+      buff <- read.table(file = files[i],header = FALSE,skip = 1)
       colnames(buff) <- CN
       IN <- rbind(IN,as.matrix(buff[,CN_data]))
       OUT <- rbind(OUT,as.matrix(buff[,PAR]))
+      cat(paste0(files[i]," -> done"))
+      rm(buff)
     }
     return(list(INPUT = IN, OUTPUT = OUT))
   }
