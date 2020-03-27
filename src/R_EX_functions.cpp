@@ -120,9 +120,10 @@ Rcpp::S4 Fit_observed_data_DL(Rcpp::List calc_cluster){
   {
     S.Simulate_and_Fit(i);
   }
+  S.RESULT.push_back(S.EVAL[0]);
   if (S.SIMPLEX_struc[0] == 0)
   {
-    return(S.Get_DDFit(S.EVAL[0]));
+    return(S.Get_DDFit(S.RESULT[0]));
   }
   else
   {

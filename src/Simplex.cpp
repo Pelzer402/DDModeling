@@ -207,7 +207,6 @@ void Simulation::SIMPLEX_TransformSimplex(int ihi, double fac)
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
     EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j]/Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
-    /*
     if (EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] < Model.DM(1,j))
     {
       EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] =  Model.DM(1,j);
@@ -216,7 +215,6 @@ void Simulation::SIMPLEX_TransformSimplex(int ihi, double fac)
     {
       EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] = Model.DM(0,j);
     }
-    */
   }
 
   Simulate_and_Fit(Model.Parameter.size()+2);    //Evaluate the function at the trial point.
@@ -232,7 +230,6 @@ void Simulation::SIMPLEX_TransformSimplex_star2_beta(int ihi, double fac)
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
     EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] / Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
-    /*
     if (EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] <  Model.DM(1,j))
     {
       EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] =  Model.DM(1,j);
@@ -241,7 +238,6 @@ void Simulation::SIMPLEX_TransformSimplex_star2_beta(int ihi, double fac)
     {
       EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = Model.DM(0,j);
     }
-    */
   }
 
   Simulate_and_Fit(Model.Parameter.size()+3);    //Evaluate the function at the trial point.
@@ -258,7 +254,6 @@ void Simulation::SIMPLEX_TransformSimplex_star2_gamma(int ihi, double fac)
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
     EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] / Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
-    /*
     if (EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] <  Model.DM(1,j))
     {
       EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] =  Model.DM(1,j);
@@ -267,7 +262,6 @@ void Simulation::SIMPLEX_TransformSimplex_star2_gamma(int ihi, double fac)
     {
       EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = Model.DM(0,j);
     }
-    */
   }
 
   Simulate_and_Fit(Model.Parameter.size()+3);		    //Evaluate the function at the trial point.

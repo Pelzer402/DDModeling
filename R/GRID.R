@@ -101,7 +101,6 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
     for (cdf_p in 1:length(CDF_perc))
     {
       CN <- c(CN,paste0(conditions[c],"_CDF_RT_",CDF_perc[cdf_p]))
-      #CN <- c(CN,paste0(conditions[c],"_CDF_PERC_",CDF_perc[cdf_p]))
       CN <- c(CN,paste0(conditions[c],"_CDF_N_",CDF_perc[cdf_p]))
     }
   }
@@ -110,15 +109,10 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
     for (caf_p in 1:length(CAF_perc))
     {
       CN <- c(CN,paste0(conditions[c],"_CAF_RT_",CAF_perc[caf_p]))
-      #CN <- c(CN,paste0(conditions[c],"_CAF_PERC_",CAF_perc[caf_p]))
       CN <- c(CN,paste0(conditions[c],"_CAF_ACC_",CAF_perc[caf_p]))
       CN <- c(CN,paste0(conditions[c],"_CAF_N_corr_",CAF_perc[caf_p]))
       CN <- c(CN,paste0(conditions[c],"_CAF_N_incorr_",CAF_perc[caf_p]))
     }
-  }
-  for ( c in 1:length(conditions))
-  {
-    #CN <- c(CN,paste0(conditions[c],"_TOTAL_corr"),paste0(conditions[c],"_TOTAL_incorr"))
   }
   CN <- c(CN,PAR)
   n_evals <- 0
@@ -128,14 +122,14 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
   }
   if(to == "frame")
   {
-    IN <- as.data.frame(read.table(file = files[1],header = FALSE,skip = 1))
-    for (i in 2:length(files))
+    IN <- list()
+    for (i in 1:length(files))
     {
-      buff <- as.data.frame(read.table(file = files[i],header = FALSE,skip = 1))
-      IN <- rbind(IN,buff)
+      IN <- data.table::fread(file = files[i],header = FALSE,skip = 1)
     }
+    IN <- data.table::rbindlist(IN)
     colnames(IN) <- CN
-    return(IN)
+    return(as.data.frame(IN))
   }
   if(to == "keras_data")
   {
@@ -155,21 +149,23 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
         CN_data <- c(CN_data,paste0(conditions[c],"_CAF_ACC_",CAF_perc[caf_p]))
       }
     }
-    IN <- c()
-    OUT <- c()
+    IN <- list()
+    OUT <- list()
     for (i in 1:length(files))
     {
-      buff <- read.table(file = files[i],header = FALSE,skip = 1)
+      buff <- data.table::fread(file = files[i],header = FALSE,skip = 1)
       colnames(buff) <- CN
-      IN <- rbind(IN,as.matrix(buff[,CN_data]))
-      OUT <- rbind(OUT,as.matrix(buff[,PAR]))
-      cat(paste0(files[i]," -> done"))
+      IN[[i]] <- buff[,..CN_data]
+      OUT[[i]] <- buff[,..PAR]
       rm(buff)
     }
-    return(list(INPUT = IN, OUTPUT = OUT))
+    IN <- data.table::rbindlist(IN)
+    OUT <- data.table::rbindlist(OUT)
+    return(list(INPUT = as.matrix(IN), OUTPUT = as.matrix(OUT)))
   }
   if (to == "DDRep")
   {
     return(.GRID_to_DDRep(list(model,files,n_evals)))
   }
 }
+
