@@ -55,15 +55,16 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, grid_path = 
   else if (!is.null(grid_path))
   {
     Grid_model <- readRDS(list.files(grid_path,full.names = TRUE,pattern = "\\.Gcfg$"))
-    if (!identical(Grid_model,model))
-    {
-      ArgumentCheck::addError(msg = "The grid under 'grid_path' does not comform to the model under 'model'!",argcheck = Check)
-      Method <- 99
-    }
-    else
-    {
-      Method <- 2
-    }
+    #if (!identical(Grid_model,model))
+    #{
+    #  ArgumentCheck::addError(msg = "The grid under 'grid_path' does not comform to the model under 'model'!",argcheck = Check)
+    #  Method <- 99
+    #}
+    #else
+    #{
+    #  Method <- 2
+    #}
+    Method <- 2
   }
   else if (!is.null(DL_model))
   {
