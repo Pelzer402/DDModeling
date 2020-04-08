@@ -142,3 +142,45 @@ setMethod("plot",signature(x="DDRep"),function(x){
   cowplot::plot_grid(C1,L,nrow=2,ncol=1,rel_heights=c(9,1))
 })
 
+#' @export
+setMethod("Compare",signature(e1="DDRep",e2="DDRep"),function(e1,e2){
+  if(identical(e1@RF,e2@RF))
+  {
+    wx <- DDRep_wide(e1)
+    wy <- DDRep_wide(e2)
+    for (i in 1:length(wy))
+    {
+      if (wy[i] == 0)
+      {
+        wy[i] <- 0.000001
+      }
+    }
+    return(sum((1-wx/wy)^2))
+  }
+  else
+  {
+    cat("Error: The two DDRep can not be compared because theire representations do not match!")
+  }
+})
+
+#' @export
+setMethod("Compare",signature(e1="DDRep",e2="character"),function(e1,e2){
+  model <- readRDS(list.files(e2,full.names = TRUE,pattern = "\\.Gcfg$"))
+  OUT <- c()
+  if(identical(e1@RF,model@RF))
+  {
+    # TO DO: Check for zero!
+    Grid <- Import_GRID(grid_path = e2,to = "keras_data")
+    we1 <- DDRep_wide(e1)
+    FITS <- rowSums((1-t(we1/t(Grid$INPUT)))^2)
+    OUT <- data.table::as.data.table(Grid$OUTPUT)
+    rm(Grid)
+    OUT[,Value := FITS]
+    return(OUT)
+  }
+  else
+  {
+    cat("Error: The the DDRep and the Grid do not match!")
+  }
+})
+

@@ -9,7 +9,7 @@
 #' @title DDModeling
 #' @author Thomas Pelzer
 #' @useDynLib DDModeling
-#' @import Rcpp
+#' @import Rcpp data.table
 #' @importFrom stats predict time
 #' @importFrom utils read.table
 NULL

@@ -125,7 +125,7 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
     IN <- list()
     for (i in 1:length(files))
     {
-      IN <- data.table::fread(file = files[i],header = FALSE,skip = 1)
+      IN[[i]] <- data.table::fread(file = files[i],header = FALSE,skip = 1)
     }
     IN <- data.table::rbindlist(IN)
     colnames(IN) <- CN
