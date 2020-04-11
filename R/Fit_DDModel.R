@@ -48,19 +48,6 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, DL_scale = N
     ArgumentCheck::addWarning(msg = "'grid_path' or 'DL_model' is missing!\n Startvalues will determined using a uniform random distribution!",argcheck = Check)
     Method <- 1
   }
-  if (!is.null(DL_scale))
-  {
-    if (!names(DL_scale) %in% c("INPUT","OUTPUT") ||
-        !length(names(DL_scale)) == 2 ||
-        !names(DL_scale$INPUT) %in% c("Center","Stddev") ||
-        !length(names(DL_scale$INPUT)) == 2 ||
-        !names(DL_scale$OUTPUT) %in% c("Center","Stddev") ||
-        !length(names(DL_scale$OUTPUT)) == 2)
-    {
-      ArgumentCheck::addError(msg = "'DL_scale' is in the wrong format!",argcheck = Check)
-      Method <- 99
-    }
-  }
   else if (!is.null(grid_path) & !is.null(DL_model))
   {
     ArgumentCheck::addError(msg = "'grid_path' and 'DL_model' is specified!\n You may only use one!",argcheck = Check)
@@ -83,6 +70,19 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, DL_scale = N
   else if (!is.null(DL_model))
   {
     Method <- 3
+  }
+  if (!is.null(DL_scale))
+  {
+    if (!names(DL_scale) %in% c("INPUT","OUTPUT") ||
+        !length(names(DL_scale)) == 2 ||
+        !names(DL_scale$INPUT) %in% c("Center","Stddev") ||
+        !length(names(DL_scale$INPUT)) == 2 ||
+        !names(DL_scale$OUTPUT) %in% c("Center","Stddev") ||
+        !length(names(DL_scale$OUTPUT)) == 2)
+    {
+      ArgumentCheck::addError(msg = "'DL_scale' is in the wrong format!",argcheck = Check)
+      Method <- 99
+    }
   }
   if (!is.logical(s_sampling))
   {
