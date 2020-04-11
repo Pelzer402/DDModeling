@@ -5,11 +5,12 @@
 #' @param grid_path  \code{path} to a directory containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.
 #' @param s_sampling \code{bool} indicating super sampling while fitting
 #' @param DL_model \code{Model} in the form of a keras neural network model
+#' @param DL_scales \code{list} containing mean and sd of the transformation used in the deep learning model while training.
 #' @param trials \code{integer} indicating the number of trials used while fitting (s_sampling = FALSE) or the maximum number of trials used while super sampling (s_sampling = TRUE)
 #' @param simplex_struc \code{numeric vector} containing the number of simplex iterations per sorting cycle.
 #' @return \code{DDFit} object
 #' @export
-Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, grid_path = NULL, s_sampling = FALSE, trials = 10000, simplex_struc= c(20,2)){
+Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, DL_scale = NULL, grid_path = NULL, s_sampling = FALSE, trials = 10000, simplex_struc= c(20,2)){
   Method <- 0 # 1 == random, 2 == grid, 3 == DL, 99 == Error
   Output <- 0 # 1 == single, 2 == list
   Check <- ArgumentCheck::newArgCheck()
@@ -46,6 +47,19 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, grid_path = 
   {
     ArgumentCheck::addWarning(msg = "'grid_path' or 'DL_model' is missing!\n Startvalues will determined using a uniform random distribution!",argcheck = Check)
     Method <- 1
+  }
+  if (!is.null(DL_scale))
+  {
+    if (!names(DL_scale) %in% c("INPUT","OUTPUT") ||
+        !length(names(DL_scale)) == 2 ||
+        !names(DL_scale$INPUT) %in% c("Center","Stddev") ||
+        !length(names(DL_scale$INPUT)) == 2 ||
+        !names(DL_scale$OUTPUT) %in% c("Center","Stddev") ||
+        !length(names(DL_scale$OUTPUT)) == 2)
+    {
+      ArgumentCheck::addError(msg = "'DL_scale' is in the wrong format!",argcheck = Check)
+      Method <- 99
+    }
   }
   else if (!is.null(grid_path) & !is.null(DL_model))
   {
@@ -142,9 +156,20 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, grid_path = 
       COMP_List <- list()
       for (i in 1:length(data))
       {
-        INP <- t(DDRep_wide(data[[i]]))
-        PRE <- as.numeric(predict(DL_model,INP))
-        COMP_List[[i]] <-list(model,data[[i]],s_sampling,trials,simplex_struc,PRE)
+        if (is.null(DL_scale))
+        {
+          INP <- t(DDRep_wide(data[[i]]))
+          PRE <- as.numeric(predict(DL_model,INP))
+          COMP_List[[i]] <-list(model,data[[i]],s_sampling,trials,simplex_struc,PRE)
+        }
+        else
+        {
+          INP <- t(DDRep_wide(data[[i]]))
+          INP <- scale(INP,DL_scale$INPUT$Center,DL_scale$INPUT$Stddev)
+          PRE <- as.numeric(predict(DL_model,INP))
+          PRE <- scale(PRE,DL_scale$OUTPUT$Center,DL_scale$OUTPUT$Stddev)
+          COMP_List[[i]] <-list(model,data[[i]],s_sampling,trials,simplex_struc,PRE)
+        }
       }
       RES <- ParallelLogger::clusterApply(clust,COMP_List,.Fit_DDModel_DL)
       ParallelLogger::stopCluster(clust)
@@ -152,8 +177,19 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, grid_path = 
     }
     else if(Output == 1)
     {
-      INP <- t(DDRep_wide(data))
-      PRE <- as.numeric(predict(DL_model,INP))
+      if (is.null(DL_scale))
+      {
+        INP <- t(DDRep_wide(data))
+        PRE <- as.numeric(predict(DL_model,INP))
+      }
+      else
+      {
+        INP <- t(DDRep_wide(data))
+        INP <- scale(INP,DL_scale$INPUT$Center,DL_scale$INPUT$Stddev)
+        PRE <- as.numeric(predict(DL_model,INP))
+        PRE <- scale(PRE,DL_scale$OUTPUT$Center,DL_scale$OUTPUT$Stddev)
+
+      }
       COMP_List <- list(model,data,s_sampling,trials,simplex_struc,PRE)
       return(.Fit_DDModel_DL(COMP_List))
     }
