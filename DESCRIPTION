@@ -23,6 +23,7 @@ Collate:
     'GRID.R'
     'RcppExports.R'
     'Sim_DDModel.R'
+    'misc.R'
     'package-DDModeling.R'
 Suggests: 
     knitr,

@@ -8,6 +8,7 @@ Fit_DDModel(
   model = NULL,
   data = NULL,
   DL_model = NULL,
+  DL_scale = NULL,
   grid_path = NULL,
   s_sampling = FALSE,
   trials = 10000,
@@ -28,6 +29,8 @@ Fit_DDModel(
 \item{trials}{\code{integer} indicating the number of trials used while fitting (s_sampling = FALSE) or the maximum number of trials used while super sampling (s_sampling = TRUE)}
 
 \item{simplex_struc}{\code{numeric vector} containing the number of simplex iterations per sorting cycle.}
+
+\item{DL_scales}{\code{list} containing mean and sd of the transformation used in the deep learning model while training.}
 }
 \value{
 \code{DDFit} object

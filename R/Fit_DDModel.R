@@ -167,7 +167,7 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, DL_scale = N
           INP <- t(DDRep_wide(data[[i]]))
           INP <- scale(INP,DL_scale$INPUT$Center,DL_scale$INPUT$Stddev)
           PRE <- as.numeric(predict(DL_model,INP))
-          PRE <- scale(PRE,DL_scale$OUTPUT$Center,DL_scale$OUTPUT$Stddev)
+          PRE <- unscale_scale(IN = PRE,unscaler = DL_scale$OUTPUT)
           COMP_List[[i]] <-list(model,data[[i]],s_sampling,trials,simplex_struc,PRE)
         }
       }
@@ -187,8 +187,7 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, DL_scale = N
         INP <- t(DDRep_wide(data))
         INP <- scale(INP,DL_scale$INPUT$Center,DL_scale$INPUT$Stddev)
         PRE <- as.numeric(predict(DL_model,INP))
-        PRE <- scale(PRE,DL_scale$OUTPUT$Center,DL_scale$OUTPUT$Stddev)
-
+        PRE <- unscale_scale(IN = PRE,unscaler = DL_scale$OUTPUT)
       }
       COMP_List <- list(model,data,s_sampling,trials,simplex_struc,PRE)
       return(.Fit_DDModel_DL(COMP_List))
