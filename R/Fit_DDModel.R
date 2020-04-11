@@ -186,21 +186,12 @@ Fit_DDModel <- function(model = NULL, data = NULL, DL_model = NULL, DL_scale = N
       }
       else
       {
-        cat("START")
         INP <- t(DDRep_wide(data))
-        cat("START2")
         INP <- scale(INP,DL_scale$INPUT$Center,DL_scale$INPUT$Stddev)
-        cat("START3")
         PRE <- as.numeric(predict(DL_model,INP))
-        cat("START4")
         PRE <- unscale_scale(IN = PRE,unscaler = DL_scale$OUTPUT)
-        cat("START5")
-        print(PRE)
         COMP_List <- list(model,data,s_sampling,trials,simplex_struc,PRE)
-        print(COMP_List)
       }
-      cat("START6")
-      print(COMP_List)
       return(.Fit_DDModel_DL(COMP_List))
     }
   }
