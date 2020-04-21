@@ -36,9 +36,7 @@
 
 
 <meta property="og:title" content="Generates a Grid from a given DDModel — Generate_GRID" />
-<meta property="og:description" content="Eval_pts specifies the number of evaluation points per parameter that are used in the grid, such the number of integers in
-eval_pts needs to match the number of parameters in the model. Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
-Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model." />
+<meta property="og:description" content="Generates a Grid from a given DDModel" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,7 +69,7 @@ Therefor, If one would like to specify the used evaluation points it is advised 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DDModeling</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.4</span>
       </span>
     </div>
 
@@ -146,9 +144,7 @@ Therefor, If one would like to specify the used evaluation points it is advised 
     </div>
 
     <div class="ref-description">
-    <p>Eval_pts specifies the number of evaluation points per parameter that are used in the grid, such the number of integers in
-eval_pts needs to match the number of parameters in the model. Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
-Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.</p>
+    <p>Generates a Grid from a given DDModel</p>
     </div>
 
     <pre class="usage"><span class='fu'>Generate_GRID</span>(<span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>eval_pts</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -166,17 +162,22 @@ Therefor, If one would like to specify the used evaluation points it is advised 
     </tr>
     <tr>
       <th>name</th>
-      <td><p><code>character</code> that represents the name (and subdirectory in path) of the Grid</p></td>
+      <td><p><code>character</code> that represents the name of the Grid (and indirectly the name of the subdirectory set in the directory specified in path)</p></td>
     </tr>
     <tr>
       <th>eval_pts</th>
-      <td><p><code>numeric</code> vector containing the step sizes for the grid</p></td>
+      <td><p><code>numeric</code> vector containing number of evaluation points of the parameters in the grid</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>No direct return value inside of the R-session. The calculated Grid will be saved in the specified path!</p>
+    <p>The path to the grid as a <code>character</code></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Eval_pts specifies the number of evaluation points per parameter that are used in the grid, such the number of integers in
+eval_pts needs to match the number of parameters in the model. Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
+Therefor, if one would like to specify the used evaluation points it is advised to specify the domain in the model.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -184,6 +185,7 @@ Therefor, If one would like to specify the used evaluation points it is advised 
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
     </ul>
 
   </div>

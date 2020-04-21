@@ -61,7 +61,7 @@ void Simulation::SIMPLEX()
           sum += EVAL[i].Rep.PAR_v[j];
         }
       }
-      EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] = sum;
+      EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] = sum / Model.Parameter.size();
     }
 
     EVAL[Model.Parameter.size()+1].Fit = 0.0;
@@ -69,33 +69,34 @@ void Simulation::SIMPLEX()
     {
       if (i != ihi)
       {
-        EVAL[Model.Parameter.size()+1].Fit += EVAL[j].Fit;
+        EVAL[Model.Parameter.size()+1].Fit += EVAL[j].Fit ;
       }
-
     }
+    EVAL[Model.Parameter.size()+1].Fit = EVAL[Model.Parameter.size()+1].Fit/ Model.Parameter.size();
     //Compute the fractional range from highest to lowest
     rtol = 0.0;
     for (i = 0; i < Model.Parameter.size()+1; ++i)
     {
       if (i != ihi)
       {
-        rtol += std::pow((EVAL[i].Fit - (EVAL[Model.Parameter.size()+1].Fit / Model.Parameter.size())), 2.0) / Model.Parameter.size();
+        rtol += std::pow((EVAL[i].Fit - (EVAL[Model.Parameter.size()+1].Fit)), 2.0) / Model.Parameter.size();
       }
     }
-    if (rtol < 0.000000000001)
+    rtol = std::sqrt((double)(rtol));
+    if (rtol < SIMPLEX_rtoll) //0.00000000001
     {
       // Simplex terminated
       std::swap(EVAL[0], EVAL[ilo]);
       break;
     }
 
-    if (nfunk >= 120)
+    if (nfunk >= SIMPLEX_nfunc) //120
     {
       // Number of function calls exceeded
       std::swap(EVAL[0], EVAL[ilo]);
       break;
     }
-    if (Sr_count >3 )
+    if (Sr_count > SIMPLEX_nshrink ) //3
     {
       // Shrink count exceeded
       std::swap(EVAL[0], EVAL[ilo]);
@@ -103,12 +104,12 @@ void Simulation::SIMPLEX()
     }
     //Begin a new iteration.
     //First reflexion by a factor alpha=1 through the face of the simplex across from the high point, i.e. reflect the simplex from the high point.
-    SIMPLEX_TransformSimplex( ihi, 1.0);
+    SIMPLEX_TransformSimplex(ihi);
 
     if (EVAL[Model.Parameter.size()+2].Fit <= EVAL[ilo].Fit)
     {
       // Gives a result better than the best point, so try an additional Expansion by a factor gamma=2
-      SIMPLEX_TransformSimplex_star2_gamma(Model.Parameter.size()+2, 2.0);
+      SIMPLEX_TransformSimplex_star2_gamma(Model.Parameter.size()+2);
 
       if (EVAL[Model.Parameter.size()+3].Fit <= EVAL[ilo].Fit)
       {
@@ -126,7 +127,7 @@ void Simulation::SIMPLEX()
       // The reflected point is worse than the second - highest, so look for an intermediate lower point, i.e., do a one - dimensional contraction.
       if (EVAL[Model.Parameter.size()+2].Fit > EVAL[ihi].Fit)
       {
-        SIMPLEX_TransformSimplex_star2_beta(ihi, 0.5);
+        SIMPLEX_TransformSimplex_star2_beta(ihi);
 
         if (EVAL[Model.Parameter.size()+3].Fit > EVAL[ihi].Fit)
         {
@@ -136,7 +137,7 @@ void Simulation::SIMPLEX()
             {
               for (j = 0; j < Model.Parameter.size(); ++j)
               {
-                EVAL[i].Rep.PAR_v[j] = (double)(0.5*(EVAL[i].Rep.PAR_v[j] + EVAL[ilo].Rep.PAR_v[j]));
+                EVAL[i].Rep.PAR_v[j] = (double)(SIMPLEX_sigma*EVAL[ilo].Rep.PAR_v[j] + (1-SIMPLEX_sigma)*EVAL[i].Rep.PAR_v[j]);
               }
               Simulate_and_Fit(i);
             }
@@ -154,7 +155,7 @@ void Simulation::SIMPLEX()
         EVAL[ihi].Fit = EVAL[Model.Parameter.size()+2].Fit;
         EVAL[ihi].Rep.PAR_v = EVAL[Model.Parameter.size()+2].Rep.PAR_v;
 
-        SIMPLEX_TransformSimplex_star2_beta(ihi, 0.5);
+        SIMPLEX_TransformSimplex_star2_beta(ihi);
 
         if (EVAL[Model.Parameter.size()+3].Fit > EVAL[ihi].Fit)
         {
@@ -164,7 +165,7 @@ void Simulation::SIMPLEX()
             {
               for (j = 0; j < Model.Parameter.size(); ++j)
               {
-                EVAL[i].Rep.PAR_v[j] = (double)(0.5*(EVAL[i].Rep.PAR_v[j] + EVAL[ilo].Rep.PAR_v[j]));
+                EVAL[i].Rep.PAR_v[j] = (double)(SIMPLEX_sigma*EVAL[ilo].Rep.PAR_v[j] + (1-SIMPLEX_sigma)*EVAL[i].Rep.PAR_v[j]);
               }
               Simulate_and_Fit(i);
             }
@@ -183,7 +184,6 @@ void Simulation::SIMPLEX()
       EVAL[ihi].Fit = EVAL[Model.Parameter.size()+2].Fit;
       EVAL[ihi].Rep.PAR_v = EVAL[Model.Parameter.size()+2].Rep.PAR_v;
     }
-
     nfunk++;
   }
   RESULT.push_back(EVAL[0]);
@@ -194,19 +194,18 @@ void Simulation::SIMPLEX()
  Input:
  ihi		-> Index of the highest value in point cluster
  fac		-> Factor of the transformation
- mod     -> Model Modifikator
  */
-void Simulation::SIMPLEX_TransformSimplex(int ihi, double fac)
+void Simulation::SIMPLEX_TransformSimplex(int ihi)
 {
   int j;
   double fac1;		// factor for mean transformation
   double fac2;		// facotr for *   transformation
 
-  fac1 = (1.0 + fac);
-  fac2 = -fac;
+  fac1 = (1.0 + SIMPLEX_alpha);
+  fac2 = -SIMPLEX_alpha;
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
-    EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j]/Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
+    EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j]) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
     if (EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] < Model.DM(1,j))
     {
       EVAL[Model.Parameter.size()+2].Rep.PAR_v[j] =  Model.DM(1,j);
@@ -219,17 +218,17 @@ void Simulation::SIMPLEX_TransformSimplex(int ihi, double fac)
 
   Simulate_and_Fit(Model.Parameter.size()+2);    //Evaluate the function at the trial point.
 }
-void Simulation::SIMPLEX_TransformSimplex_star2_beta(int ihi, double fac)
+void Simulation::SIMPLEX_TransformSimplex_star2_beta(int ihi)
 {
   int j;
   double fac1;		// factor for mean transformation
   double fac2;		// facotr for *   transformation
 
-  fac1 = (1.0 - fac);
-  fac2 = fac;
+  fac1 = (1.0 - SIMPLEX_beta);
+  fac2 = SIMPLEX_beta;
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
-    EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] / Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
+    EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j]) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
     if (EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] <  Model.DM(1,j))
     {
       EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] =  Model.DM(1,j);
@@ -243,17 +242,17 @@ void Simulation::SIMPLEX_TransformSimplex_star2_beta(int ihi, double fac)
   Simulate_and_Fit(Model.Parameter.size()+3);    //Evaluate the function at the trial point.
 
 }
-void Simulation::SIMPLEX_TransformSimplex_star2_gamma(int ihi, double fac)
+void Simulation::SIMPLEX_TransformSimplex_star2_gamma(int ihi)
 {
   int j;
   double fac1;		// factor for mean transformation
   double fac2;		// facotr for *   transformation
 
-  fac1 = -fac;
-  fac2 = fac+1.0;
+  fac1 = -SIMPLEX_gamma;
+  fac2 = SIMPLEX_gamma+1.0;
   for (j = 0; j < Model.Parameter.size(); ++j)
   {
-    EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j] / Model.Parameter.size()) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
+    EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] = (EVAL[Model.Parameter.size()+1].Rep.PAR_v[j]) * fac1 + EVAL[ihi].Rep.PAR_v[j] * fac2;
     if (EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] <  Model.DM(1,j))
     {
       EVAL[Model.Parameter.size()+3].Rep.PAR_v[j] =  Model.DM(1,j);
@@ -266,4 +265,14 @@ void Simulation::SIMPLEX_TransformSimplex_star2_gamma(int ihi, double fac)
 
   Simulate_and_Fit(Model.Parameter.size()+3);		    //Evaluate the function at the trial point.
 
+}
+
+void Simulation::SIMPLEX_Init_coef(Rcpp::List lcoef){
+  SIMPLEX_alpha = Rcpp::as<double>(lcoef["alpha"]);
+  SIMPLEX_beta = Rcpp::as<double>(lcoef["beta"]);
+  SIMPLEX_gamma = Rcpp::as<double>(lcoef["gamma"]);
+  SIMPLEX_sigma = Rcpp::as<double>(lcoef["sigma"]);
+  SIMPLEX_rtoll = Rcpp::as<double>(lcoef["tol"]);
+  SIMPLEX_nfunc = Rcpp::as<int>(lcoef["nfunc"]);
+  SIMPLEX_nshrink = Rcpp::as<int>(lcoef["nshrink"]);
 }

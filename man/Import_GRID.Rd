@@ -7,7 +7,7 @@
 Import_GRID(grid_path = NULL, to = "frame")
 }
 \arguments{
-\item{grid_path}{\code{path} to a directory containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.}
+\item{grid_path}{\code{path} to a directory containing a .GRID fileset.}
 
 \item{to}{\code{character} that specifies the format to import to (choose from "frame", "keras_data" and "DDRep")}
 }
@@ -16,4 +16,9 @@ Import_GRID(grid_path = NULL, to = "frame")
 }
 \description{
 Imports a GRID into the R environment
+}
+\details{
+"frame" will return a \code{data.frame} like structure to the total Grid stored in the grid_path. "keras_data" will return a \code{list}
+containing an INPUT and OUTPUT element. The INPUT constitutes all relevant values from the CDF/CAF (namely reaction times and accuracy) in a \code{matrix} with each row
+corresponding to one parameter set in the OUTPUT. "DDRep" will convert the complete Grid to DDReps in a \code{list}.
 }

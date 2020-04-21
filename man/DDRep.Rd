@@ -20,9 +20,9 @@ Userfriendly function for the construction of a \link{DDRep-class}.
 \details{
 Raw data in the DDModeling package is handled in \code{data.frames} containing three coulmns:
 \describe{
-  \item{cond}{Factor: Specifying the condition under which a given measure was taken.}
-  \item{resp}{Numeric: Specifying the binary coded response property (0==false, 1==correct)}
-  \item{time}{Numeric: Specifying the time (in rounded ms) for a given measure.}
+\item{cond}{Factor: Specifying the condition under which a given measure was taken.}
+\item{resp}{Numeric: Specifying the binary coded response property (0==false, 1==correct)}
+\item{time}{Numeric: Specifying the time (in rounded ms) for a given measure.}
 }
 Note: In order for the DDRep function to execute successfully the factor levels of the cond coulmns have to be identical to the condition names specified
 in the MM slot of the \code{model}!

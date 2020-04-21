@@ -3,7 +3,15 @@
 \docType{class}
 \name{DDFit-class}
 \alias{DDFit-class}
+\alias{summary,DDFit-method}
+\alias{plot,DDFit,ANY-method}
+\alias{plot,DDFit-method}
 \title{\code{DDFit} class definition}
+\usage{
+\S4method{summary}{DDFit}(object)
+
+\S4method{plot}{DDFit,ANY}(x)
+}
 \description{
 \code{DDFit} class definition
 }

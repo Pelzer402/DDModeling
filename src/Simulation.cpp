@@ -262,7 +262,7 @@ void Simulation::PAR_Model_Get(int Set, int cond){
 void Simulation::Run_SIMPLEX_struc(bool rnd){
   if (rnd)
   {
-    for (int SORTING = 0; SORTING<SIMPLEX_struc.size(); ++SORTING)
+    for (std::size_t SORTING = 0; SORTING<SIMPLEX_struc.size(); ++SORTING)
     {
       for ( int j = 0;j<SIMPLEX_struc[SORTING];++j)
       {
@@ -285,7 +285,7 @@ void Simulation::Run_SIMPLEX_struc(bool rnd){
   }
   else
   {
-    for (int SORTING = 0; SORTING<SIMPLEX_struc.size(); ++SORTING)
+    for (std::size_t SORTING = 0; SORTING<SIMPLEX_struc.size(); ++SORTING)
     {
       for ( int j = 0;j<SIMPLEX_struc[SORTING];++j)
       {
@@ -312,7 +312,7 @@ void Simulation::SIM_Init_SS(int m_trials){
   {
     n_s_trials = m_trials;
     trials = 0;
-    for (int p = 0; p<TBF.Rep.CAF[0].size();++p)
+    for (std::size_t p = 0; p<TBF.Rep.CAF[0].size();++p)
     {
       trials += TBF.Rep.CAF[0][p].N_A + TBF.Rep.CAF[0][p].N_B;
     }
@@ -387,7 +387,7 @@ void Simulation::REP_Get(int Set){
     //split Data in correct and incorrect
     std::vector<RAW_format> RAW_c;
     std::vector<RAW_format> RAW_i;
-    for (int i = 0; i<EVAL[Set].Rep.RAW[c].size();++i)
+    for (std::size_t i = 0; i<EVAL[Set].Rep.RAW[c].size();++i)
     {
       if(EVAL[Set].Rep.RAW[c][i].resp == 1)
       {
@@ -401,7 +401,7 @@ void Simulation::REP_Get(int Set){
     // CDF korrekter Antworten
     if (RAW_c.size()<EVAL[Set].Rep.CDF[c].size())
     {
-      for (int i = 0; i<EVAL[Set].Rep.CDF[c].size();++i)
+      for (std::size_t i = 0; i<EVAL[Set].Rep.CDF[c].size();++i)
       {
         EVAL[Set].Rep.CDF[c][i].time = 0.0;
         EVAL[Set].Rep.CDF[c][i].N = 0;
@@ -409,7 +409,7 @@ void Simulation::REP_Get(int Set){
     }
     else
     {
-      for (int i = 0; i<EVAL[Set].Rep.CDF[c].size();++i)
+      for (std::size_t i = 0; i<EVAL[Set].Rep.CDF[c].size();++i)
       {
         EVAL[Set].Rep.CDF[c][i].time = RAW_c[(long)(RAW_c.size()*EVAL[Set].Rep.CDF[c][i].perc)].time;
         EVAL[Set].Rep.CDF[c][i].N = (RAW_c.size()*EVAL[Set].Rep.CDF[c][i].perc);
@@ -417,9 +417,9 @@ void Simulation::REP_Get(int Set){
     }
     // CAF
     std::vector<RAW_format> tmp_RAW;
-    for (int i = 0; i<EVAL[Set].Rep.RAW[c].size();++i)
+    for (std::size_t i = 0; i<EVAL[Set].Rep.RAW[c].size();++i)
     {
-      for (int j = 0; j<EVAL[Set].Rep.CAF[c].size();++j)
+      for (std::size_t j = 0; j<EVAL[Set].Rep.CAF[c].size();++j)
       {
         tmp_RAW.push_back(EVAL[Set].Rep.RAW[c][i]);
       }
@@ -429,7 +429,7 @@ void Simulation::REP_Get(int Set){
     long space = 0;
     double buff_time;
     long buff_N_A;
-    for (int b = 0; b < EVAL[Set].Rep.CAF[c].size(); ++b)
+    for (std::size_t b = 0; b < EVAL[Set].Rep.CAF[c].size(); ++b)
     {
       buff_time = 0.0;
       buff_N_A = 0;
@@ -464,7 +464,7 @@ void Simulation::FitCrit_Get(int Set)
   {
     tmp = 0.0;
     n_cdf_tbf= 0.0;
-    for (int i = 0; i<TBF.Rep.CAF[c].size();++i )
+    for (std::size_t i = 0; i<TBF.Rep.CAF[c].size();++i )
     {
       n_cdf_tbf += TBF.Rep.CAF[c][i].N_A;
     }
@@ -474,11 +474,11 @@ void Simulation::FitCrit_Get(int Set)
     else
     {
       n_cdf_eval = 0.0;
-      for (int i = 0; i<EVAL[Set].Rep.CAF[c].size();++i )
+      for (std::size_t i = 0; i<EVAL[Set].Rep.CAF[c].size();++i )
       {
         n_cdf_eval += EVAL[Set].Rep.CAF[c][i].N_A;
       }
-      for (int p = 0; p < TBF.Rep.CDF[c].size(); ++p)
+      for (std::size_t p = 0; p < TBF.Rep.CDF[c].size(); ++p)
       {
         prop_sim = (double)EVAL[Set].Rep.CDF[c][p].time/ (double)TBF.Rep.CDF[c][p].time;
         tmp += std::pow((1 - prop_sim), 2.0);
@@ -492,7 +492,7 @@ void Simulation::FitCrit_Get(int Set)
     }
     tmp_FitCrit += tmp;
     tmp = 0.0;
-    for (int p = 0; p < TBF.Rep.CAF[c].size(); ++p)
+    for (std::size_t p = 0; p < TBF.Rep.CAF[c].size(); ++p)
     {
       if (TBF.Rep.CAF[c][p].acc == 0.0)
       {
@@ -684,9 +684,9 @@ void Simulation::GRID_Split(int nS,std::string name)
 void Simulation::GRID_IN(std::ifstream &grid, bool eval)
 {
   char ichar[64];
-  for (int cond = 0; cond < EVAL[0].Rep.CDF.size(); ++cond)
+  for (std::size_t cond = 0; cond < EVAL[0].Rep.CDF.size(); ++cond)
   {
-    for (int bin = 0; bin < EVAL[0].Rep.CDF[cond].size(); ++bin)
+    for (std::size_t bin = 0; bin < EVAL[0].Rep.CDF[cond].size(); ++bin)
     {
       grid >> ichar;
       EVAL[0].Rep.CDF[cond][bin].time = atof(ichar);
@@ -696,9 +696,9 @@ void Simulation::GRID_IN(std::ifstream &grid, bool eval)
       EVAL[0].Rep.CDF[cond][bin].N = atof(ichar);
     }
   }
-  for (int cond = 0; cond < EVAL[0].Rep.CAF.size(); ++cond)
+  for (std::size_t cond = 0; cond < EVAL[0].Rep.CAF.size(); ++cond)
   {
-    for (int bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
+    for (std::size_t bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
     {
       grid >> ichar;
       EVAL[0].Rep.CAF[cond][bin].time= atof(ichar);
@@ -729,7 +729,7 @@ void Simulation::GRID_IN(std::ifstream &grid, bool eval)
     FitCrit_Get(0);
   }
   RESULT.push_back(EVAL[0]);
-  if (RESULT.size()>n_GRID)
+  if ((int)(RESULT.size())>n_GRID)
   {
     std::sort(RESULT.begin(), RESULT.end());
     RESULT.pop_back();
@@ -751,7 +751,7 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
     Simulate(0);
     for (int cond = 0; cond < Model.Conditions.length() ; ++cond)
     {
-        for (int bin = 0; bin < EVAL[0].Rep.CDF[cond].size(); ++bin)
+        for (std::size_t bin = 0; bin < EVAL[0].Rep.CDF[cond].size(); ++bin)
         {
           outstream << EVAL[0].Rep.CDF[cond][bin].time << " ";
           //outstream << EVAL[0].Rep.CDF[cond][bin].perc << " ";
@@ -760,7 +760,7 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
     }
     for (int cond = 0; cond < Model.Conditions.length(); ++cond)
     {
-      for (int bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
+      for (std::size_t bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
       {
         outstream << EVAL[0].Rep.CAF[cond][bin].time << " ";
         //outstream << EVAL[0].Rep.CAF[cond][bin].perc << " ";
@@ -773,7 +773,7 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
     {
       long NA_buff = 0;
       long NB_buff = 0;
-      for (int bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
+      for (std::size_t bin = 0; bin < EVAL[0].Rep.CAF[cond].size(); ++bin)
       {
         NA_buff += EVAL[0].Rep.CAF[cond][bin].N_A;
         NB_buff += EVAL[0].Rep.CAF[cond][bin].N_B;
@@ -790,7 +790,7 @@ void Simulation::GRID_Simulate_ParComb(std::ofstream &outstream, std::ifstream &
 
 void Simulation::GRID_Read(std::vector<std::string> grid_parts, bool eval)
 {
-  for ( int i = 0; i<grid_parts.size(); ++i)
+  for ( std::size_t i = 0; i<grid_parts.size(); ++i)
   {
     std::ifstream grid_in(grid_parts[i].c_str());
     int n_grid = 0;
@@ -806,3 +806,4 @@ void Simulation::GRID_Read(std::vector<std::string> grid_parts, bool eval)
     std::sort(RESULT.begin(), RESULT.end());
   }
 }
+

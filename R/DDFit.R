@@ -15,8 +15,10 @@ setClass("DDFit",
          )
 )
 
-#' @export
-setMethod("summary","DDFit",function(object){
+#' @rdname DDFit-class
+#' @aliases summary,DDFit-method
+#' @exportMethod summary
+setMethod("summary",signature("DDFit"),function(object){
   if (all(object@INP_REP@PAR == 0))
   {
    eta_buff <- "Population parameters not known! No calculation possible."
@@ -31,8 +33,11 @@ setMethod("summary","DDFit",function(object){
   print(OUT)
 })
 
-#' @export
-setMethod("plot",signature(x="DDFit"),function(x){
+#' @rdname DDFit-class
+#' @aliases plot,DDFit-method
+#' @exportMethod plot
+setMethod("plot",signature("DDFit"),function(x){
+  perc <- type <- cond <- acc <- NULL
   CAF <- c()
   CDF <- c()
   for ( i in 1:length(x@MODEL@MM))

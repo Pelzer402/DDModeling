@@ -31,12 +31,12 @@ public:
   Simulation(DDModel_cpp DDModel_cpp_) :Model{DDModel_cpp_}
   {
     PAR_Model.resize(Model.ModelParameter.length());
-    trials=10000;
     EVAL.resize(Model.Parameter.length()+4); // +4 ==  4 additional buffer points for SIMPLEX
-    for (int i = 0; i<EVAL.size();++i)
+    for (std::size_t i = 0; i<EVAL.size();++i)
     {
       EVAL[i] = EVAL_format(DDModel_cpp_);
     }
+    trials=10000;
     S_Sampling = false;
     n_s_sample = 1;
   }
@@ -44,7 +44,7 @@ public:
   {
     PAR_Model.resize(Model.ModelParameter.length());
     EVAL.resize(Model.Parameter.length()+4); // +4 ==  4 additional buffer points for SIMPLEX
-    for (int i = 0; i<EVAL.size();++i)
+    for (std::size_t i = 0; i<EVAL.size();++i)
     {
       EVAL[i] = EVAL_format(DDModel_cpp_);
     }
@@ -56,7 +56,7 @@ public:
   {
     PAR_Model.resize(Model.ModelParameter.length());
     EVAL.resize(Model.Parameter.length()+4); // +4 ==  4 additional buffer points for SIMPLEX
-    for (int i = 0; i<EVAL.size();++i)
+    for (std::size_t i = 0; i<EVAL.size();++i)
     {
       EVAL[i] = EVAL_format(DDModel_cpp_);
     }
@@ -69,21 +69,34 @@ public:
   // variables
   std::string                       Dir;          // working directory
   DDModel_cpp                       Model;        // Model used
+  // Simulation variables
   long                              trials;       // number of trials in simulation
   bool                              S_Sampling;   // logical for application of super sampling
   int                               n_s_sample;   // Number of super samples
   long                              n_s_trials;   // Trials inside a super sample
   RAW_format                        response;     // Single response of da diffusion proces [0]=time[ms], [1] = response [1==correct,0==incorrect]
   std::vector<double>               PAR_Model;    // Buffer for the true modelparameters (after transformation with modelmatrix)
-  std::vector<EVAL_format>          EVAL;         // Evaluationsbuffer used in SIMPLEX
+  // Fit variables
   EVAL_format                       TBF;          // Data that should be fitted
+  std::vector<EVAL_format>          EVAL;         // Evaluationsbuffer used in SIMPLEX
   std::vector<EVAL_format>          RESULT;       // Buffer of possible results
   std::string                       fit_method;   // Fit method used
   std::string                       start_method; // Start value method used
-  int                               n_GRID;       // Number of values that are to be saved from grid
-  std::vector<int>                  SIMPLEX_struc;// Structure of simplexes used for fitting
-  double                            self_fit;
   std::string                       perf_ana;
+  // Grid variables
+  int                               n_GRID;       // Number of values that are to be saved from grid
+  // SIMPLEX variables
+  std::vector<int>                  SIMPLEX_struc; // Structure of simplexes used for fitting
+  double                            SIMPLEX_alpha; // Reflection coef
+  double                            SIMPLEX_beta;  // Contraction coef
+  double                            SIMPLEX_gamma; // Expansion coef
+  double                            SIMPLEX_sigma; // Shrink coef
+  double                            SIMPLEX_rtoll; // Simplex tollerance
+  int                               SIMPLEX_nfunc; // maximum number of iterations
+  int                               SIMPLEX_nshrink; // maximum number of shrinks
+  // Misc vars (perfomrmance analysis)
+  double                            self_fit;
+
 
   // Functions for Simulation/Parameterinitialisation/Fit-evalutation
   void Simulate(int Set);                             // Simulates a given parameterset in EVAL[Set] and writes the corresponding representation
@@ -101,9 +114,10 @@ public:
 
   // Functions for the Simplex
   void SIMPLEX();                                     // Runs a Simplex on a given EVAL
-  void SIMPLEX_TransformSimplex(int ihi, double fac);               // Subroutine for Simplex-manipulation
-  void SIMPLEX_TransformSimplex_star2_beta(int ihi, double fac);    // Subroutine for Simplex-manipulation
-  void SIMPLEX_TransformSimplex_star2_gamma(int ihi, double fac);   // Subroutine for Simplex-manipulation
+  void SIMPLEX_TransformSimplex(int ihi);               // Subroutine for Simplex-manipulation
+  void SIMPLEX_TransformSimplex_star2_beta(int ihi);    // Subroutine for Simplex-manipulation
+  void SIMPLEX_TransformSimplex_star2_gamma(int ihi);   // Subroutine for Simplex-manipulatio
+  void SIMPLEX_Init_coef(Rcpp::List lcoef);
   void Run_SIMPLEX_struc(bool rnd);                                 // Runs Simplex structure
   // Functions for the Grid-calculation
   void GRID_Get_ParComb(std::vector<int> maxes);                    // Calculates parametercombinations with stepsizes equal to "maxes" and writes them in RESULT

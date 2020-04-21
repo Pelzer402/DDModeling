@@ -6,12 +6,12 @@ Rcpp::S4 DDRep_cpp::Convert_to_S4(){
   Rcpp::List CDF_List;
   Rcpp::List CAF_List;
   Rcpp::List REP_List;
-   for (int c = 0; c<CDF.size();++c)
+   for (std::size_t c = 0; c<CDF.size();++c)
    {
    Rcpp::NumericVector time;
    Rcpp::NumericVector resp;
    Rcpp::CharacterVector cond;
-     for (int i = 0; i<RAW[c].size();++i)
+     for (std::size_t i = 0; i<RAW[c].size();++i)
      {
      time.push_back(RAW[c][i].time);
      resp.push_back(RAW[c][i].resp);
@@ -20,13 +20,13 @@ Rcpp::S4 DDRep_cpp::Convert_to_S4(){
    RAW_List.push_back(Rcpp::DataFrame::create( Rcpp::Named("cond") = cond,Rcpp::Named("resp") = resp,Rcpp::Named("time")=time));
    }
   Rcpp::CharacterVector cond_names_buff;
-  for (int c = 0; c< CDF.size();++c)
+  for (std::size_t c = 0; c< CDF.size();++c)
   {
     Rcpp::NumericVector time;
     Rcpp::NumericVector N;
     Rcpp::CharacterVector cond;
     Rcpp::NumericVector perc;
-    for (int i = 0; i<CDF[c].size();++i)
+    for (std::size_t i = 0; i<CDF[c].size();++i)
     {
       time.push_back(CDF[c][i].time);
       N.push_back(CDF[c][i].N);
@@ -38,7 +38,7 @@ Rcpp::S4 DDRep_cpp::Convert_to_S4(){
     CDF_List.push_back(CDF_frame);
   }
   CDF_List.names() = cond_names_buff;
-  for (int c = 0; c<CAF.size();++c)
+  for (std::size_t c = 0; c<CAF.size();++c)
   {
     Rcpp::NumericVector time_caf;
     Rcpp::NumericVector N_A;
@@ -46,7 +46,7 @@ Rcpp::S4 DDRep_cpp::Convert_to_S4(){
     Rcpp::CharacterVector cond_caf;
     Rcpp::NumericVector perc_caf;
     Rcpp::NumericVector acc;
-    for (int i = 0; i<CAF[c].size();++i)
+    for (std::size_t i = 0; i<CAF[c].size();++i)
     {
       time_caf.push_back(CAF[c][i].time);
       N_A.push_back(CAF[c][i].N_A);
@@ -61,11 +61,11 @@ Rcpp::S4 DDRep_cpp::Convert_to_S4(){
   CAF_List.names()=cond_names_buff;
   Rcpp::NumericVector CDF_Form;
   Rcpp::NumericVector CAF_Form;
-  for (int i = 0; i<RF[0].size();++i)
+  for (std::size_t i = 0; i<RF[0].size();++i)
   {
     CDF_Form.push_back(RF[0][i]);
   }
-  for (int i = 0; i<RF[1].size();++i)
+  for (std::size_t i = 0; i<RF[1].size();++i)
   {
     CAF_Form.push_back(RF[1][i]);
   }
@@ -77,7 +77,7 @@ Rcpp::S4 DDRep_cpp::Convert_to_S4(){
   REP_List.names() = Rcpp::CharacterVector({"CDF","CAF"});
   RAW_List.names() = cond_names_buff;
   Rcpp::DataFrame PAR_frame = Rcpp::DataFrame::create();
-  for (int i = 0; i<PAR_v.size();++i)
+  for (std::size_t i = 0; i<PAR_v.size();++i)
   {
     PAR_frame.push_back(PAR_v[i]);
   }
@@ -93,11 +93,11 @@ Rcpp::List DDRep_cpp::Convert_FORM_to_List(){
   Rcpp::List FORM_vec;
   Rcpp::NumericVector CDF_Form;
   Rcpp::NumericVector CAF_Form;
-  for (int i = 0; i<RF[0].size();++i)
+  for (std::size_t i = 0; i<RF[0].size();++i)
   {
     CDF_Form.push_back(RF[0][i]);
   }
-  for (int i = 0; i<RF[1].size();++i)
+  for (std::size_t i = 0; i<RF[1].size();++i)
   {
     CAF_Form.push_back(RF[1][i]);
   }

@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DDModeling</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.4</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Function to fit a given DDRep to a given DDModel</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Pelzer402/DDModeling/blob/master/R/Fit_DDModel.R'><code>R/Fit_DDModel.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/Pelzer402/DDModeling/blob/master/R/Fit.R'><code>R/Fit.R</code></a></small>
     <div class="hidden name"><code>Fit_DDModel.Rd</code></div>
     </div>
 
@@ -151,10 +151,14 @@
   <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>DL_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>DL_scale</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>INPUT</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>Center</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>Stddev</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>), <span class='kw'>OUTPUT</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>Center</span> <span class='kw'>=</span>
+    <span class='fl'>FALSE</span>, <span class='kw'>Stddev</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)),
   <span class='kw'>grid_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>trials</span> <span class='kw'>=</span> <span class='fl'>10000L</span>,
   <span class='kw'>s_sampling</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>trials</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-  <span class='kw'>simplex_struc</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>, <span class='fl'>2</span>)
+  <span class='kw'>simplex_struc</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0L</span>),
+  <span class='kw'>simplex_coef</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-07</span>, <span class='kw'>nfunc</span>
+    <span class='kw'>=</span> <span class='fl'>120L</span>, <span class='kw'>nshrink</span> <span class='kw'>=</span> <span class='fl'>3L</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -170,29 +174,46 @@
     </tr>
     <tr>
       <th>DL_model</th>
-      <td><p><code>Model</code> in the form of a keras neural network model</p></td>
+      <td><p>(optional) <code>Model</code> in the form of a keras neural network model</p></td>
+    </tr>
+    <tr>
+      <th>DL_scale</th>
+      <td><p>(optional) <code>list</code> containing mean and sd of the transformation used in the deep learning model while training.</p></td>
     </tr>
     <tr>
       <th>grid_path</th>
-      <td><p><code>path</code> to a directory containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.</p></td>
-    </tr>
-    <tr>
-      <th>s_sampling</th>
-      <td><p><code>bool</code> indicating super sampling while fitting</p></td>
+      <td><p>(optional) <code>path</code> to a directory containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.</p></td>
     </tr>
     <tr>
       <th>trials</th>
       <td><p><code>integer</code> indicating the number of trials used while fitting (s_sampling = FALSE) or the maximum number of trials used while super sampling (s_sampling = TRUE)</p></td>
     </tr>
     <tr>
+      <th>s_sampling</th>
+      <td><p><code>bool</code> indicating super sampling while fitting</p></td>
+    </tr>
+    <tr>
       <th>simplex_struc</th>
       <td><p><code>numeric vector</code> containing the number of simplex iterations per sorting cycle.</p></td>
+    </tr>
+    <tr>
+      <th>simplex_coef</th>
+      <td><p><code>list</code> containing named parameters for the SIMPLEX</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>DDFit</code> object</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This is a rather complex function that is very flexible depending on your input!</p><dl class='dl-horizontal'>
+<dt><em>Random Fitting:</em></dt><dd><p>Exclude all optional parameters</p></dd>
+<dt>Grid Fitting:</dt><dd><p>Specify a grid_path</p></dd>
+<dt>Deep Learning Fitting</dt><dd><p>Specify DL_model and DL_scale</p></dd>
+
+</dl>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -200,6 +221,7 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
     </ul>
 
   </div>

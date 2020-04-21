@@ -58,12 +58,12 @@ public:
     }
     std::vector<double> cdf_buff;
     std::vector<double> caf_buff;
-    for (int p = 0; p< RF[0].size(); ++p)
+    for (std::size_t p = 0; p< RF[0].size(); ++p)
     {
       cdf_buff.push_back(RF[0][p]);
     }
 
-    for (int p = 0; p< (RF[1].size()-1); ++p)
+    for (std::size_t p = 0; p< (RF[1].size()-1); ++p)
     {
       caf_buff.push_back((RF[1][p+1]+RF[1][p])/2);
     }
@@ -73,12 +73,12 @@ public:
     {
       CDF[c].resize(cdf_buff.size());
       CAF[c].resize(caf_buff.size());
-      for (int i = 0; i<CDF[c].size();++i)
+      for (std::size_t i = 0; i<CDF[c].size();++i)
       {
         CDF[c][i].perc = cdf_buff[i];
         CDF[c][i].cond = DDModel_cpp_.Conditions[c];
       }
-      for (int i = 0; i<CAF[c].size();++i)
+      for (std::size_t i = 0; i<CAF[c].size();++i)
       {
         CAF[c][i].perc = caf_buff[i];
         CAF[c][i].cond = DDModel_cpp_.Conditions[c];
@@ -106,12 +106,12 @@ public:
     }
     std::vector<double> cdf_buff;
     std::vector<double> caf_buff;
-    for (int p = 0; p< RF[0].size(); ++p)
+    for (std::size_t p = 0; p< RF[0].size(); ++p)
     {
       cdf_buff.push_back(RF[0][p]);
     }
 
-    for (int p = 0; p< (RF[1].size()-1); ++p)
+    for (std::size_t p = 0; p< (RF[1].size()-1); ++p)
     {
       caf_buff.push_back((RF[1][p+1]+RF[1][p])/2);
     }
@@ -127,12 +127,12 @@ public:
       Rcpp::NumericVector RAW_resp_buff = RAW_frame_buff["resp"];
       CDF[c].resize(cdf_buff.size());
       CAF[c].resize(caf_buff.size());
-      for (int i = 0; i<CDF[c].size();++i)
+      for (std::size_t i = 0; i<CDF[c].size();++i)
       {
         CDF[c][i].perc = cdf_buff[i];
         CDF[c][i].cond = DDModel_cpp_.Conditions[c];
       }
-      for (int i = 0; i<CAF[c].size();++i)
+      for (std::size_t i = 0; i<CAF[c].size();++i)
       {
         CAF[c][i].perc = caf_buff[i];
         CAF[c][i].cond = DDModel_cpp_.Conditions[c];
@@ -173,12 +173,12 @@ public:
     }
     std::vector<double> cdf_buff;
     std::vector<double> caf_buff;
-    for (int p = 0; p< RF[0].size(); ++p)
+    for (std::size_t p = 0; p< RF[0].size(); ++p)
     {
       cdf_buff.push_back(RF[0][p]);
     }
 
-    for (int p = 0; p< (RF[1].size()-1); ++p)
+    for (std::size_t p = 0; p< (RF[1].size()-1); ++p)
     {
       caf_buff.push_back((RF[1][p+1]+RF[1][p])/2);
     }
@@ -202,14 +202,14 @@ public:
       Rcpp::CharacterVector RAW_cond_buff = RAW_frame_buff["cond"];
       Rcpp::NumericVector RAW_time_buff = RAW_frame_buff["time"];
       Rcpp::NumericVector RAW_resp_buff = RAW_frame_buff["resp"];
-      for (int i = 0; i<cdf_buff.size();++i)
+      for (std::size_t i = 0; i<cdf_buff.size();++i)
       {
         CDF[c][i].perc = cdf_buff[i];
         CDF[c][i].cond = cond_name_buff[c];
         CDF[c][i].time = cdf_time_buff[i];
         CDF[c][i].N = cdf_N_buff[i];
       }
-      for (int i = 0; i<caf_buff.size();++i)
+      for (std::size_t i = 0; i<caf_buff.size();++i)
       {
         CAF[c][i].perc = caf_buff[i];
         CAF[c][i].cond = cond_name_buff[c];

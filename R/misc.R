@@ -1,6 +1,6 @@
 # Internal rescaling function
 unscale_scale <- function(IN = NULL,unscaler = NULL){
-  if (is.null(unscaler$Center) & is.null(unscaler$Stddev))
+  if ((unscaler$Center == FALSE) || (unscaler$Stddev == FALSE))
   {
     return(IN)
   }

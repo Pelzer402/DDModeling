@@ -3,7 +3,22 @@
 \docType{class}
 \name{DDRep-class}
 \alias{DDRep-class}
+\alias{show,DDRep-method}
+\alias{plot,DDRep,ANY-method}
+\alias{plot,DDRep-method}
+\alias{Compare,DDRep,DDRep-method}
+\alias{Compare,DDRep-method}
+\alias{Compare,DDRep,character-method}
 \title{\code{DDRep} class definition}
+\usage{
+\S4method{show}{DDRep}(object)
+
+\S4method{plot}{DDRep,ANY}(x)
+
+\S4method{Compare}{DDRep,DDRep}(e1, e2)
+
+\S4method{Compare}{DDRep,character}(e1, e2)
+}
 \description{
 \code{DDRep} class definition
 }

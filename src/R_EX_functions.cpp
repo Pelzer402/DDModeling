@@ -36,8 +36,10 @@ Rcpp::S4 Fit_observed_data_rnd(Rcpp::List calc_cluster){
   Simulation S(M,DDRep_);
   S.start_method = "Random";
   S.SIMPLEX_struc = Rcpp::as<std::vector<int>>(calc_cluster[4]);
+  Rcpp::List scoef = Rcpp::as<Rcpp::List>(calc_cluster[5]);
+  S.SIMPLEX_Init_coef(scoef);
   S.fit_method = "";
-  for (int i = 0; i<S.SIMPLEX_struc.size(); ++ i)
+  for (std::size_t i = 0; i<S.SIMPLEX_struc.size(); ++ i)
   {
     S.fit_method = S.fit_method + std::to_string(S.SIMPLEX_struc[i]) + " Simplex";
     if (i<S.SIMPLEX_struc.size()-1)
@@ -64,6 +66,8 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
   Simulation S(M,DDRep_);
   S.start_method = "Grid: " + grid_path;
   S.SIMPLEX_struc = Rcpp::as<std::vector<int>>(calc_cluster[6]);
+  Rcpp::List scoef = Rcpp::as<Rcpp::List>(calc_cluster[7]);
+  S.SIMPLEX_Init_coef(scoef);
   if (S.SIMPLEX_struc[0] == 0)
   {
     S.n_GRID = 1;
@@ -73,7 +77,7 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
     S.n_GRID = S.SIMPLEX_struc[0];
   }
   S.fit_method = "";
-  for (int i = 0; i<S.SIMPLEX_struc.size(); ++ i)
+  for (std::size_t i = 0; i<S.SIMPLEX_struc.size(); ++ i)
   {
     S.fit_method = S.fit_method + std::to_string(S.SIMPLEX_struc[i]) + " Simplex";
     if (i<S.SIMPLEX_struc.size()-1)
@@ -81,7 +85,7 @@ Rcpp::S4 Fit_observed_data_grid(Rcpp::List calc_cluster){
       S.fit_method =  S.fit_method  + " -> ";
     }
   }
-  for ( int i = 0; i<grid_parts.size();++i)
+  for ( std::size_t i = 0; i<grid_parts.size();++i)
   {
     std::replace(grid_parts[i].begin(),grid_parts[i].end(),'/','\\');
   }
@@ -104,8 +108,10 @@ Rcpp::S4 Fit_observed_data_DL(Rcpp::List calc_cluster){
   S.start_method = "DL Prediction";
   S.SIMPLEX_struc = Rcpp::as<std::vector<int>>(calc_cluster[4]);
   std::vector<double> PRE = Rcpp::as<std::vector<double>>(calc_cluster[5]);
+  Rcpp::List scoef = Rcpp::as<Rcpp::List>(calc_cluster[6]);
+  S.SIMPLEX_Init_coef(scoef);
   S.fit_method = "";
-  for (int i = 0; i<S.SIMPLEX_struc.size(); ++ i)
+  for (std::size_t i = 0; i<S.SIMPLEX_struc.size(); ++ i)
   {
     S.fit_method = S.fit_method + std::to_string(S.SIMPLEX_struc[i]) + " Simplex";
     if (i<S.SIMPLEX_struc.size()-1)
@@ -167,7 +173,7 @@ Rcpp::List GRID_to_DDRep(Rcpp::List calc_cluster)
 {
   Rcpp::S4 DDModel_ = Rcpp::as<Rcpp::S4>(calc_cluster[0]);
   std::vector<std::string> grid_parts =Rcpp::as<std::vector<std::string>>(calc_cluster[1]);
-  for ( int i = 0; i<grid_parts.size();++i)
+  for ( std::size_t i = 0; i<grid_parts.size();++i)
   {
     std::replace(grid_parts[i].begin(),grid_parts[i].end(),'/','\\');
   }
@@ -176,7 +182,7 @@ Rcpp::List GRID_to_DDRep(Rcpp::List calc_cluster)
   S.n_GRID = Rcpp::as<int>(calc_cluster[2]);
   S.GRID_Read(grid_parts,false);
   Rcpp::List OUT;
-  for (int i = 0; i<S.RESULT.size();++i)
+  for (std::size_t i = 0; i<S.RESULT.size();++i)
   {
     OUT.push_back(S.RESULT[i].Rep.Convert_to_S4());
   }

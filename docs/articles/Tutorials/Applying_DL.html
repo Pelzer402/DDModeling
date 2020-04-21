@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">DDModeling</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.4</span>
       </span>
     </div>
 
@@ -115,8 +115,23 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DDModeling)</a>
 <a class="sourceLine" id="cb1-2" title="2">DSTP &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/DDModel.html">DDModel</a></span>(<span class="dt">model=</span><span class="st">"DSTP"</span>,<span class="dt">task =</span> <span class="st">"flanker"</span>, <span class="dt">CDF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.9</span>), <span class="dt">CAF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.0</span>,<span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">0.6</span>,<span class="fl">0.8</span>,<span class="fl">1.0</span>))</a>
 <a class="sourceLine" id="cb1-3" title="3">Grid_DSTP &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Generate_GRID.html">Generate_GRID</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">path =</span> <span class="kw"><a href="https://rdrr.io/r/base/getwd.html">getwd</a></span>(), <span class="dt">name =</span> <span class="st">"DSTP_Flanker"</span>, <span class="dt">eval_pts =</span> <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">2</span>,<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(DSTP<span class="op">@</span>DM)))</a>
-<a class="sourceLine" id="cb1-4" title="4">DATA &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Import_GRID.html">Import_GRID</a></span>(<span class="dt">grid_path =</span> Grid_DSTP,<span class="dt">to =</span> <span class="st">"keras_data"</span>)</a></code></pre></div>
-<p>The <code><a href="../../reference/Import_GRID.html">Import_GRID()</a></code> function takes two arguments <strong>grid_path</strong> and <strong>to</strong>. The former takes the path to the directory where the GRID is saved, the latter specifies to which format the import should take place. <code>to = "data_keras</code> will return a list containing an INPUT and OUTPUT, which can be used for deep learning.</p>
+<a class="sourceLine" id="cb1-4" title="4">DATA &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Import_GRID.html">Import_GRID</a></span>(<span class="dt">grid_path =</span> Grid_DSTP,<span class="dt">to =</span> <span class="st">"keras_data"</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..CN_data): Both 'CN_data' and '..CN_data'</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co">#&gt; exist in calling scope. Please remove the '..CN_data' variable in calling scope</span></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co">#&gt; for clarity.</span></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..PAR): Both 'PAR' and '..PAR' exist in</span></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt; calling scope. Please remove the '..PAR' variable in calling scope for clarity.</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..CN_data): Both 'CN_data' and '..CN_data'</span></a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt; exist in calling scope. Please remove the '..CN_data' variable in calling scope</span></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; for clarity.</span></a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..PAR): Both 'PAR' and '..PAR' exist in</span></a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="co">#&gt; calling scope. Please remove the '..PAR' variable in calling scope for clarity.</span></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..CN_data): Both 'CN_data' and '..CN_data'</span></a>
+<a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt; exist in calling scope. Please remove the '..CN_data' variable in calling scope</span></a>
+<a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; for clarity.</span></a>
+<a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..PAR): Both 'PAR' and '..PAR' exist in</span></a>
+<a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt; calling scope. Please remove the '..PAR' variable in calling scope for clarity.</span></a></code></pre></div>
+<p>The <code><a href="../../reference/Import_GRID.html">Import_GRID()</a></code> function takes two arguments <strong>grid_path</strong> and <strong>to</strong>. The former takes the path to the directory where the GRID is saved, the latter specifies to which format the import should take place. <code>to = "data_keras"</code> will return a list containing an INPUT and OUTPUT, which can be used for deep learning.</p>
 <p>DDModeling is using Tensorflow and keras for deep learning, so make sure to install those beforehand!</p>
 <p>With the data setup lets build a quick model!</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(keras)</a>
@@ -146,7 +161,7 @@
 <a class="sourceLine" id="cb2-25" title="25">      <span class="kw">callback_reduce_lr_on_plateau</span>(<span class="dt">factor =</span> <span class="fl">0.05</span>)</a>
 <a class="sourceLine" id="cb2-26" title="26">    )</a>
 <a class="sourceLine" id="cb2-27" title="27">)</a></code></pre></div>
-<p>You can either use this in your own code in any way you want or integrate it further for fitting in with DDModeling!</p>
+<p>You can either use this in your own code in any way you want or integrate it further for fitting with DDModeling!</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

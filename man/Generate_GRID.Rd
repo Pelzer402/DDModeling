@@ -11,15 +11,18 @@ Generate_GRID(model = NULL, path = NULL, name = NULL, eval_pts = NULL)
 
 \item{path}{\code{character} that specifies the full path to the directory in which the Grid should be saved}
 
-\item{name}{\code{character} that represents the name (and subdirectory in path) of the Grid}
+\item{name}{\code{character} that represents the name of the Grid (and indirectly the name of the subdirectory set in the directory specified in path)}
 
-\item{eval_pts}{\code{numeric} vector containing the step sizes for the grid}
+\item{eval_pts}{\code{numeric} vector containing number of evaluation points of the parameters in the grid}
 }
 \value{
-No direct return value inside of the R-session. The calculated Grid will be saved in the specified path!
+The path to the grid as a \code{character}
 }
 \description{
+Generates a Grid from a given DDModel
+}
+\details{
 Eval_pts specifies the number of evaluation points per parameter that are used in the grid, such the number of integers in
 eval_pts needs to match the number of parameters in the model. Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
-Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.
+Therefor, if one would like to specify the used evaluation points it is advised to specify the domain in the model.
 }

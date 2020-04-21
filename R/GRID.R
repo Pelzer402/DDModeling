@@ -4,12 +4,12 @@
 #' @rdname Generate_GRID
 #' @param  model \code{DDModel} object
 #' @param path \code{character} that specifies the full path to the directory in which the Grid should be saved
-#' @param name \code{character} that represents the name (and subdirectory in path) of the Grid
-#' @param eval_pts \code{numeric} vector containing the step sizes for the grid
-#' @return No direct return value inside of the R-session. The calculated Grid will be saved in the specified path!
-#' @description  Eval_pts specifies the number of evaluation points per parameter that are used in the grid, such the number of integers in
+#' @param name \code{character} that represents the name of the Grid (and indirectly the name of the subdirectory set in the directory specified in path)
+#' @param eval_pts \code{numeric} vector containing number of evaluation points of the parameters in the grid
+#' @return The path to the grid as a \code{character}
+#' @details   Eval_pts specifies the number of evaluation points per parameter that are used in the grid, such the number of integers in
 #' eval_pts needs to match the number of parameters in the model. Note that in the given function the evaluation points are allways equally spaced concerning the corresponding parameter domain in the used model.
-#' Therefor, If one would like to specify the used evaluation points it is advised to specify the domain in the model.
+#' Therefor, if one would like to specify the used evaluation points it is advised to specify the domain in the model.
 #' @export
 Generate_GRID <- function(model = NULL, path = NULL, name = NULL, eval_pts = NULL){
   Flag <- NULL
@@ -37,12 +37,6 @@ Generate_GRID <- function(model = NULL, path = NULL, name = NULL, eval_pts = NUL
   ArgumentCheck::finishArgCheck(Check)
   if (is.null(Flag))
   {
-    #steps <- rep(1,ncol(model@DM))
-    #cat("Please define the step sizes of all parameters:")
-    #for (i in 1:length(steps))
-    #{
-    #  steps[i] <- as.integer(readline(prompt = paste0(colnames(model@DM)[i],": ")))
-    #}
     steps <- eval_pts
     grid_path <- paste(path,name,sep = "/")
     dir.create(grid_path,showWarnings = FALSE)
@@ -76,11 +70,15 @@ Generate_GRID <- function(model = NULL, path = NULL, name = NULL, eval_pts = NUL
 #'
 #' @name Import_GRID
 #' @rdname Import_GRID
-#' @param grid_path  \code{path} to a directory containing a .GRID fileset. If NULL the model will be fitted using 20 randomly drawn startparametersets from the model-DOMAIN.
+#' @param grid_path  \code{path} to a directory containing a .GRID fileset.
 #' @param to \code{character} that specifies the format to import to (choose from "frame", "keras_data" and "DDRep")
+#' @details  "frame" will return a \code{data.frame} like structure to the total Grid stored in the grid_path. "keras_data" will return a \code{list}
+#' containing an INPUT and OUTPUT element. The INPUT constitutes all relevant values from the CDF/CAF (namely reaction times and accuracy) in a \code{matrix} with each row
+#' corresponding to one parameter set in the OUTPUT. "DDRep" will convert the complete Grid to DDReps in a \code{list}.
 #' @return \code{list} of \code{DDRep}, \code{list} of \code{matrix} or \code{data.frame} dependend on the "to" parameter
 #' @export
 Import_GRID <- function(grid_path = NULL, to = "frame"){
+  ..CN_data <- ..PAR <- NULL
   files <- list.files(grid_path,full.names = TRUE,pattern = "\\.GRID$")
   model <- readRDS(list.files(grid_path,full.names = TRUE,pattern = "\\.Gcfg$"))
   n_evals <- 0;

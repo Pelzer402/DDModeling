@@ -1,10 +1,11 @@
 Package: DDModeling
 Type: Package
 Title: A package for the easy simulation of drift diffusion processes in cognitive psychology
-Version: 0.0.1.3
+Version: 0.0.1.4
 Authors@R: person("Thomas", "Pelzer", email = "thomas.pelzer.arbeit@gmail.com", role = c("aut", "cre"))
 NeedsCompilation: Yes
 Lang: en-US
+Roxygen: list(markdown = TRUE)
 Description: A package for the easy simulation of drift diffusion processes in cognitive psychology.
    It grands access to easy modelling and fitting.
 License: GPL-2
@@ -19,7 +20,7 @@ Collate:
     'DDRep.R'
     'DDFit.R'
     'FLANKER_DATA.R'
-    'Fit_DDModel.R'
+    'Fit.R'
     'GRID.R'
     'RcppExports.R'
     'Sim_DDModel.R'
@@ -32,3 +33,4 @@ VignetteBuilder: knitr
 URL: https://github.com/Pelzer402/DDModeling
 BugReports: https://github.com/Pelzer402/DDModeling/issues
 Depends: R (>= 3.5.0)
+

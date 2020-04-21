@@ -1,3 +1,8 @@
+## DDModeling 0.0.1.4
+* Several performace improvements (especially to GRID_Import)
+* Added ability to tune SIMPLEX parameters in Fit_DDModel (see new argument simplex_coef)
+* Added a Compare generic method to DDRep
+
 ## DDModeling 0.0.1.3
 * Added functionality for fitting with deep learning networks in Fit_DDModel
 

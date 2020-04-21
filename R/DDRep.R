@@ -102,7 +102,9 @@ DDRep_wide <- function(rep = NULL){
   return(OUT)
 }
 
-#' @export
+#' @rdname DDRep-class
+#' @aliases show,DDRep-method
+#' @exportMethod show
 setMethod("show","DDRep",function(object){
   cat("CDF: \n")
   print(object@REP$CDF)
@@ -112,8 +114,12 @@ setMethod("show","DDRep",function(object){
   print(object@PAR)
 })
 
-#' @export
+
+#' @rdname DDRep-class
+#' @aliases plot,DDRep-method
+#' @exportMethod plot
 setMethod("plot",signature(x="DDRep"),function(x){
+  perc <- cond <- acc <- NULL
   CAF <- c()
   CDF <- c()
   for ( i in 1:length(x@RAW))
@@ -142,7 +148,9 @@ setMethod("plot",signature(x="DDRep"),function(x){
   cowplot::plot_grid(C1,L,nrow=2,ncol=1,rel_heights=c(9,1))
 })
 
-#' @export
+#' @rdname DDRep-class
+#' @aliases Compare,DDRep-method
+#' @exportMethod Compare
 setMethod("Compare",signature(e1="DDRep",e2="DDRep"),function(e1,e2){
   if(identical(e1@RF,e2@RF))
   {
@@ -163,8 +171,11 @@ setMethod("Compare",signature(e1="DDRep",e2="DDRep"),function(e1,e2){
   }
 })
 
-#' @export
+#' @rdname DDRep-class
+#' @aliases Compare,DDRep-method
+#' @exportMethod Compare
 setMethod("Compare",signature(e1="DDRep",e2="character"),function(e1,e2){
+  Value <- NULL
   model <- readRDS(list.files(e2,full.names = TRUE,pattern = "\\.Gcfg$"))
   OUT <- c()
   if(identical(e1@RF,model@RF))

@@ -273,6 +273,9 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
   )
 }
 
+#' @rdname DDModel-class
+#' @aliases summary,DDModel-method
+#' @exportMethod show
 setMethod("show","DDModel",function(object){
   cat("DDModel Object: \n",
       "\nModel: ", object@ID,"\n",

@@ -3,7 +3,12 @@
 \docType{class}
 \name{DDModel-class}
 \alias{DDModel-class}
+\alias{show,DDModel-method}
+\alias{summary,DDModel-method}
 \title{\code{DDModel} class definition}
+\usage{
+\S4method{show}{DDModel}(object)
+}
 \description{
 \code{DDModel} class definition
 }
