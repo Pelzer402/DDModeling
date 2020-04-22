@@ -15,8 +15,8 @@ setClass("DDFit",
          )
 )
 
-#' @rdname DDFit-class
-#' @aliases summary,DDFit-method
+#' @rdname summary-methods
+#' @aliases summary
 #' @exportMethod summary
 setMethod("summary",signature("DDFit"),function(object){
   if (all(object@INP_REP@PAR == 0))
@@ -33,8 +33,8 @@ setMethod("summary",signature("DDFit"),function(object){
   print(OUT)
 })
 
-#' @rdname DDFit-class
-#' @aliases plot,DDFit-method
+#' @rdname plot-methods
+#' @aliases plot
 #' @exportMethod plot
 setMethod("plot",signature("DDFit"),function(x){
   perc <- type <- cond <- acc <- NULL

@@ -129,37 +129,37 @@
 <a class="sourceLine" id="cb2-2" title="2">Fit_rand_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Fit_DDModel.html">Fit_DDModel</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">data =</span> DATA, <span class="dt">s_sampling =</span> <span class="ot">FALSE</span>, <span class="dt">trials =</span> 2000L, <span class="dt">simplex_struc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(10L))</a>
 <a class="sourceLine" id="cb2-3" title="3">Fit_rand_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Fit_DDModel.html">Fit_DDModel</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">data =</span> DATA, <span class="dt">s_sampling =</span> <span class="ot">FALSE</span>, <span class="dt">trials =</span> 2000L, <span class="dt">simplex_struc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(10L,2L))</a>
 <a class="sourceLine" id="cb2-4" title="4">Fit_rand_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Fit_DDModel.html">Fit_DDModel</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">data =</span> DATA, <span class="dt">s_sampling =</span> <span class="ot">FALSE</span>, <span class="dt">trials =</span> 2000L, <span class="dt">simplex_struc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(10L,2L,1L))</a></code></pre></div>
-<p><code><a href="../../reference/Fit_DDModel.html">Fit_DDModel()</a></code> will return a <strong>DDFit</strong> object that can be called by name or inspected using the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> or <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> functions.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(Fit_rand_<span class="dv">1</span>)</a>
+<p><code><a href="../../reference/Fit_DDModel.html">Fit_DDModel()</a></code> will return a <strong>DDFit</strong> object that can be called by name or inspected using the <code><a href="../../reference/summary-methods.html">summary()</a></code> or <code><a href="../../reference/plot-methods.html">plot()</a></code> functions.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="../../reference/summary-methods.html">summary</a></span>(Fit_rand_<span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; $INPUT_Par</span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;         Ter         a         c       mu_t       mu_f    mu_RS2     mu_SS</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; 1 0.1624934 0.1499947 0.1499947 0.05416447 0.05832894 0.2624934 0.4333158</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;         Ter         a         c      mu_t      mu_f    mu_RS2    mu_SS</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; 1 0.3981397 0.3385118 0.3385118 0.1327132 0.2154265 0.4981397 1.061706</span></a>
 <a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; $FIT_Par</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;         Ter         a         c       mu_t       mu_f    mu_RS2     mu_SS</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; 1 0.2059236 0.1408341 0.1642783 0.06776147 0.06747453 0.3107187 0.4587933</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;         Ter         a    c      mu_t      mu_f    mu_RS2     mu_SS</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; 1 0.3817597 0.3649903 0.14 0.1446968 0.1121554 0.5350138 0.4049623</span></a>
 <a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; $Eta</span></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;         Ter          a          c    mu_t       mu_f    mu_RS2      mu_SS</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; 1 0.1447673 0.03816924 0.05951501 0.13597 0.04572792 0.1607508 0.03184691</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;          Ter         a         c      mu_t      mu_f    mu_RS2     mu_SS</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; 1 0.05459988 0.1103273 0.8271324 0.1198353 0.5163553 0.1229136 0.8209295</span></a>
 <a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; $mean_Eta</span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; [1] 0.08810674</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; [1] 0.3674419</span></a>
 <a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; $Fit</span></a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; [1] 0.05721719</span></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(Fit_rand_<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt; Fit: 0.05721719</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; [1] 0.02415821</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="kw"><a href="../../reference/plot-methods.html">plot</a></span>(Fit_rand_<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt; Fit: 0.02415821</span></a></code></pre></div>
 <p><img src="Fitting_models_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"></a>
 <a class="sourceLine" id="cb4-2" title="2">Fit_rand_<span class="dv">1</span><span class="op">@</span>FIT<span class="op">@</span>FIT_V</a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; [1] 0.05721719</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; [1] 0.02415821</span></a>
 <a class="sourceLine" id="cb4-4" title="4">Fit_rand_<span class="dv">2</span><span class="op">@</span>FIT<span class="op">@</span>FIT_V</a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; [1] 0.004621392</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; [1] 0.0001772721</span></a>
 <a class="sourceLine" id="cb4-6" title="6">Fit_rand_<span class="dv">3</span><span class="op">@</span>FIT<span class="op">@</span>FIT_V</a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; [1] 0.008588202</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; [1] 0.000137421</span></a>
 <a class="sourceLine" id="cb4-8" title="8">Fit_rand_<span class="dv">4</span><span class="op">@</span>FIT<span class="op">@</span>FIT_V</a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; [1] 0.004239488</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; [1] 0.0001543609</span></a></code></pre></div>
 <p>Note how the fit gets better the more sophisticated the SIMPLEX structure gets! However DDModeling does not stop here, let us take a look at more complex solutions for the starting values!</p>
 </div>
 <div id="grid-simplex" class="section level1">

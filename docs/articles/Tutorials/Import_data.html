@@ -141,7 +141,7 @@
 <p>After you formated your data according to the above conventions and constructed an according <strong>DDModel</strong> importing it is rather simple.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">DSTP &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/DDModel.html">DDModel</a></span>(<span class="dt">model=</span><span class="st">"DSTP"</span>,<span class="dt">task =</span> <span class="st">"flanker"</span>,<span class="dt">CDF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.9</span>), <span class="dt">CAF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.0</span>,<span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">0.6</span>,<span class="fl">0.8</span>,<span class="fl">1.0</span>))</a>
 <a class="sourceLine" id="cb2-2" title="2">Subj &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/DDRep.html">DDRep</a></span>(<span class="dt">model =</span> DSTP,<span class="dt">raw =</span> FLANKER_DATA[[<span class="dv">1</span>]])</a></code></pre></div>
-<p>Finally you can take a look at your imported data simply by calling the object or using the <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> function.</p>
+<p>Finally you can take a look at your imported data simply by calling the object or using the <code><a href="../../reference/plot-methods.html">plot()</a></code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">Subj</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; CDF: </span></a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; $Cong</span></a>
@@ -182,7 +182,7 @@
 <a class="sourceLine" id="cb3-38" title="38"><span class="co">#&gt; Parameter: </span></a>
 <a class="sourceLine" id="cb3-39" title="39"><span class="co">#&gt;   Ter a c mu_t mu_f mu_RS2 mu_SS</span></a>
 <a class="sourceLine" id="cb3-40" title="40"><span class="co">#&gt; 1   0 0 0    0    0      0     0</span></a>
-<a class="sourceLine" id="cb3-41" title="41"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(Subj)</a></code></pre></div>
+<a class="sourceLine" id="cb3-41" title="41"><span class="kw"><a href="../../reference/plot-methods.html">plot</a></span>(Subj)</a></code></pre></div>
 <p><img src="Import_data_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
   </div>

@@ -3,8 +3,8 @@
 #' @name Sim_DDModel
 #'
 #' @param model \code{\linkS4class{DDModel}} object to be used in the simulation.
-#' @param trials \code{Numeric} specifying the number of trials per condition.
-#' @param simulations \code{Numeric} specifying the number of simulations
+#' @param trials \code{integer} specifying the number of trials per condition.
+#' @param simulations \code{integer} specifying the number of simulations
 #' @param parameter \code{Data.frame} containing parameters that should be simulated
 #' @details If 'parameter' is specified the function will undergo nrow(parameter) times simulation calls.
 #' Depending on the input the return value will be either a \code{DDRep}, \code{list} or \code{list} of \code{lists}.
@@ -12,12 +12,12 @@
 #' M1 <- DDModel(model="DSTP",task = "flanker",
 #'           CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
 #' # Simulate some Data with randomly generated parameters in the domain of M1
-#' R1 <- Sim_DDModel(M1,10000)
+#' R1 <- Sim_DDModel(M1,10000L)
 #' # If you want to reuse the randomly drawn parameters (or any other) simply insert them
-#' R2 <- Sim_DDModel(M1,10000,parameter = R1@PAR)
+#' R2 <- Sim_DDModel(M1,10000L,parameter = R1@PAR)
 #' @return \code{DDRep} object or \code{list} of \code{DDRep} depending on the input
 #' @export
-Sim_DDModel <- function(model = NULL, trials = NULL, simulations = 1, parameter = NULL){
+Sim_DDModel <- function(model = NULL, trials = 1000L, simulations = 1L, parameter = NULL){
   Flag <- 1
   Check <- ArgumentCheck::newArgCheck()
   if (is.null(model) || !methods::is(model,"DDModel"))
@@ -25,12 +25,12 @@ Sim_DDModel <- function(model = NULL, trials = NULL, simulations = 1, parameter 
     ArgumentCheck::addError(msg = "'model' is missing or in the wrong format!",argcheck = Check)
     Flag <- 99
   }
-  if (is.null(trials) || !is.numeric(trials))
+  if (is.null(trials) || !is.integer(trials))
   {
     ArgumentCheck::addError(msg = "'trials' is missing or in the wrong format!",argcheck = Check)
     Flag <- 99
   }
-  if (!is.numeric(trials))
+  if (!is.integer(trials))
   {
     ArgumentCheck::addError(msg = "'simulations' is in the format of numeric!",argcheck = Check)
     Flag <- 99
@@ -61,7 +61,7 @@ Sim_DDModel <- function(model = NULL, trials = NULL, simulations = 1, parameter 
   {
     if (Flag == 1)
     {
-      if (simulations == 1)
+      if (simulations == 1L)
       {
         return(.Sim_DDModel_rnd(model,trials))
       }
@@ -77,7 +77,7 @@ Sim_DDModel <- function(model = NULL, trials = NULL, simulations = 1, parameter 
     }
     if (Flag == 2)
     {
-      if (simulations == 1)
+      if (simulations == 1L)
       {
         if (nrow(parameter) == 1)
         {

@@ -4,11 +4,9 @@ pkgdown_sha: ~
 articles:
   Setup: Setup.html
   Applying_DL: Tutorials/Applying_DL.html
-  Backup: Tutorials/Backup.html
   Fitting_models: Tutorials/Fitting_models.html
   Generate_GRIDs: Tutorials/Generate_GRIDs.html
   Import_data: Tutorials/Import_data.html
-  Misc: Tutorials/Misc.html
   Model_definition: Tutorials/Model_definition.html
   Model_simulation: Tutorials/Model_simulation.html
 

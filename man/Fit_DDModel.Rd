@@ -46,7 +46,7 @@ Function to fit a given DDRep to a given DDModel
 \details{
 This is a rather complex function that is very flexible depending on your input!
 \describe{
-\item{\emph{Random Fitting:}}{Exclude all optional parameters}
+\item{Random Fitting:}{Exclude all optional parameters}
 \item{Grid Fitting:}{Specify a grid_path}
 \item{Deep Learning Fitting}{Specify DL_model and DL_scale}
 }

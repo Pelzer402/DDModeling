@@ -4,14 +4,14 @@
 \alias{Sim_DDModel}
 \title{Function to simulate a given DDModel}
 \usage{
-Sim_DDModel(model = NULL, trials = NULL, simulations = 1, parameter = NULL)
+Sim_DDModel(model = NULL, trials = 1000L, simulations = 1L, parameter = NULL)
 }
 \arguments{
 \item{model}{\code{\linkS4class{DDModel}} object to be used in the simulation.}
 
-\item{trials}{\code{Numeric} specifying the number of trials per condition.}
+\item{trials}{\code{integer} specifying the number of trials per condition.}
 
-\item{simulations}{\code{Numeric} specifying the number of simulations}
+\item{simulations}{\code{integer} specifying the number of simulations}
 
 \item{parameter}{\code{Data.frame} containing parameters that should be simulated}
 }
@@ -30,7 +30,7 @@ Depending on the input the return value will be either a \code{DDRep}, \code{lis
 M1 <- DDModel(model="DSTP",task = "flanker",
           CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
 # Simulate some Data with randomly generated parameters in the domain of M1
-R1 <- Sim_DDModel(M1,10000)
+R1 <- Sim_DDModel(M1,10000L)
 # If you want to reuse the randomly drawn parameters (or any other) simply insert them
-R2 <- Sim_DDModel(M1,10000,parameter = R1@PAR)
+R2 <- Sim_DDModel(M1,10000L,parameter = R1@PAR)
 }

@@ -147,7 +147,7 @@
     <p>Function to simulate a given DDModel</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Sim_DDModel</span>(<span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>trials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>simulations</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>parameter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>Sim_DDModel</span>(<span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>trials</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>simulations</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>parameter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,11 +158,11 @@
     </tr>
     <tr>
       <th>trials</th>
-      <td><p><code>Numeric</code> specifying the number of trials per condition.</p></td>
+      <td><p><code>integer</code> specifying the number of trials per condition.</p></td>
     </tr>
     <tr>
       <th>simulations</th>
-      <td><p><code>Numeric</code> specifying the number of simulations</p></td>
+      <td><p><code>integer</code> specifying the number of simulations</p></td>
     </tr>
     <tr>
       <th>parameter</th>
@@ -183,9 +183,9 @@ Depending on the input the return value will be either a <code>DDRep</code>, <co
 <span class='no'>M1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='DDModel.html'>DDModel</a></span>(<span class='kw'>model</span><span class='kw'>=</span><span class='st'>"DSTP"</span>,<span class='kw'>task</span> <span class='kw'>=</span> <span class='st'>"flanker"</span>,
           <span class='kw'>CDF_perc</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>,<span class='fl'>0.3</span>,<span class='fl'>0.5</span>,<span class='fl'>0.7</span>,<span class='fl'>0.9</span>),<span class='kw'>CAF_perc</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.0</span>,<span class='fl'>0.2</span>,<span class='fl'>0.4</span>,<span class='fl'>0.6</span>,<span class='fl'>0.8</span>,<span class='fl'>1.0</span>))
 <span class='co'># Simulate some Data with randomly generated parameters in the domain of M1</span>
-<span class='no'>R1</span> <span class='kw'>&lt;-</span> <span class='fu'>Sim_DDModel</span>(<span class='no'>M1</span>,<span class='fl'>10000</span>)
+<span class='no'>R1</span> <span class='kw'>&lt;-</span> <span class='fu'>Sim_DDModel</span>(<span class='no'>M1</span>,<span class='fl'>10000L</span>)
 <span class='co'># If you want to reuse the randomly drawn parameters (or any other) simply insert them</span>
-<span class='no'>R2</span> <span class='kw'>&lt;-</span> <span class='fu'>Sim_DDModel</span>(<span class='no'>M1</span>,<span class='fl'>10000</span>,<span class='kw'>parameter</span> <span class='kw'>=</span> <span class='no'>R1</span>@<span class='kw'>PAR</span>)</div></pre>
+<span class='no'>R2</span> <span class='kw'>&lt;-</span> <span class='fu'>Sim_DDModel</span>(<span class='no'>M1</span>,<span class='fl'>10000L</span>,<span class='kw'>parameter</span> <span class='kw'>=</span> <span class='no'>R1</span>@<span class='kw'>PAR</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

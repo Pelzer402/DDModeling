@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • DDModeling</title>
+<title>plot mehtod implementation for DDRep — plot-DDRep-methods • DDModeling</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="plot mehtod implementation for DDRep — plot-DDRep-methods" />
+<meta property="og:description" content="plot mehtod implementation for DDRep" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -54,7 +56,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -134,159 +136,37 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>plot mehtod implementation for DDRep</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Pelzer402/DDModeling/blob/master/R/DDRep.R'><code>R/DDRep.R</code></a></small>
+    <div class="hidden name"><code>plot-DDRep-methods.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>plot mehtod implementation for DDRep</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='co'># S4 method for DDRep,ANY</span>
+<span class='fu'><a href='plot-methods.html'>plot</a></span>(<span class='no'>x</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-s-classes" class="hasAnchor"><a href="#section-s-classes" class="anchor"></a>S4-Classes</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="DDFit-class.html">DDFit-class</a></code> </p>
-        </td>
-        <td><p><code>DDFit</code> class definition</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="DDFitPar-class.html">DDFitPar-class</a></code> </p>
-        </td>
-        <td><p><code>DDFitPar</code> class definition</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="DDModel-class.html">DDModel-class</a></code> </p>
-        </td>
-        <td><p><code>DDModel</code> class definition</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="DDRep-class.html">DDRep-class</a></code> </p>
-        </td>
-        <td><p><code>DDRep</code> class definition</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-simulation-and-fit" class="hasAnchor"><a href="#section-simulation-and-fit" class="anchor"></a>Simulation and Fit</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="DDModel.html">DDModel()</a></code> </p>
-        </td>
-        <td><p>Constructor for DDModel-class</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="DDModeling.html">DDModeling</a></code> </p>
-        </td>
-        <td><p>DDModeling</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="DDRep.html">DDRep()</a></code> </p>
-        </td>
-        <td><p>Constructor for DDRep-class</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="Fit_DDModel.html">Fit_DDModel()</a></code> </p>
-        </td>
-        <td><p>Function to fit a given DDRep to a given DDModel</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="Generate_GRID.html">Generate_GRID()</a></code> </p>
-        </td>
-        <td><p>Generates a Grid from a given DDModel</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="Import_GRID.html">Import_GRID()</a></code> </p>
-        </td>
-        <td><p>Imports a GRID into the R environment</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="Sim_DDModel.html">Sim_DDModel()</a></code> </p>
-        </td>
-        <td><p>Function to simulate a given DDModel</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-datasets" class="hasAnchor"><a href="#section-datasets" class="anchor"></a>Datasets</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="FLANKER_DATA.html">FLANKER_DATA</a></code> </p>
-        </td>
-        <td><p>Flanker-task data</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-generics" class="hasAnchor"><a href="#section-generics" class="anchor"></a>Generics</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="Compare-methods.html">Compare(<i>&lt;DDRep&gt;</i>,<i>&lt;DDRep&gt;</i>)</a></code> <code><a href="Compare-methods.html">Compare(<i>&lt;DDRep&gt;</i>,<i>&lt;character&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Custom implementations of the Compare method for DDModeling</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot-methods.html">plot(<i>&lt;DDRep&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="plot-methods.html">plot(<i>&lt;DDFit&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Custom implementations of the plot method for DDModeling</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="show-methods.html">show(<i>&lt;DDModel&gt;</i>)</a></code> <code><a href="show-methods.html">show(<i>&lt;DDRep&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Custom implementations of the show method for DDModeling</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="summary-methods.html">summary(<i>&lt;DDFit&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Custom implementations of the summary method for DDModeling</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>a DDRep object</p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-s-classes">S4-Classes</a></li>
-      <li><a href="#section-simulation-and-fit">Simulation and Fit</a></li>
-      <li><a href="#section-datasets">Datasets</a></li>
-      <li><a href="#section-generics">Generics</a></li>
+      <li><a href="#arguments">Arguments</a></li>
     </ul>
+
   </div>
 </div>
 

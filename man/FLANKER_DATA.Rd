@@ -6,9 +6,9 @@
 \title{Flanker-task data}
 \format{A list with 64 \code{data.frames} conteining 3 variables
 \describe{
-\item{cond}{flanker condition \link{Cong==congurent, Incong==incongruent}}
+\item{cond}{flanker condition Cong==congurent, Incong==incongruent}
 \item{time}{reaction time of a trial}
-\item{resp}{response for a trial \link{1==correct,0==incorrect}}
+\item{resp}{response for a trial 1==correct,0==incorrect}
 }}
 \source{
 The data is a summation of multiple classical flanker task studies undergone

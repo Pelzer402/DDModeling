@@ -19,7 +19,7 @@ All the following examples will use the same **DDModel** and **DDRep**:
 ```{r}
 library(DDModeling)
 DSTP <- DDModel(model="DSTP",task = "flanker",CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
-DATA <- Sim_DDModel(model = DSTP, trials = 2000, simulations = 1)
+DATA <- Sim_DDModel(model = DSTP, trials = 2000L, simulations = 1L)
 ```
 
 # Random SIMPLEX
@@ -31,10 +31,10 @@ All of the following examples will use the `Fit_DDModel()` function which you wi
 With all this said and done, let us fit some!
 
 ```{r echo=TRUE ,results='hide'}
-Fit_rand_1 <- Fit_DDModel(model = DSTP, data = DATA, s_sampling = FALSE, trials = 2000, simplex_struc = c(1))
-Fit_rand_2 <- Fit_DDModel(model = DSTP, data = DATA, s_sampling = FALSE, trials = 2000, simplex_struc = c(10))
-Fit_rand_3 <- Fit_DDModel(model = DSTP, data = DATA, s_sampling = FALSE, trials = 2000, simplex_struc = c(10,2))
-Fit_rand_4 <- Fit_DDModel(model = DSTP, data = DATA, s_sampling = FALSE, trials = 2000, simplex_struc = c(10,2,1))
+Fit_rand_1 <- Fit_DDModel(model = DSTP, data = DATA, s_sampling = FALSE, trials = 2000L, simplex_struc = c(1L))
+Fit_rand_2 <- Fit_DDModel(model = DSTP, data = DATA, s_sampling = FALSE, trials = 2000L, simplex_struc = c(10L))
+Fit_rand_3 <- Fit_DDModel(model = DSTP, data = DATA, s_sampling = FALSE, trials = 2000L, simplex_struc = c(10L,2L))
+Fit_rand_4 <- Fit_DDModel(model = DSTP, data = DATA, s_sampling = FALSE, trials = 2000L, simplex_struc = c(10L,2L,1L))
 ```
 
 `Fit_DDModel()` will return a **DDFit** object that can be called by name or inspected using the `summary()` or `plot()` functions.
@@ -57,10 +57,10 @@ The GRID SIMPLEX is analogue to the Random SIMPLEX only that the SIMPLEX will be
 
 ```{r eval=FALSE}
 Grid_DSTP <- Generate_GRID(model = DSTP, path = getwd(), name = "DSTP_Flanker", eval_pts = rep(2,ncol(DSTP@DM)))
-Fit_grid_1 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000, simplex_struc = c(1))
-Fit_grid_2 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000, simplex_struc = c(10))
-Fit_grid_3 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000, simplex_struc = c(10,2))
-Fit_grid_4 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000, simplex_struc = c(10,2,1))
+Fit_grid_1 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000L, simplex_struc = c(1L))
+Fit_grid_2 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000L, simplex_struc = c(10L))
+Fit_grid_3 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000L, simplex_struc = c(10L,2L))
+Fit_grid_4 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000L, simplex_struc = c(10L,2L,1L))
 ```
 
 # GRID Search
@@ -68,7 +68,7 @@ Fit_grid_4 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sa
 Of course you do not need to use an additionl SIMPLEX after the GRID search! Simply set `simplex_struc = c(0)`!
 
 ```{r eval=FALSE}
-Fit_grid <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000, simplex_struc = c(0))
+Fit_grid <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000L, simplex_struc = c(0L))
 ```
 
 # DL SIMPLEX
@@ -107,6 +107,6 @@ model %>% fit(
     )
 )
 
-Fit_DL <- Fit_DDModel(model = DSTP, data = DATA, DL_model = model, s_sampling = FALSE, trials = 2000, simplex_struc = c(1))
+Fit_DL <- Fit_DDModel(model = DSTP, data = DATA, DL_model = model, s_sampling = FALSE, trials = 2000L, simplex_struc = c(1L))
 ```
 

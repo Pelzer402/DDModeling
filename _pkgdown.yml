@@ -28,14 +28,18 @@ navbar:
 reference:
   - title: "S4-Classes"
     contents:
-      - ends_with("class")
+      - ends_with("-class")
   - title: "Simulation and Fit"
     contents:
-      - -ends_with("class")
+      - -ends_with("-class")
       - -ends_with("_DATA")
+      - -ends_with("-methods")
   - title: "Datasets"
     contents:
       - ends_with("_DATA")
+  - title: "Generics"
+    contents:
+      - ends_with("-methods")
 authors:
   Thomas Pelzer:
     href: https://github.com/Pelzer402

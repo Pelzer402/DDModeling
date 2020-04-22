@@ -102,8 +102,8 @@ DDRep_wide <- function(rep = NULL){
   return(OUT)
 }
 
-#' @rdname DDRep-class
-#' @aliases show,DDRep-method
+#' @rdname show-methods
+#' @aliases show
 #' @exportMethod show
 setMethod("show","DDRep",function(object){
   cat("CDF: \n")
@@ -115,8 +115,8 @@ setMethod("show","DDRep",function(object){
 })
 
 
-#' @rdname DDRep-class
-#' @aliases plot,DDRep-method
+#' @rdname plot-methods
+#' @aliases plot
 #' @exportMethod plot
 setMethod("plot",signature(x="DDRep"),function(x){
   perc <- cond <- acc <- NULL
@@ -148,8 +148,8 @@ setMethod("plot",signature(x="DDRep"),function(x){
   cowplot::plot_grid(C1,L,nrow=2,ncol=1,rel_heights=c(9,1))
 })
 
-#' @rdname DDRep-class
-#' @aliases Compare,DDRep-method
+#' @rdname Compare-methods
+#' @aliases Compare
 #' @exportMethod Compare
 setMethod("Compare",signature(e1="DDRep",e2="DDRep"),function(e1,e2){
   if(identical(e1@RF,e2@RF))
@@ -171,8 +171,8 @@ setMethod("Compare",signature(e1="DDRep",e2="DDRep"),function(e1,e2){
   }
 })
 
-#' @rdname DDRep-class
-#' @aliases Compare,DDRep-method
+#' @rdname Compare-methods
+#' @aliases Compare
 #' @exportMethod Compare
 setMethod("Compare",signature(e1="DDRep",e2="character"),function(e1,e2){
   Value <- NULL
