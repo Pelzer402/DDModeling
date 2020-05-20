@@ -23,6 +23,11 @@ void Simulation::Simulate(int Set){
         response_SSP();
         EVAL[Set].Rep.RAW[c].push_back(response);
       }
+      else if (Model.ID == "DDM_classic")
+      {
+        response_DDM_classic();
+        EVAL[Set].Rep.RAW[c].push_back(response);
+      }
     }
     std::sort(EVAL[Set].Rep.RAW[c].begin(),EVAL[Set].Rep.RAW[c].end());
   }
@@ -53,22 +58,22 @@ void Simulation::response_DSTP(){
   int ready_RS1 = 0;
   int ready_RS2 = 0;
   long t = 0;
-  double I_RS = 0; // x0 RS
-  double I_SS = 0; // x0 SS
+  double I_RS = urand(PAR_Model[7]-PAR_Model[14]/2,PAR_Model[7]+PAR_Model[14]/2);
+  double I_SS = urand(PAR_Model[8]-PAR_Model[15]/2,PAR_Model[8]+PAR_Model[15]/2);
   double a          = PAR_Model[1];
-  double A          = a/2;
+  double A          = a/2.0;
   double B          = -A;
   double c          = PAR_Model[2];
-  double C          = c/2;
-  double D          = -c/2;
-  double mu_RS1     = PAR_Model[3];
-  double mu_RS2_C   = PAR_Model[4];
-  double mu_RS2_D   = PAR_Model[5];
-  double mu_SS      = PAR_Model[6];
+  double C          = c/2.0;
+  double D          = -C;
+  double mu_RS1     = PAR_Model[3] + PAR_Model[10]*nrand();
+  double mu_RS2_C   = PAR_Model[4] + PAR_Model[11]*nrand();
+  double mu_RS2_D   = PAR_Model[5] + PAR_Model[12]*nrand();
+  double mu_SS      = PAR_Model[6] + PAR_Model[13]*nrand();
   double dt         = Model.dt;
   double sqrt_dt    = std::sqrt(dt);
   double sigma      = Model.sigma;
-  long   Ter        = (long)(PAR_Model[0]/dt);  //Parameter Ter is in seconds
+  long   Ter        = (long)(urand(PAR_Model[0]-PAR_Model[9]/2,PAR_Model[0]+PAR_Model[9]/2)/dt);  //Parameter Ter is in seconds
 
   while (!ready_RS1)
   {
@@ -144,10 +149,10 @@ void Simulation::response_DMC()
 {
   int ready;											// Pseudo bool for loop exit
   long t = 0;
-  double I = 0; // x0
+  double I = PAR_Model[6] + nrand()*PAR_Model[8]; // x0
   double a          = PAR_Model[1];
-  double A          = I + a/2.0;
-  double B          = I - a/2.0;
+  double A          = a/2.0;
+  double B          = -A;
   double zeta       = PAR_Model[2];
   double alpha      = PAR_Model[3];
   double mu_c       = PAR_Model[4];
@@ -155,7 +160,7 @@ void Simulation::response_DMC()
   double dt         = Model.dt*1000; // conversion!!
   double sqrt_dt    = std::sqrt(dt);
   double sigma      = Model.sigma;
-  long   Ter        = (long)(PAR_Model[0]);  //Parameter Ter is in milliseconds
+  long   Ter        = (long)(PAR_Model[0] + nrand()*PAR_Model[7]);  //Parameter Ter is in milliseconds
   ready = 0;
   while (!ready)
   {
@@ -180,17 +185,17 @@ void Simulation::response_SSP()
 {
   int ready;											// Pseudo bool for loop exit
   long t = 0;
-  double I = 0; // x0
+  double I = PAR_Model[5] + nrand()*PAR_Model[7];; // x0
   double a          = PAR_Model[1];
-  double A          = I + a/2;
-  double B          = I - a/2;
+  double A          = a/2.0;
+  double B          = -A;
   double P          = PAR_Model[2];
   double sda        = PAR_Model[3];
   double rd         = PAR_Model[4];
   double dt         = Model.dt;
   double sqrt_dt    = std::sqrt(dt);
   double sigma      = Model.sigma;
-  long   Ter        = (long)(PAR_Model[0]/dt);  //Parameter Ter is in milliseconds
+  long   Ter        = (long)((PAR_Model[0] + nrand()*PAR_Model[6])/dt);  //Parameter Ter is in milliseconds
   double tar = 2.5;									// Location of Target
   double inner, outer, cent;
 
@@ -243,6 +248,40 @@ void Simulation::response_SSP()
   response.time = t + Ter;
 }
 
+void Simulation::response_DDM_classic()
+{
+  int ready;											// Pseudo bool for loop exit
+  long t = 0;
+  double I = urand(PAR_Model[3]-PAR_Model[6]/2,PAR_Model[3]+PAR_Model[6]/2);
+  double a          = PAR_Model[1];
+  double A          = a/2.0;
+  double B          = -A;
+  double mu         = PAR_Model[2] + nrand()*PAR_Model[5];
+  double dt         = Model.dt;
+  double sqrt_dt    = std::sqrt(dt);
+  double sigma      = Model.sigma;
+  long   Ter        = (long)(PAR_Model[0]+PAR_Model[4]*nrand());
+
+  ready = 0;
+  while (!ready)
+  {
+    I += mu*dt + sigma*sqrt_dt*nrand();
+    t++;												// Add 1 time quant to the overall time
+
+    // Evaluation of the exit condition
+    if (I >= A)
+    {
+      ready = 1;
+      response.resp = 1;
+    }
+    else if (I <= B)
+    {
+      ready = 1;
+      response.resp = 0;
+    }
+  }
+  response.time = t + Ter;
+}
 
 
 void Simulation::PAR_Model_Get(int Set, int cond){

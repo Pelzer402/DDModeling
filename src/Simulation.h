@@ -109,6 +109,7 @@ public:
   void response_DSTP();                               // Generate a response from the DSTP
   void response_DMC();                                // Generate a response from the DMC
   void response_SSP();                                // Generate a response from the SSP
+  void response_DDM_classic();                                // Generate a response from the classic DDM
   void REP_Get(int Set);                              // Generates a Representation for a given EVAL[Set]
   void SIM_Init_SS(int m_trials);                     // Initializes Super Sampling
 

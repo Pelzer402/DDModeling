@@ -52,8 +52,8 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
   }
   else
   {
-    if (!(model %in% c("DSTP","DMC","SSP")))
-      ArgumentCheck::addError(msg = "'model' must be one of 'DSTP', 'DMC' or 'SSP'!",argcheck = Check)
+    if (!(model %in% c("DSTP","DMC","SSP",'DDM_classic')))
+      ArgumentCheck::addError(msg = "'model' must be one of 'DSTP', 'DMC', 'SSP' or 'DDM_classic'!",argcheck = Check)
   }
   if (is.null(task))
     ArgumentCheck::addError(msg = "'task' is missing!",argcheck = Check)
@@ -139,8 +139,8 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
          custom ={
            switch(EXPR = model,
                   DSTP={
-                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 7,ncol = length(parameter))
-                    rownames(x) <- c("Ter","a","c","mu_RS1","mu_RS2_C","mu_RS2_D","mu_SS")
+                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 16,ncol = length(parameter))
+                    rownames(x) <- c("Ter","a","c","mu_RS1","mu_RS2_C","mu_RS2_D","mu_SS","z_RS","z_SS","s_Ter","s_mu_RS1","s_mu_RS2_C","s_mu_RS2_D","s_SS","s_z_RS","s_z_SS")
                     colnames(x) <- parameter
                     return(x)
                     })
@@ -150,8 +150,8 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     colnames(dm) <- parameter
                   },
                   DMC={
-                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 6,ncol = length(parameter))
-                    rownames(x) <- c("Ter","a","zeta","alpha","mu_c","tau")
+                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 9,ncol = length(parameter))
+                    rownames(x) <- c("Ter","a","zeta","alpha","mu_c","tau","z","s_Ter","s_z")
                     colnames(x) <- parameter
                     return(x)
                     })
@@ -161,8 +161,19 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     colnames(dm) <- parameter
                   },
                   SSP={
-                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 5,ncol = length(parameter))
-                    rownames(x) <- c("Ter","a","P","sda","rd")
+                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 8,ncol = length(parameter))
+                    rownames(x) <- c("Ter","a","P","sda","rd","z","s_Ter","s_z")
+                    colnames(x) <- parameter
+                    return(x)
+                    })
+                    names(mm) <- conditions
+                    dm <- matrix(nrow = 2,ncol = length(parameter))
+                    rownames(dm) <- c("Upper_Limit","Lower_Limit")
+                    colnames(dm) <- parameter
+                  },
+                  DDM_classic={
+                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 7,ncol = length(parameter))
+                    rownames(x) <- c("Ter","a","mu","z","s_Ter","s_mu","s_mu","s_z")
                     colnames(x) <- parameter
                     return(x)
                     })
@@ -183,8 +194,8 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     parameter <- c("Ter","a","c","mu_t","mu_f","mu_RS2","mu_SS")
                     dt <- 0.001
                     sigma <- 0.1
-                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 7,ncol = length(parameter))
-                    rownames(x) <- c("Ter","a","c","mu_RS1","mu_RS2_C","mu_RS2_D","mu_SS")
+                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 16,ncol = length(parameter))
+                    rownames(x) <- c("Ter","a","c","mu_RS1","mu_RS2_C","mu_RS2_D","mu_SS","z_RS","z_SS","s_Ter","s_mu_RS1","s_mu_RS2_C","s_mu_RS2_D","s_SS","s_z_RS","s_z_SS")
                     colnames(x) <- parameter
                     return(x)
                     })
@@ -199,13 +210,31 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     mm$Cong["mu_RS2_C",]   <- c(0,0,0,0,0,1,0)
                     mm$Cong["mu_RS2_D",]   <- c(0,0,0,0,0,1,0)
                     mm$Cong["mu_SS",]      <- c(0,0,0,0,0,0,1)
-                    mm$Incong["Ter",]      <- c(1,0,0,0,0,0,0)
-                    mm$Incong["a",]        <- c(0,1,0,0,0,0,0)
-                    mm$Incong["c",]        <- c(0,0,1,0,0,0,0)
-                    mm$Incong["mu_RS1",]   <- c(0,0,0,1,-1,0,0)
-                    mm$Incong["mu_RS2_C",] <- c(0,0,0,0,0,1,0)
-                    mm$Incong["mu_RS2_D",] <- c(0,0,0,0,0,-1,0)
-                    mm$Incong["mu_SS",]    <- c(0,0,0,0,0,0,1)
+                    mm$Cong["z_RS",]       <- c(0,0,0,0,0,0,0)
+                    mm$Cong["z_SS",]       <- c(0,0,0,0,0,0,0)
+                    mm$Cong["s_Ter",]      <- c(0,0,0,0,0,0,0)
+                    mm$Cong["s_mu_RS1",]   <- c(0,0,0,0,0,0,0)
+                    mm$Cong["s_mu_RS2_C",] <- c(0,0,0,0,0,0,0)
+                    mm$Cong["s_mu_RS2_D",] <- c(0,0,0,0,0,0,0)
+                    mm$Cong["s_SS",]       <- c(0,0,0,0,0,0,0)
+                    mm$Cong["s_z_RS",]     <- c(0,0,0,0,0,0,0)
+                    mm$Cong["s_z_SS",]     <- c(0,0,0,0,0,0,0)
+                    mm$Incong["Ter",]        <- c(1,0,0,0,0,0,0)
+                    mm$Incong["a",]          <- c(0,1,0,0,0,0,0)
+                    mm$Incong["c",]          <- c(0,0,1,0,0,0,0)
+                    mm$Incong["mu_RS1",]     <- c(0,0,0,1,-1,0,0)
+                    mm$Incong["mu_RS2_C",]   <- c(0,0,0,0,0,1,0)
+                    mm$Incong["mu_RS2_D",]   <- c(0,0,0,0,0,-1,0)
+                    mm$Incong["mu_SS",]      <- c(0,0,0,0,0,0,1)
+                    mm$Incong["z_RS",]       <- c(0,0,0,0,0,0,0)
+                    mm$Incong["z_SS",]       <- c(0,0,0,0,0,0,0)
+                    mm$Incong["s_Ter",]      <- c(0,0,0,0,0,0,0)
+                    mm$Incong["s_mu_RS1",]   <- c(0,0,0,0,0,0,0)
+                    mm$Incong["s_mu_RS2_C",] <- c(0,0,0,0,0,0,0)
+                    mm$Incong["s_mu_RS2_D",] <- c(0,0,0,0,0,0,0)
+                    mm$Incong["s_SS",]       <- c(0,0,0,0,0,0,0)
+                    mm$Incong["s_z_RS",]     <- c(0,0,0,0,0,0,0)
+                    mm$Incong["s_z_SS",]     <- c(0,0,0,0,0,0,0)
                     dm["Upper_Limit",] <- c(0.45,0.38,0.38,0.15,0.25,0.55,1.2)
                     dm["Lower_Limit",] <- c(0.15,0.14,0.14,0.05,0.05,0.25,0.4)
                   },
@@ -214,8 +243,8 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     parameter <- c("Ter","a","zeta","alpha","mu_c","tau")
                     dt <- 0.001
                     sigma <- 4
-                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 6,ncol = length(parameter))
-                    rownames(x) <- c("Ter","a","zeta","alpha","mu_c","tau")
+                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 9,ncol = length(parameter))
+                    rownames(x) <- c("Ter","a","zeta","alpha","mu_c","tau","z","s_Ter","s_z")
                     colnames(x) <- parameter
                     return(x)
                     })
@@ -229,12 +258,18 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     mm$Cong["alpha",] <- c(0,0,0,1,0,0)
                     mm$Cong["mu_c",]  <- c(0,0,0,0,1,0)
                     mm$Cong["tau",]   <- c(0,0,0,0,0,1)
+                    mm$Cong["z",]   <- c(0,0,0,0,0,0)
+                    mm$Cong["s_Ter",]   <- c(0,0,0,0,0,0)
+                    mm$Cong["s_z",]   <- c(0,0,0,0,0,0)
                     mm$Incong["Ter",]   <- c(1,0,0,0,0,0)
                     mm$Incong["a",]     <- c(0,1,0,0,0,0)
                     mm$Incong["zeta",]  <- c(0,0,-1,0,0,0)
                     mm$Incong["alpha",] <- c(0,0,0,1,0,0)
                     mm$Incong["mu_c",]  <- c(0,0,0,0,1,0)
                     mm$Incong["tau",]   <- c(0,0,0,0,0,1)
+                    mm$Incong["z",]   <- c(0,0,0,0,0,0)
+                    mm$Incong["s_Ter",]   <- c(0,0,0,0,0,0)
+                    mm$Incong["s_z",]   <- c(0,0,0,0,0,0)
                     dm["Upper_Limit",] <- c(400,160,40,4.5,0.8,120)
                     dm["Lower_Limit",] <- c(270,90,15,1.5,0.2,20)
                   },
@@ -243,8 +278,8 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     parameter <- c("Ter","a","P","sda","rd")
                     dt <- 0.001
                     sigma <- 0.1
-                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 5,ncol = length(parameter))
-                    rownames(x) <- c("Ter","a","P","sda","rd")
+                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 8,ncol = length(parameter))
+                    rownames(x) <- c("Ter","a","P","sda","rd","z","s_Ter","s_z")
                     colnames(x) <- parameter
                     return(x)
                     })
@@ -257,11 +292,17 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     mm$Cong["P",]     <- c(0,0,1,0,0)
                     mm$Cong["sda",]   <- c(0,0,0,1,0)
                     mm$Cong["rd",]    <- c(0,0,0,0,1)
+                    mm$Cong["z",]    <- c(0,0,0,0,0)
+                    mm$Cong["s_Ter",]    <- c(0,0,0,0,0)
+                    mm$Cong["s_z",]    <- c(0,0,0,0,0)
                     mm$Incong["Ter",] <- c(1,0,0,0,0)
                     mm$Incong["a",]   <- c(0,1,0,0,0)
                     mm$Incong["P",]   <- c(0,0,-1,0,0)
                     mm$Incong["sda",] <- c(0,0,0,1,0)
                     mm$Incong["rd",]   <- c(0,0,0,0,1)
+                    mm$Incong["z",]    <- c(0,0,0,0,0)
+                    mm$Incong["s_Ter",]    <- c(0,0,0,0,0)
+                    mm$Incong["s_z",]    <- c(0,0,0,0,0)
                     dm["Upper_Limit",] <- c(0.45,0.19,0.55,2.6,0.026)
                     dm["Lower_Limit",] <- c(0.15,0.07,0.2,1,0.01)
                   }

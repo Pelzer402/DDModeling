@@ -5,6 +5,32 @@
 
 using namespace Rcpp;
 
+// TEST
+std::vector<double> TEST(double lb, double ub, int n);
+RcppExport SEXP _DDModeling_TEST(SEXP lbSEXP, SEXP ubSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type lb(lbSEXP);
+    Rcpp::traits::input_parameter< double >::type ub(ubSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(TEST(lb, ub, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// TEST2
+std::vector<double> TEST2(double mu, double s, int n);
+RcppExport SEXP _DDModeling_TEST2(SEXP muSEXP, SEXP sSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(TEST2(mu, s, n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Generate_Modelprediction_rnd
 Rcpp::S4 Generate_Modelprediction_rnd(Rcpp::S4 DDModel_, long trials_);
 RcppExport SEXP _DDModeling_Generate_Modelprediction_rnd(SEXP DDModel_SEXP, SEXP trials_SEXP) {
@@ -112,6 +138,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_DDModeling_TEST", (DL_FUNC) &_DDModeling_TEST, 3},
+    {"_DDModeling_TEST2", (DL_FUNC) &_DDModeling_TEST2, 3},
     {"_DDModeling_Generate_Modelprediction_rnd", (DL_FUNC) &_DDModeling_Generate_Modelprediction_rnd, 2},
     {"_DDModeling_Generate_Modelprediction_par", (DL_FUNC) &_DDModeling_Generate_Modelprediction_par, 3},
     {"_DDModeling_Fit_observed_data_rnd", (DL_FUNC) &_DDModeling_Fit_observed_data_rnd, 1},

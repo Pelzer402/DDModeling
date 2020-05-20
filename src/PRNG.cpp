@@ -3,11 +3,10 @@
 uint64_t s[2];
 
 uint64_t seed_seeder;
+std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
 
 double urand(double lb, double up)
 {
-  std::default_random_engine generator;
-  generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
   std::uniform_real_distribution<double> distribution(lb,up);
 	return distribution(generator);
 }
