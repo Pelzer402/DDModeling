@@ -260,7 +260,7 @@ void Simulation::response_DDM_classic()
   double dt         = Model.dt;
   double sqrt_dt    = std::sqrt(dt);
   double sigma      = Model.sigma;
-  long   Ter        = (long)(PAR_Model[0]+PAR_Model[4]*nrand());
+  long   Ter        = (long)(PAR_Model[0]-PAR_Model[4]/2.0,PAR_Model[0]+PAR_Model[4]/2.0);
 
   ready = 0;
   while (!ready)
