@@ -160,7 +160,7 @@ void Simulation::response_DMC()
   double dt         = Model.dt*1000; // conversion!!
   double sqrt_dt    = std::sqrt(dt);
   double sigma      = Model.sigma;
-  long   Ter        = (long)(PAR_Model[0] + nrand()*PAR_Model[7]);  //Parameter Ter is in milliseconds
+  long   Ter        = (long)((PAR_Model[0] + nrand()*PAR_Model[7])/dt);  //Parameter Ter is in milliseconds
   ready = 0;
   while (!ready)
   {
@@ -252,7 +252,7 @@ void Simulation::response_DDM_classic()
 {
   int ready;											// Pseudo bool for loop exit
   long t = 0;
-  double I = urand(PAR_Model[3]-PAR_Model[6]/2,PAR_Model[3]+PAR_Model[6]/2);
+  double I = urand(PAR_Model[3]-PAR_Model[6]/2.0,PAR_Model[3]+PAR_Model[6]/2.0);
   double a          = PAR_Model[1];
   double A          = a/2.0;
   double B          = -A;
@@ -260,7 +260,7 @@ void Simulation::response_DDM_classic()
   double dt         = Model.dt;
   double sqrt_dt    = std::sqrt(dt);
   double sigma      = Model.sigma;
-  long   Ter        = (long)(PAR_Model[0]-PAR_Model[4]/2.0,PAR_Model[0]+PAR_Model[4]/2.0);
+  long   Ter        = (long)(urand(PAR_Model[0]-PAR_Model[4]/2.0,PAR_Model[0]+PAR_Model[4]/2.0)/dt);
 
   ready = 0;
   while (!ready)
@@ -556,12 +556,17 @@ void Simulation::FitCrit_Get(int Set)
 
 void Simulation::Performance_Analysis(EVAL_format &EF){
   int flag = 0;
+  int inter_flag = 0;
   for (int i = 0; i<Model.Parameter.size();++i)
   {
     if (TBF.Rep.PAR_v[i] == 0.0)
     {
-      flag += 1;
+      inter_flag += 1;
     }
+  }
+  if (inter_flag == Model.Parameter.size())
+  {
+    flag += 1;
   }
   if (TBF.Rep.PAR_v.size() != EF.Rep.PAR_v.size())
   {

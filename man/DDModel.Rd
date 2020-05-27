@@ -18,7 +18,7 @@ DDModel(
 \arguments{
 \item{model}{\code{character} of the name of the Model to be used (choices are "DSTP","DMC","SSP")}
 
-\item{task}{\code{character} specifying a specific predefined modelstructure ("flanker","custom)}
+\item{task}{\code{character} specifying a specific predefined modelstructure ("flanker","custom","RMT_LDT")}
 
 \item{conditions}{\code{character} vector of the names of conditions}
 
