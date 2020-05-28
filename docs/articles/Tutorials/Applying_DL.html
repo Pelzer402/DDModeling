@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">DDModeling</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.0</span>
       </span>
     </div>
 
@@ -115,52 +115,43 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DDModeling)</a>
 <a class="sourceLine" id="cb1-2" title="2">DSTP &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/DDModel.html">DDModel</a></span>(<span class="dt">model=</span><span class="st">"DSTP"</span>,<span class="dt">task =</span> <span class="st">"flanker"</span>, <span class="dt">CDF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.9</span>), <span class="dt">CAF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.0</span>,<span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">0.6</span>,<span class="fl">0.8</span>,<span class="fl">1.0</span>))</a>
 <a class="sourceLine" id="cb1-3" title="3">Grid_DSTP &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Generate_GRID.html">Generate_GRID</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">path =</span> <span class="kw"><a href="https://rdrr.io/r/base/getwd.html">getwd</a></span>(), <span class="dt">name =</span> <span class="st">"DSTP_Flanker"</span>, <span class="dt">eval_pts =</span> <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">2</span>,<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(DSTP<span class="op">@</span>DM)))</a>
-<a class="sourceLine" id="cb1-4" title="4">DATA &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Import_GRID.html">Import_GRID</a></span>(<span class="dt">grid_path =</span> Grid_DSTP,<span class="dt">to =</span> <span class="st">"keras_data"</span>)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..CN_data): Both 'CN_data' and '..CN_data'</span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="co">#&gt; exist in calling scope. Please remove the '..CN_data' variable in calling scope</span></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co">#&gt; for clarity.</span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..PAR): Both 'PAR' and '..PAR' exist in</span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt; calling scope. Please remove the '..PAR' variable in calling scope for clarity.</span></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..CN_data): Both 'CN_data' and '..CN_data'</span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt; exist in calling scope. Please remove the '..CN_data' variable in calling scope</span></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; for clarity.</span></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..PAR): Both 'PAR' and '..PAR' exist in</span></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="co">#&gt; calling scope. Please remove the '..PAR' variable in calling scope for clarity.</span></a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..CN_data): Both 'CN_data' and '..CN_data'</span></a>
-<a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt; exist in calling scope. Please remove the '..CN_data' variable in calling scope</span></a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; for clarity.</span></a>
-<a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; Warning in `[.data.table`(buff, , ..PAR): Both 'PAR' and '..PAR' exist in</span></a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt; calling scope. Please remove the '..PAR' variable in calling scope for clarity.</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-4" title="4">DATA &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Import_GRID.html">Import_GRID</a></span>(<span class="dt">grid_path =</span> Grid_DSTP,<span class="dt">to =</span> <span class="st">"keras_data"</span>)</a></code></pre></div>
 <p>The <code><a href="../../reference/Import_GRID.html">Import_GRID()</a></code> function takes two arguments <strong>grid_path</strong> and <strong>to</strong>. The former takes the path to the directory where the GRID is saved, the latter specifies to which format the import should take place. <code>to = "data_keras"</code> will return a list containing an INPUT and OUTPUT, which can be used for deep learning.</p>
 <p>DDModeling is using Tensorflow and keras for deep learning, so make sure to install those beforehand!</p>
 <p>With the data setup lets build a quick model!</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(keras)</a>
-<a class="sourceLine" id="cb2-2" title="2">model &lt;-<span class="st"> </span><span class="kw">keras_model_sequential</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">input_shape=</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(DATA<span class="op">$</span>INPUT),<span class="dt">units =</span> <span class="dv">10</span>, <span class="dt">activation =</span> <span class="st">"relu"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="st">    </span><span class="kw">layer_batch_normalization</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="st">    </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="st">    </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">20</span>, <span class="dt">activation =</span> <span class="st">"relu"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="st">    </span><span class="kw">layer_batch_normalization</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="st">    </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="st">    </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(DATA<span class="op">$</span>OUTPUT),<span class="dt">activation =</span> <span class="st">"linear"</span>)</a>
-<a class="sourceLine" id="cb2-10" title="10"></a>
-<a class="sourceLine" id="cb2-11" title="11">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compile</span>(</a>
-<a class="sourceLine" id="cb2-12" title="12">  <span class="dt">loss =</span> <span class="st">"mean_squared_error"</span>,</a>
-<a class="sourceLine" id="cb2-13" title="13">  <span class="dt">optimizer =</span> <span class="st">"adam"</span>,</a>
-<a class="sourceLine" id="cb2-14" title="14">  <span class="dt">metrics =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"mae"</span>,<span class="st">"mape"</span>)</a>
-<a class="sourceLine" id="cb2-15" title="15">)</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># General note: You should allways scale INPUT and OUTPUT!</span></a>
+<a class="sourceLine" id="cb2-2" title="2">DATA<span class="op">$</span>INPUT &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(DATA<span class="op">$</span>INPUT)</a>
+<a class="sourceLine" id="cb2-3" title="3">DATA<span class="op">$</span>OUTPUT &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(DATA<span class="op">$</span>OUPUT)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co"># DDModeling give you a handy function to extracted the scaling information!</span></a>
+<a class="sourceLine" id="cb2-5" title="5">DATA_scale &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Scale_DL_Data.html">Scale_DL_Data</a></span>(<span class="dt">data =</span> DATA)</a>
+<a class="sourceLine" id="cb2-6" title="6"></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(keras)</a>
+<a class="sourceLine" id="cb2-8" title="8">model &lt;-<span class="st"> </span><span class="kw">keras_model_sequential</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">input_shape=</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(DATA<span class="op">$</span>INPUT),<span class="dt">units =</span> <span class="dv">10</span>, <span class="dt">activation =</span> <span class="st">"relu"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="st">    </span><span class="kw">layer_batch_normalization</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="st">    </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="st">    </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">20</span>, <span class="dt">activation =</span> <span class="st">"relu"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="st">    </span><span class="kw">layer_batch_normalization</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="st">    </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="st">    </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(DATA<span class="op">$</span>OUTPUT),<span class="dt">activation =</span> <span class="st">"linear"</span>)</a>
 <a class="sourceLine" id="cb2-16" title="16"></a>
-<a class="sourceLine" id="cb2-17" title="17">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fit</span>(</a>
-<a class="sourceLine" id="cb2-18" title="18">    <span class="dt">x =</span> DATA<span class="op">$</span>INPUT, <span class="dt">y =</span> DATA<span class="op">$</span>OUTPUT,</a>
-<a class="sourceLine" id="cb2-19" title="19">    <span class="dt">epochs =</span> <span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb2-20" title="20">    <span class="dt">batch_size =</span> <span class="dv">16</span>,</a>
-<a class="sourceLine" id="cb2-21" title="21">    <span class="dt">verbose =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb2-22" title="22">    <span class="dt">validation_split =</span> <span class="fl">0.1</span>,</a>
-<a class="sourceLine" id="cb2-23" title="23">    <span class="dt">shuffle =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb2-24" title="24">    <span class="dt">callbacks =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
-<a class="sourceLine" id="cb2-25" title="25">      <span class="kw">callback_reduce_lr_on_plateau</span>(<span class="dt">factor =</span> <span class="fl">0.05</span>)</a>
-<a class="sourceLine" id="cb2-26" title="26">    )</a>
-<a class="sourceLine" id="cb2-27" title="27">)</a></code></pre></div>
+<a class="sourceLine" id="cb2-17" title="17">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compile</span>(</a>
+<a class="sourceLine" id="cb2-18" title="18">  <span class="dt">loss =</span> <span class="st">"mean_squared_error"</span>,</a>
+<a class="sourceLine" id="cb2-19" title="19">  <span class="dt">optimizer =</span> <span class="st">"adam"</span>,</a>
+<a class="sourceLine" id="cb2-20" title="20">  <span class="dt">metrics =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"mae"</span>,<span class="st">"mape"</span>)</a>
+<a class="sourceLine" id="cb2-21" title="21">)</a>
+<a class="sourceLine" id="cb2-22" title="22"></a>
+<a class="sourceLine" id="cb2-23" title="23">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fit</span>(</a>
+<a class="sourceLine" id="cb2-24" title="24">    <span class="dt">x =</span> DATA<span class="op">$</span>INPUT, <span class="dt">y =</span> DATA<span class="op">$</span>OUTPUT,</a>
+<a class="sourceLine" id="cb2-25" title="25">    <span class="dt">epochs =</span> <span class="dv">50</span>,</a>
+<a class="sourceLine" id="cb2-26" title="26">    <span class="dt">batch_size =</span> <span class="dv">16</span>,</a>
+<a class="sourceLine" id="cb2-27" title="27">    <span class="dt">verbose =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb2-28" title="28">    <span class="dt">validation_split =</span> <span class="fl">0.1</span>,</a>
+<a class="sourceLine" id="cb2-29" title="29">    <span class="dt">shuffle =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb2-30" title="30">    <span class="dt">callbacks =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
+<a class="sourceLine" id="cb2-31" title="31">      <span class="kw">callback_reduce_lr_on_plateau</span>(<span class="dt">factor =</span> <span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb2-32" title="32">    )</a>
+<a class="sourceLine" id="cb2-33" title="33">)</a></code></pre></div>
 <p>You can either use this in your own code in any way you want or integrate it further for fitting with DDModeling!</p>
   </div>
 

@@ -73,12 +73,15 @@ Fit_grid <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_samp
 
 # DL SIMPLEX
 
-Finally you can use a predefined deep learning model (see [here](Applying_DL.html)) to initialize your SIMPLEX by simply referencing it under the **DL_model** argument!
+Finally you can use a predefined deep learning model (see [here](Applying_DL.html)) to initialize your SIMPLEX by simply referencing it under the **DL_model** argument! Additionally I highly recommend to scale your learning data. DDModeling gives you the opportunity to simply rescale data while fitting using the **DL_scale** argument.
 
 ```{r eval=FALSE}
 library(keras)
 
 LEARN_DATA <- Import_GRID(grid_path = Grid_DSTP,to = "keras_data")
+LEARN_DATA$INPUT <- scale(LEARN_DATA$INPUT)
+LEARN_DATA$OUTPUT <- scale(LEARN_DATA$OUPUT)
+LEARN_DATA_scale <- Scale_DL_Data(data = LEARN_DATA)
 
 model <- keras_model_sequential() %>%
   layer_dense(input_shape=ncol(LEARN_DATA$INPUT),units = 10, activation = "relu") %>%
@@ -107,6 +110,6 @@ model %>% fit(
     )
 )
 
-Fit_DL <- Fit_DDModel(model = DSTP, data = DATA, DL_model = model, s_sampling = FALSE, trials = 2000L, simplex_struc = c(1L))
+Fit_DL <- Fit_DDModel(model = DSTP, data = DATA, DL_model = model, DL_scale = LEARN_DATA_scale, s_sampling = FALSE, trials = 2000L, simplex_struc = c(1L))
 ```
 

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">DDModeling</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.0</span>
       </span>
     </div>
 
@@ -116,8 +116,9 @@
 <p>In order to fit something with DDModeling you need at least your model definition in form of a <strong>DDModel</strong> object (see <a href="Model_definition.html">here</a> for a tutorial) and some data in form of a <strong>DDRep</strong> object (see <a href="Import_data.html">here</a> for a tutorial on data import or <a href="Model_simulation.html">here</a> for one on data simulation). With this you can perform a rather simple SIMPLEX downhill optimization. However DDModeling enables you to use a wide spectrum of additional feautures! In the following most of these will be introduced starting from the least complex all the way to deep learning aided fitting.</p>
 <p>All the following examples will use the same <strong>DDModel</strong> and <strong>DDRep</strong>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DDModeling)</a>
-<a class="sourceLine" id="cb1-2" title="2">DSTP &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/DDModel.html">DDModel</a></span>(<span class="dt">model=</span><span class="st">"DSTP"</span>,<span class="dt">task =</span> <span class="st">"flanker"</span>,<span class="dt">CDF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.9</span>),<span class="dt">CAF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.0</span>,<span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">0.6</span>,<span class="fl">0.8</span>,<span class="fl">1.0</span>))</a>
-<a class="sourceLine" id="cb1-3" title="3">DATA &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Sim_DDModel.html">Sim_DDModel</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">trials =</span> 2000L, <span class="dt">simulations =</span> 1L)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co">#&gt; Lade nötiges Paket: data.table</span></a>
+<a class="sourceLine" id="cb1-3" title="3">DSTP &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/DDModel.html">DDModel</a></span>(<span class="dt">model=</span><span class="st">"DSTP"</span>,<span class="dt">task =</span> <span class="st">"flanker"</span>,<span class="dt">CDF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.9</span>),<span class="dt">CAF_perc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.0</span>,<span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">0.6</span>,<span class="fl">0.8</span>,<span class="fl">1.0</span>))</a>
+<a class="sourceLine" id="cb1-4" title="4">DATA &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Sim_DDModel.html">Sim_DDModel</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">trials =</span> 2000L, <span class="dt">simulations =</span> 1L)</a></code></pre></div>
 </div>
 <div id="random-simplex" class="section level1">
 <h1 class="hasAnchor">
@@ -132,34 +133,34 @@
 <p><code><a href="../../reference/Fit_DDModel.html">Fit_DDModel()</a></code> will return a <strong>DDFit</strong> object that can be called by name or inspected using the <code><a href="../../reference/summary-methods.html">summary()</a></code> or <code><a href="../../reference/plot-methods.html">plot()</a></code> functions.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="../../reference/summary-methods.html">summary</a></span>(Fit_rand_<span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; $INPUT_Par</span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;         Ter         a         c      mu_t      mu_f    mu_RS2    mu_SS</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; 1 0.3981397 0.3385118 0.3385118 0.1327132 0.2154265 0.4981397 1.061706</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;         Ter         a         c       mu_t       mu_f    mu_RS2     mu_SS</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; 1 0.2465182 0.3373662 0.3173206 0.09158025 0.06008717 0.2933416 0.9289961</span></a>
 <a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; $FIT_Par</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;         Ter         a    c      mu_t      mu_f    mu_RS2     mu_SS</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; 1 0.3817597 0.3649903 0.14 0.1446968 0.1121554 0.5350138 0.4049623</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;         Ter         a         c      mu_t       mu_f    mu_RS2     mu_SS</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; 1 0.3564655 0.2820382 0.3265625 0.1463099 0.09345318 0.3841282 0.4691533</span></a>
 <a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; $Eta</span></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;          Ter         a         c      mu_t      mu_f    mu_RS2     mu_SS</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; 1 0.05459988 0.1103273 0.8271324 0.1198353 0.5163553 0.1229136 0.8209295</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;         Ter         a          c     mu_t      mu_f    mu_RS2     mu_SS</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; 1 0.3664911 0.2305335 0.03850805 0.547297 0.1668301 0.3026221 0.5748035</span></a>
 <a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; $mean_Eta</span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; [1] 0.3674419</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; [1] 0.3181551</span></a>
 <a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; $Fit</span></a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; [1] 0.02415821</span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; [1] 0.09664102</span></a>
 <a class="sourceLine" id="cb3-19" title="19"><span class="kw"><a href="../../reference/plot-methods.html">plot</a></span>(Fit_rand_<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt; Fit: 0.02415821</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt; Fit: 0.09664102</span></a></code></pre></div>
 <p><img src="Fitting_models_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"></a>
 <a class="sourceLine" id="cb4-2" title="2">Fit_rand_<span class="dv">1</span><span class="op">@</span>FIT<span class="op">@</span>FIT_V</a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; [1] 0.02415821</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; [1] 0.09664102</span></a>
 <a class="sourceLine" id="cb4-4" title="4">Fit_rand_<span class="dv">2</span><span class="op">@</span>FIT<span class="op">@</span>FIT_V</a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; [1] 0.0001772721</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; [1] 0.003553657</span></a>
 <a class="sourceLine" id="cb4-6" title="6">Fit_rand_<span class="dv">3</span><span class="op">@</span>FIT<span class="op">@</span>FIT_V</a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; [1] 0.000137421</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; [1] 0.0007295803</span></a>
 <a class="sourceLine" id="cb4-8" title="8">Fit_rand_<span class="dv">4</span><span class="op">@</span>FIT<span class="op">@</span>FIT_V</a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; [1] 0.0001543609</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; [1] 0.0007130949</span></a></code></pre></div>
 <p>Note how the fit gets better the more sophisticated the SIMPLEX structure gets! However DDModeling does not stop here, let us take a look at more complex solutions for the starting values!</p>
 </div>
 <div id="grid-simplex" class="section level1">
@@ -181,39 +182,42 @@
 <div id="dl-simplex" class="section level1">
 <h1 class="hasAnchor">
 <a href="#dl-simplex" class="anchor"></a>DL SIMPLEX</h1>
-<p>Finally you can use a predefined deep learning model (see <a href="Applying_DL.html">here</a>) to initialize your SIMPLEX by simply referencing it under the <strong>DL_model</strong> argument!</p>
+<p>Finally you can use a predefined deep learning model (see <a href="Applying_DL.html">here</a>) to initialize your SIMPLEX by simply referencing it under the <strong>DL_model</strong> argument! Additionally I highly recommend to scale your learning data. DDModeling gives you the opportunity to simply rescale data while fitting using the <strong>DL_scale</strong> argument.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(keras)</a>
 <a class="sourceLine" id="cb7-2" title="2"></a>
 <a class="sourceLine" id="cb7-3" title="3">LEARN_DATA &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Import_GRID.html">Import_GRID</a></span>(<span class="dt">grid_path =</span> Grid_DSTP,<span class="dt">to =</span> <span class="st">"keras_data"</span>)</a>
-<a class="sourceLine" id="cb7-4" title="4"></a>
-<a class="sourceLine" id="cb7-5" title="5">model &lt;-<span class="st"> </span><span class="kw">keras_model_sequential</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">input_shape=</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(LEARN_DATA<span class="op">$</span>INPUT),<span class="dt">units =</span> <span class="dv">10</span>, <span class="dt">activation =</span> <span class="st">"relu"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="st">    </span><span class="kw">layer_batch_normalization</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="st">    </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="st">    </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">20</span>, <span class="dt">activation =</span> <span class="st">"relu"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-4" title="4">LEARN_DATA<span class="op">$</span>INPUT &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(LEARN_DATA<span class="op">$</span>INPUT)</a>
+<a class="sourceLine" id="cb7-5" title="5">LEARN_DATA<span class="op">$</span>OUTPUT &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>(LEARN_DATA<span class="op">$</span>OUPUT)</a>
+<a class="sourceLine" id="cb7-6" title="6">LEARN_DATA_scale &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Scale_DL_Data.html">Scale_DL_Data</a></span>(<span class="dt">data =</span> LEARN_DATA)</a>
+<a class="sourceLine" id="cb7-7" title="7"></a>
+<a class="sourceLine" id="cb7-8" title="8">model &lt;-<span class="st"> </span><span class="kw">keras_model_sequential</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">input_shape=</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(LEARN_DATA<span class="op">$</span>INPUT),<span class="dt">units =</span> <span class="dv">10</span>, <span class="dt">activation =</span> <span class="st">"relu"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb7-10" title="10"><span class="st">    </span><span class="kw">layer_batch_normalization</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="st">    </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-12" title="12"><span class="st">    </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(LEARN_DATA<span class="op">$</span>OUTPUT),<span class="dt">activation =</span> <span class="st">"linear"</span>)</a>
-<a class="sourceLine" id="cb7-13" title="13"></a>
-<a class="sourceLine" id="cb7-14" title="14">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compile</span>(</a>
-<a class="sourceLine" id="cb7-15" title="15">  <span class="dt">loss =</span> <span class="st">"mean_squared_error"</span>,</a>
-<a class="sourceLine" id="cb7-16" title="16">  <span class="dt">optimizer =</span> <span class="st">"adam"</span>,</a>
-<a class="sourceLine" id="cb7-17" title="17">  <span class="dt">metrics =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"mae"</span>,<span class="st">"mape"</span>)</a>
-<a class="sourceLine" id="cb7-18" title="18">)</a>
-<a class="sourceLine" id="cb7-19" title="19"></a>
-<a class="sourceLine" id="cb7-20" title="20">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fit</span>(</a>
-<a class="sourceLine" id="cb7-21" title="21">    <span class="dt">x =</span> LEARN_DATA<span class="op">$</span>INPUT, <span class="dt">y =</span> LEARN_DATA<span class="op">$</span>OUTPUT,</a>
-<a class="sourceLine" id="cb7-22" title="22">    <span class="dt">epochs =</span> <span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb7-23" title="23">    <span class="dt">batch_size =</span> <span class="dv">16</span>,</a>
-<a class="sourceLine" id="cb7-24" title="24">    <span class="dt">verbose =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb7-25" title="25">    <span class="dt">validation_split =</span> <span class="fl">0.1</span>,</a>
-<a class="sourceLine" id="cb7-26" title="26">    <span class="dt">shuffle =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb7-27" title="27">    <span class="dt">callbacks =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
-<a class="sourceLine" id="cb7-28" title="28">      <span class="kw">callback_reduce_lr_on_plateau</span>(<span class="dt">factor =</span> <span class="fl">0.05</span>)</a>
-<a class="sourceLine" id="cb7-29" title="29">    )</a>
-<a class="sourceLine" id="cb7-30" title="30">)</a>
-<a class="sourceLine" id="cb7-31" title="31"></a>
-<a class="sourceLine" id="cb7-32" title="32">Fit_DL &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Fit_DDModel.html">Fit_DDModel</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">data =</span> DATA, <span class="dt">DL_model =</span> model, <span class="dt">s_sampling =</span> <span class="ot">FALSE</span>, <span class="dt">trials =</span> 2000L, <span class="dt">simplex_struc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(1L))</a></code></pre></div>
+<a class="sourceLine" id="cb7-11" title="11"><span class="st">    </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="st">    </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="dv">20</span>, <span class="dt">activation =</span> <span class="st">"relu"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="st">    </span><span class="kw">layer_batch_normalization</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="st">    </span><span class="kw">layer_dropout</span>(<span class="dt">rate =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="st">    </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> <span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(LEARN_DATA<span class="op">$</span>OUTPUT),<span class="dt">activation =</span> <span class="st">"linear"</span>)</a>
+<a class="sourceLine" id="cb7-16" title="16"></a>
+<a class="sourceLine" id="cb7-17" title="17">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">compile</span>(</a>
+<a class="sourceLine" id="cb7-18" title="18">  <span class="dt">loss =</span> <span class="st">"mean_squared_error"</span>,</a>
+<a class="sourceLine" id="cb7-19" title="19">  <span class="dt">optimizer =</span> <span class="st">"adam"</span>,</a>
+<a class="sourceLine" id="cb7-20" title="20">  <span class="dt">metrics =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"mae"</span>,<span class="st">"mape"</span>)</a>
+<a class="sourceLine" id="cb7-21" title="21">)</a>
+<a class="sourceLine" id="cb7-22" title="22"></a>
+<a class="sourceLine" id="cb7-23" title="23">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fit</span>(</a>
+<a class="sourceLine" id="cb7-24" title="24">    <span class="dt">x =</span> LEARN_DATA<span class="op">$</span>INPUT, <span class="dt">y =</span> LEARN_DATA<span class="op">$</span>OUTPUT,</a>
+<a class="sourceLine" id="cb7-25" title="25">    <span class="dt">epochs =</span> <span class="dv">50</span>,</a>
+<a class="sourceLine" id="cb7-26" title="26">    <span class="dt">batch_size =</span> <span class="dv">16</span>,</a>
+<a class="sourceLine" id="cb7-27" title="27">    <span class="dt">verbose =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb7-28" title="28">    <span class="dt">validation_split =</span> <span class="fl">0.1</span>,</a>
+<a class="sourceLine" id="cb7-29" title="29">    <span class="dt">shuffle =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb7-30" title="30">    <span class="dt">callbacks =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
+<a class="sourceLine" id="cb7-31" title="31">      <span class="kw">callback_reduce_lr_on_plateau</span>(<span class="dt">factor =</span> <span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb7-32" title="32">    )</a>
+<a class="sourceLine" id="cb7-33" title="33">)</a>
+<a class="sourceLine" id="cb7-34" title="34"></a>
+<a class="sourceLine" id="cb7-35" title="35">Fit_DL &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/Fit_DDModel.html">Fit_DDModel</a></span>(<span class="dt">model =</span> DSTP, <span class="dt">data =</span> DATA, <span class="dt">DL_model =</span> model, <span class="dt">DL_scale =</span> LEARN_DATA_scale, <span class="dt">s_sampling =</span> <span class="ot">FALSE</span>, <span class="dt">trials =</span> 2000L, <span class="dt">simplex_struc =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(1L))</a></code></pre></div>
 </div>
   </div>
 

@@ -5,6 +5,7 @@
   * set 'task="RMT_LDT"' in DDModel
 * DDRep now has the ability to reshape a given DDrep between different representations
   * Specify 'ddrep' in DDRep (Note: Only reshaping inside an identical DDModel framework is allowed!)
+* Added a handy function for extracting scaling using Deep Learning models (see `Scale_DL_Data()`)
 * Several performance improvements
 
 ## DDModeling 0.0.1.4

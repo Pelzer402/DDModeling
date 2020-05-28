@@ -20,7 +20,7 @@ In order to define a model you need to call the `DDModel()` function. There are 
 
 The **model** parameter is relatively straightforward. There are currently three models supported in the package:  [DSTP](https://psycnet.apa.org/buy/2010-14834-002), [DMC](https://www.ncbi.nlm.nih.gov/pubmed/25909766) and [SSP](https://psycnet.apa.org/record/2011-23986-003). Simply specify one of these abreviations and this will set the mathamtical groundwork for your model:
 
-```{r }
+```{r echo=TRUE}
 library(DDModeling)
 DSTP <- DDModel(model="DSTP",task = "flanker",CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
 DMC  <- DDModel(model="DMC" ,task = "flanker",CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
@@ -45,12 +45,12 @@ DSTP_simple <- DDModel(model="DSTP",task = "custom",conditions = "hit",parameter
 DSTP_simple
 ```
 
-Seems good so far, however there is still some work to do! For starters the ModelMatrix only contains zeros, such a model wont go anywhere! We need to map our parameters (coloumns) to the model-parameters (rows). Here we have a simple 1:1 mapping:
+Seems good so far, however there is still some work to do! For starters the ModelMatrix only contains zeros, such a model wont go anywhere! We need to map our parameters (coloumns) to the model-parameters (rows). Here we have a simple 1:1 mapping (Note that in the new version (DDModeling 0.0.2.0) I introduced intertrial variability to all models leading to a little more spacious initialization!):
 
 ```{r }
-DSTP_simple@MM$hit[,"Ter"]<- c(1,0,0,0,0,0,0)
-DSTP_simple@MM$hit[,"a"]  <- c(0,1,0,0,0,0,0)
-DSTP_simple@MM$hit[,"mu"]  <- c(0,0,0,1,0,0,0)
+DSTP_simple@MM$hit[,"Ter"]<- c(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+DSTP_simple@MM$hit[,"a"]  <- c(0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+DSTP_simple@MM$hit[,"mu"]  <- c(0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0)
 ```
 
 Next up there are NAs in the Parameter Domain section! We need to specify an upper and lower limit for each of them:

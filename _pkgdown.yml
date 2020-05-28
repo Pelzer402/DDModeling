@@ -37,6 +37,9 @@ reference:
   - title: "Datasets"
     contents:
       - ends_with("_DATA")
+  - title: "Misc"
+    contents:
+      - ends_with("_DL_Data")
   - title: "Generics"
     contents:
       - ends_with("-methods")
