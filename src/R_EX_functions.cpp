@@ -227,5 +227,17 @@ Rcpp::S4 Generate_DDRep(Rcpp::S4 DDModel_,Rcpp::List RAW_){
   return(S.EVAL[0].Rep.Convert_to_S4());
 }
 
-
+// [[Rcpp::export(.Reshape_DDRep_cpp)]]
+Rcpp::S4 Reshape_DDRep(Rcpp::S4 DDModel_,Rcpp::S4 DDRep_){
+  DDModel_cpp M(DDModel_);
+  Simulation S(M);
+  DDRep_cpp REP_buff(M);
+  DDRep_cpp REP_IN(DDRep_);
+  REP_buff.RAW =  REP_IN.RAW;
+  REP_buff.PAR_n  =  REP_IN.PAR_n;
+  REP_buff.PAR_v  =  REP_IN.PAR_v;
+  S.EVAL[0].Rep = REP_buff;
+  S.REP_Get(0);
+  return(S.EVAL[0].Rep.Convert_to_S4());
+}
 

@@ -159,6 +159,7 @@ Import_GRID <- function(grid_path = NULL, to = "frame"){
     }
     IN <- data.table::rbindlist(IN)
     OUT <- data.table::rbindlist(OUT)
+    rm(..CN_data,..PAR)
     return(list(INPUT = as.matrix(IN), OUTPUT = as.matrix(OUT)))
   }
   if (to == "DDRep")

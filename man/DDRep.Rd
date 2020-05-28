@@ -4,12 +4,14 @@
 \alias{DDRep}
 \title{Constructor for \link{DDRep-class}}
 \usage{
-DDRep(model = NULL, raw = NULL)
+DDRep(model = NULL, raw = NULL, ddrep = NULL)
 }
 \arguments{
 \item{model}{\code{\link{DDModel-class}}.}
 
 \item{raw}{\code{data.frame} that contains the raw data in a specific format (see details for further information)}
+
+\item{ddrep}{\code{\link{DDRep-class}}}
 }
 \value{
 \code{\link{DDRep-class}}.
