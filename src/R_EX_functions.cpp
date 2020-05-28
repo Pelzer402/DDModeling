@@ -3,31 +3,6 @@
 
 // Here functions for the export in the R-environment are listed
 
-
-// TESST
-// [[Rcpp::export(.TEST)]]
-std::vector<double> TEST(double lb, double ub, int n){
-  seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());
-  std::vector<double> OUT;
-  for (int i = 0; i<n; ++i)
-  {
-    OUT.push_back(urand(lb,ub));
-  }
-  return(OUT);
-}
-
-// TESST
-// [[Rcpp::export(.TEST2)]]
-std::vector<double> TEST2(double mu, double s, int n){
-  seed_nrand(std::chrono::system_clock::now().time_since_epoch().count());
-  std::vector<double> OUT;
-  for (int i = 0; i<n; ++i)
-  {
-    OUT.push_back(mu+nrand()*s);
-  }
-  return(OUT);
-}
-
 // Functions for Simulation
 // [[Rcpp::export(.Sim_DDModel_rnd)]]
 Rcpp::S4 Generate_Modelprediction_rnd(Rcpp::S4 DDModel_,long trials_){
