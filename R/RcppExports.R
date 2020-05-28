@@ -45,3 +45,7 @@
     .Call('_DDModeling_Generate_DDRep', PACKAGE = 'DDModeling', DDModel_, RAW_)
 }
 
+.Reshape_DDRep_cpp <- function(DDModel_, DDRep_) {
+    .Call('_DDModeling_Reshape_DDRep', PACKAGE = 'DDModeling', DDModel_, DDRep_)
+}
+

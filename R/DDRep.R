@@ -20,6 +20,7 @@ setClass("DDRep",
 #' @description Userfriendly function for the construction of a \link{DDRep-class}.
 #' @param model  \code{\link{DDModel-class}}.
 #' @param raw    \code{data.frame} that contains the raw data in a specific format (see details for further information)
+#' @param ddrep  \code{\link{DDRep-class}}
 #' @return \code{\link{DDRep-class}}.
 #' @details Raw data in the DDModeling package is handled in \code{data.frames} containing three coulmns:
 #' \describe{
@@ -30,7 +31,7 @@ setClass("DDRep",
 #' Note: In order for the DDRep function to execute successfully the factor levels of the cond coulmns have to be identical to the condition names specified
 #' in the MM slot of the \code{model}!
 #' @export
-DDRep <- function(model = NULL,raw=NULL){
+DDRep <- function(model = NULL,raw=NULL,ddrep = NULL){
   Flag <- 1
   Check <- ArgumentCheck::newArgCheck()
   if (!methods::is(model,"DDModel"))
@@ -38,9 +39,33 @@ DDRep <- function(model = NULL,raw=NULL){
     ArgumentCheck::addError(msg = "'model' is missing or in the wrong format!",argcheck = Check)
     Flag <- 99
   }
-  if (!is.data.frame(raw))
+  if (!is.null(raw))
   {
-    ArgumentCheck::addError(msg = "'raw' is missing or in the wrong format!",argcheck = Check)
+    if (!is.data.frame(raw))
+    {
+      ArgumentCheck::addError(msg = "'raw' is missing or in the wrong format!",argcheck = Check)
+      Flag <- 99
+    }
+    else
+    {
+      Flag <- 1
+    }
+  }
+  if (!is.null(ddrep))
+  {
+    if(!methods::is(ddrep,"DDRep"))
+    {
+      ArgumentCheck::addError(msg = "'ddrep' is in the wrong format!",argcheck = Check)
+      Flag <- 99
+    }
+    else
+    {
+      Flag <- 2
+    }
+  }
+  if (!is.null(raw) & !is.null(ddrep))
+  {
+    ArgumentCheck::addError(msg = "You can not generate a DDRep on the basis of another 'ddrep' and 'raw'! Only enter one!",argcheck = Check)
     Flag <- 99
   }
   if (Flag == 1)
@@ -73,10 +98,22 @@ DDRep <- function(model = NULL,raw=NULL){
       Flag <- 99
     }
   }
+  if ( Flag == 2)
+  {
+    if(!all(colnames(model@DM)==colnames(ddrep@PAR)) || !all(names(model@MM)==names(ddrep@REP$CDF)))
+    {
+      ArgumentCheck::addError(msg = "The parameter or conditions in 'model' do not match the ones used in your 'ddrep'! You are trying to reshape a DDRep into a new DDModel! Only reshaping between different representation inside a fixed model is allowed, adjust 'model' accordingly!",argcheck = Check)
+      Flag <- 99
+    }
+  }
   ArgumentCheck::finishArgCheck(Check)
   if (Flag == 1)
   {
     return(.DDRep_cpp(model,raw))
+  }
+  else if (Flag == 2)
+  {
+    return(.Reshape_DDRep_cpp(model,ddrep))
   }
   else
   {

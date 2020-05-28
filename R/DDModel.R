@@ -22,7 +22,7 @@ setClass("DDModel",
 #' @name DDModel
 #' @description Userfriendly function for the construction of a \link{DDModel-class}.
 #' @param model       \code{character} of the name of the Model to be used (choices are "DSTP","DMC","SSP")
-#' @param task        \code{character} specifying a specific predefined modelstructure ("flanker","custom)
+#' @param task        \code{character} specifying a specific predefined modelstructure ("flanker","custom","RMT_LDT")
 #' @param conditions  \code{character} vector of the names of conditions
 #' @param parameter   \code{character} vector of the names of custom parameters
 #' @param dt          \code{numeric} representing the integration constant of the diffusion process
@@ -59,9 +59,9 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
     ArgumentCheck::addError(msg = "'task' is missing!",argcheck = Check)
   if (!is.null(task))
   {
-    if(!(task %in% c("flanker","custom")))
-      ArgumentCheck::addError(msg = "'task' must be one of 'flanker' or 'custom'!",argcheck = Check)
-    if(task %in% c("flanker")&& ((!is.null(conditions))||(!is.null(parameter))||(!is.null(dt))||(!is.null(sigma))))
+    if(!(task %in% c("flanker","custom","RMT_LDT")))
+      ArgumentCheck::addError(msg = "'task' must be one of 'flanker', 'custom' or 'RMT_LDT'!",argcheck = Check)
+    if(task %in% c("flanker","RMT_LDT")&& ((!is.null(conditions))||(!is.null(parameter))||(!is.null(dt))||(!is.null(sigma))))
     {
       if(!is.null(conditions))
         ArgumentCheck::addMessage(msg = "'conditions' will be discarded because of task specification",argcheck = Check)
@@ -71,11 +71,14 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
         ArgumentCheck::addWarning(msg = "'dt' will be discarded because of task specification",argcheck = Check)
       if(!is.null(sigma))
         ArgumentCheck::addWarning(msg = "'sigma' will be discarded because of task specification",argcheck = Check)
-      Flag <- "flanker"
     }
-    else
+    if (task %in% c("flanker"))
     {
       Flag <- "flanker"
+    }
+    if (task %in% c("RMT_LDT"))
+    {
+      Flag <- "RMT_LDT"
     }
     if(task %in% c("custom"))
     {
@@ -173,7 +176,7 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                   },
                   DDM_classic={
                     mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 7,ncol = length(parameter))
-                    rownames(x) <- c("Ter","a","mu","z","s_Ter","s_mu","s_mu","s_z")
+                    rownames(x) <- c("Ter","a","mu","z","s_Ter","s_mu","s_z")
                     colnames(x) <- parameter
                     return(x)
                     })
@@ -305,6 +308,44 @@ DDModel <- function(model = NULL,task = NULL,conditions=NULL,parameter=NULL,dt=N
                     mm$Incong["s_z",]    <- c(0,0,0,0,0)
                     dm["Upper_Limit",] <- c(0.45,0.19,0.55,2.6,0.026)
                     dm["Lower_Limit",] <- c(0.15,0.07,0.2,1,0.01)
+                  }
+           )
+           sp <- as.matrix(data.frame(dt=dt,sigma=sigma))
+           rf <- list(CDF=CDF_perc,CAF=CAF_perc)
+           return(methods::new("DDModel",ID=model,MM=mm,DM=dm,SP=sp,RF=rf))
+         },
+         RMT_LDT ={
+           switch(EXPR = model,
+                  DDM_classic={
+                    conditions <- c("New_noWord","Old_Word")
+                    parameter <-  c("Ter","a","mu","z","s_Ter","s_mu","s_z")
+                    dt <- 0.001
+                    sigma <- 0.1
+                    mm <- lapply(1:length(conditions), function(x){ x<-matrix(0,nrow = 7,ncol = length(parameter))
+                    rownames(x) <- c("Ter","a","mu","z","s_Ter","s_mu","s_z")
+                    colnames(x) <- parameter
+                    return(x)
+                    })
+                    names(mm) <- conditions
+                    dm <- matrix(nrow = 2,ncol = length(parameter))
+                    rownames(dm) <- c("Upper_Limit","Lower_Limit")
+                    colnames(dm) <- parameter
+                    mm$New_noWord["Ter",]  <- c(1,0,0,0,0,0,0)
+                    mm$New_noWord["a",]           <- c(0,1,0,0,0,0,0)
+                    mm$New_noWord["mu",]          <- c(0,0,1,0,0,0,0)
+                    mm$New_noWord["z",]           <- c(0,0,0,1,0,0,0)
+                    mm$New_noWord["s_Ter",]       <- c(0,0,0,0,1,0,0)
+                    mm$New_noWord["s_mu",]        <- c(0,0,0,0,0,1,0)
+                    mm$New_noWord["s_z",]         <- c(0,0,0,0,0,0,1)
+                    mm$Old_Word["Ter",]           <- c(1,0,0,0,0,0,0)
+                    mm$Old_Word["a",]             <- c(0,1,0,0,0,0,0)
+                    mm$Old_Word["mu",]            <- c(0,0,1,0,0,0,0)
+                    mm$Old_Word["z",]             <- c(0,0,0,-1,0,0,0)
+                    mm$Old_Word["s_Ter",]         <- c(0,0,0,0,1,0,0)
+                    mm$Old_Word["s_mu",]          <- c(0,0,0,0,0,1,0)
+                    mm$Old_Word["s_z",]           <- c(0,0,0,0,0,0,1)
+                    dm["Upper_Limit",] <- c(0.5,0.2,0.4,0.02,0.2,0.1,0.05)
+                    dm["Lower_Limit",] <- c(0.2,0.05,0.0,-0.02,0.0,0.0,0.0)
                   }
            )
            sp <- as.matrix(data.frame(dt=dt,sigma=sigma))

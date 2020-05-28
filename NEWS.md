@@ -1,3 +1,12 @@
+# DDModeling 0.0.2.0
+* Added functionality to perform modeling using the classic drift diffusion model (see [here](https://doi.org/10.1037/0033-295X.85.2.59))
+  * set 'model="DDM_classic"' in DDModel
+* In addition to the above the lexical decision and repetition memory task were introduced to the package (only for DDM_classic for now)
+  * set 'task="RMT_LDT"' in DDModel
+* DDRep now has the ability to reshape a given DDrep between different representations
+  * Specify 'ddrep' in DDRep (Note: Only reshaping inside an identical DDModel framework is allowed!)
+* Several performance improvements
+
 ## DDModeling 0.0.1.4
 * Several performace improvements (especially to GRID_Import)
 * Added ability to tune SIMPLEX parameters in Fit_DDModel (see new argument simplex_coef)
