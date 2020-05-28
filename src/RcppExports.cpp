@@ -136,6 +136,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Reshape_DDRep
+Rcpp::S4 Reshape_DDRep(Rcpp::S4 DDModel_, Rcpp::S4 DDRep_);
+RcppExport SEXP _DDModeling_Reshape_DDRep(SEXP DDModel_SEXP, SEXP DDRep_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::S4 >::type DDModel_(DDModel_SEXP);
+    Rcpp::traits::input_parameter< Rcpp::S4 >::type DDRep_(DDRep_SEXP);
+    rcpp_result_gen = Rcpp::wrap(Reshape_DDRep(DDModel_, DDRep_));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DDModeling_TEST", (DL_FUNC) &_DDModeling_TEST, 3},
@@ -149,6 +161,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DDModeling_Grid_calc", (DL_FUNC) &_DDModeling_Grid_calc, 1},
     {"_DDModeling_GRID_to_DDRep", (DL_FUNC) &_DDModeling_GRID_to_DDRep, 1},
     {"_DDModeling_Generate_DDRep", (DL_FUNC) &_DDModeling_Generate_DDRep, 2},
+    {"_DDModeling_Reshape_DDRep", (DL_FUNC) &_DDModeling_Reshape_DDRep, 2},
     {NULL, NULL, 0}
 };
 
