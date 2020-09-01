@@ -8,114 +8,98 @@
 #' @param parameter \code{Data.frame} containing parameters that should be simulated
 #' @details If 'parameter' is specified the function will undergo nrow(parameter) times simulation calls.
 #' Depending on the input the return value will be either a \code{DDRep}, \code{list} or \code{list} of \code{lists}.
-#' @examples # Define a Model
-#' M1 <- DDModel(model="DSTP",task = "flanker",
-#'           CDF_perc = c(0.1,0.3,0.5,0.7,0.9),CAF_perc = c(0.0,0.2,0.4,0.6,0.8,1.0))
+#' @examples
+#' # Define a Model
+#' M1 <- DDModel(
+#'   model = "DSTP", task = "flanker",
+#'   CDF_perc = c(0.1, 0.3, 0.5, 0.7, 0.9), CAF_perc = c(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)
+#' )
 #' # Simulate some Data with randomly generated parameters in the domain of M1
-#' R1 <- Sim_DDModel(M1,10000L)
+#' R1 <- Sim_DDModel(M1, 10000L)
 #' # If you want to reuse the randomly drawn parameters (or any other) simply insert them
-#' R2 <- Sim_DDModel(M1,10000L,parameter = R1@PAR)
+#' R2 <- Sim_DDModel(M1, 10000L, parameter = R1@PAR)
 #' @return \code{DDRep} object or \code{list} of \code{DDRep} depending on the input
 #' @export
-Sim_DDModel <- function(model = NULL, trials = 1000L, simulations = 1L, parameter = NULL){
+Sim_DDModel <- function(model = NULL, trials = 1000L, simulations = 1L, parameter = NULL) {
   Flag <- 1
   Check <- ArgumentCheck::newArgCheck()
-  if (is.null(model) || !methods::is(model,"DDModel"))
-  {
-    ArgumentCheck::addError(msg = "'model' is missing or in the wrong format!",argcheck = Check)
+  if (is.null(model) || !methods::is(model, "DDModel")) {
+    ArgumentCheck::addError(msg = "'model' is missing or in the wrong format!", argcheck = Check)
     Flag <- 99
   }
-  if (is.null(trials) || !is.integer(trials))
-  {
-    ArgumentCheck::addError(msg = "'trials' is missing or in the wrong format!",argcheck = Check)
+  if (is.null(trials) || !is.integer(trials)) {
+    ArgumentCheck::addError(msg = "'trials' is missing or in the wrong format!", argcheck = Check)
     Flag <- 99
   }
-  if (!is.integer(trials))
-  {
-    ArgumentCheck::addError(msg = "'simulations' is in the format of numeric!",argcheck = Check)
+  if (!is.integer(trials)) {
+    ArgumentCheck::addError(msg = "'simulations' is in the format of numeric!", argcheck = Check)
     Flag <- 99
   }
-  if (!is.data.frame(parameter) && !is.null(parameter))
-  {
-    ArgumentCheck::addError(msg = "'parameter' is in the wrong format!",argcheck = Check)
+  if (!is.data.frame(parameter) && !is.null(parameter)) {
+    ArgumentCheck::addError(msg = "'parameter' is in the wrong format!", argcheck = Check)
     Flag <- 99
   }
-  else if (!is.null(parameter))
-  {
-    if(all(colnames(model@DM) == colnames(parameter)))
-    {
+  else if (!is.null(parameter)) {
+    if (all(colnames(model@DM) == colnames(parameter))) {
       Flag <- 2
     }
-    else
-    {
-      ArgumentCheck::addError(msg = "'parameter' do not match the definition in the 'model'!",argcheck = Check)
+    else {
+      ArgumentCheck::addError(msg = "'parameter' do not match the definition in the 'model'!", argcheck = Check)
       Flag <- 99
     }
   }
   ArgumentCheck::finishArgCheck(Check)
-  if (Flag == 99)
-  {
+  if (Flag == 99) {
     return(cat("Sim_DDModel failed"))
   }
-  else
-  {
-    if (Flag == 1)
-    {
-      if (simulations == 1L)
-      {
-        return(.Sim_DDModel_rnd(model,trials))
+  else {
+    if (Flag == 1) {
+      if (simulations == 1L) {
+        return(.Sim_DDModel_rnd(model, trials))
       }
-      else
-      {
+      else {
         OUT <- list()
         for (i in 1:simulations)
         {
-          OUT[[i]] <- .Sim_DDModel_rnd(model,trials)
+          OUT[[i]] <- .Sim_DDModel_rnd(model, trials)
         }
         return(OUT)
       }
     }
-    if (Flag == 2)
-    {
-      if (simulations == 1L)
-      {
-        if (nrow(parameter) == 1)
-        {
-          par_buff <- as.numeric(parameter[1,])
-          return(.Sim_DDModel_par(model,trials,par_buff))
+    if (Flag == 2) {
+      if (simulations == 1L) {
+        if (nrow(parameter) == 1) {
+          par_buff <- as.numeric(parameter[1, ])
+          return(.Sim_DDModel_par(model, trials, par_buff))
         }
-        else
-        {
+        else {
           OUT <- list()
           for (p in 1:nrow(parameter))
           {
-            par_buff <- as.numeric(parameter[p,])
-            OUT[[p]] <- .Sim_DDModel_par(model,trials,par_buff)
+            par_buff <- as.numeric(parameter[p, ])
+            OUT[[p]] <- .Sim_DDModel_par(model, trials, par_buff)
           }
           return(OUT)
         }
       }
-      else
-      {
+      else {
         OUT <- list()
-        if (nrow(parameter) == 1)
-        {
+        if (nrow(parameter) == 1) {
           for (s in 1:simulations)
           {
-            par_buff <- as.numeric(parameter[1,])
-            OUT[[s]] <- .Sim_DDModel_par(model,trials,par_buff)
+            par_buff <- as.numeric(parameter[1, ])
+            OUT[[s]] <- .Sim_DDModel_par(model, trials, par_buff)
           }
           return(OUT)
         }
-        else
-        {
+        else {
           for (p in 1:nrow(parameter))
           {
             OUT[[p]] <- list()
             for (s in 1:simulations)
             {
-              par_buff <- as.numeric(parameter[p,])
-              OUT[[p]][[s]] <- .Sim_DDModel_par(model,trials,par_buff)
+              par_buff <- as.numeric(parameter[p, ])
+              OUT[[p]][[s]] <- .Sim_DDModel_par(model, trials, par_buff)
             }
           }
           return(OUT)
@@ -124,4 +108,3 @@ Sim_DDModel <- function(model = NULL, trials = 1000L, simulations = 1L, paramete
     }
   }
 }
-

@@ -522,12 +522,6 @@ void Simulation::FitCrit_Get(int Set)
         prop_sim = (double)EVAL[Set].Rep.CDF[c][p].time/ (double)TBF.Rep.CDF[c][p].time;
         tmp += std::pow((1 - prop_sim), 2.0);
       }
-      prop_sim2 = ((double)EVAL[Set].Rep.CDF[c][0].N /(double)n_cdf_eval)/((double)TBF.Rep.CDF[c][0].N/(double)n_cdf_tbf);
-      if (prop_sim2 == 0.0)
-      {
-        prop_sim2 = 1.0;
-      }
-      tmp += (TBF.Rep.CDF[c].size() * std::pow((1 - prop_sim2), 2.0));
     }
     tmp_FitCrit += tmp;
     tmp = 0.0;
@@ -536,11 +530,7 @@ void Simulation::FitCrit_Get(int Set)
       if (TBF.Rep.CAF[c][p].acc == 0.0)
       {
         prop_sim = (double)EVAL[Set].Rep.CAF[c][p].time/(double)TBF.Rep.CAF[c][p].time;
-        prop_sim2 = (double)EVAL[Set].Rep.CAF[c][p].acc/ 0.001;
-        if (prop_sim2 == 0.0)
-        {
-          prop_sim2 = 1.0;
-        }
+        prop_sim2 = ((double)EVAL[Set].Rep.CAF[c][p].acc+0.001)/ 0.001;
       }
       else
       {

@@ -11,16 +11,15 @@
 #' @slot TRIALS_SAMPLE \code{numeric} specifying the number of trials inside a given sample
 #' @slot PERF \code{character} specifying the performance analysis error
 setClass("DDFitPar",
-         slots      = list(
-           FIT_V         = "numeric",
-           FIT_V_self    = "numeric",
-           FIT_N         = "numeric",
-           START_VALUE   = "character",
-           METHOD        = "character",
-           S_SAMPLING    = "logical",
-           TRIALS_TOTAL  = "numeric",
-           TRIALS_SAMPLE = "numeric",
-           PERF          = "character"
-         )
+  slots = list(
+    FIT_V = "numeric",
+    FIT_V_self = "numeric",
+    FIT_N = "numeric",
+    START_VALUE = "character",
+    METHOD = "character",
+    S_SAMPLING = "logical",
+    TRIALS_TOTAL = "numeric",
+    TRIALS_SAMPLE = "numeric",
+    PERF = "character"
+  )
 )
-
