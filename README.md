@@ -4,7 +4,7 @@
 
 <!-- badges: start -->
 <!-- badges: end -->
-DDModeling is a R-package. It's goal is to give researchers access to an easy to use toolset for simulating and fitting drift diffusion models in cognitive psychology.
+DDModeling is an R packet. Its goal is to give researchers access to an easy-to-use toolkit for the simulation and adaptation of drift-diffusion models in cognitive psychology.
 
 ## Installation
 

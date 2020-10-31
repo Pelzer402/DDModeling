@@ -148,7 +148,7 @@
 <h1 class="page-header" data-toc-text="0.0.2.0">
 <a href="#ddmodeling-0020" class="anchor"></a>DDModeling 0.0.2.0</h1>
 <ul>
-<li>Added functionality to perform modeling using the classic drift diffusion model (see <a href="https://doi.org/10.1037/0033-295X.85.2.59">here</a>)
+<li>Added functionality to perform modelling using the classic drift diffusion model (see <a href="https://doi.org/10.1037/0033-295X.85.2.59">here</a>)
 <ul>
 <li>set ‘model=“DDM_classic”’ in DDModel</li>
 </ul>
@@ -170,7 +170,7 @@
 <h2 class="hasAnchor">
 <a href="#ddmodeling-0014" class="anchor"></a>DDModeling 0.0.1.4</h2>
 <ul>
-<li>Several performace improvements (especially to GRID_Import)</li>
+<li>Several performance improvements (especially to GRID_Import)</li>
 <li>Added ability to tune SIMPLEX parameters in Fit_DDModel (see new argument simplex_coef)</li>
 <li>Added a Compare generic method to DDRep</li>
 </ul>
@@ -179,7 +179,13 @@
 <h2 class="hasAnchor">
 <a href="#ddmodeling-0013" class="anchor"></a>DDModeling 0.0.1.3</h2>
 <ul>
-<li>Added functionality for fitting with deep learning networks in Fit_DDModel</li>
+<li>Added multi thread support to several functions!
+<ul>
+<li>Defaults to k-1 threads where k is the maximum number of threads available to the system</li>
+</ul>
+</li>
+<li>Added functionality for fitting with deep learning methods in Fit_DDModel</li>
+<li>Added functionality to easily convert GRIDs into datasets suitable for the training of neural networks using deep learning methods</li>
 </ul>
 </div>
 <div id="ddmodeling-0012" class="section level2">
