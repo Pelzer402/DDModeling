@@ -10,19 +10,20 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-Importing data in DDModeling is done by calling the `DDRep()` function, which needs two arguments **model** and **data**. **model** constitutes a **DDModel** object (see [here](Model_definition.html) for a tutorial). **raw** specifies the raw data from a given experiment. For a sucessfull import, **raw** needs to follow a formating convention. This convention will be investigated in the following section.
+Importing data into DDModeling is done by calling the function `DDRep()` which takes two arguments **model** and **data**. **model** represents a **DDModel** object (see [here](Model_definition.html) for a tutorial). **raw** specifies the raw data from a given experiment. For a successful import, **raw** must follow a formatting convention. This convention is examined in the following section.
 
 # How to format RAW data
 
-Raw data in the DDModeling package is handled in data.frames containing three coulmns:
+The raw data in the DDModeling package is handled in data.frames, which contain three coulmns:
 
-* **cond** (Factor): Specifying the condition under which a given trial was taken
-* **resp** (Numeric): Specifying the binary coded response property of a trial 
-* **time** (Numeric): Specifying the time (in rounded ms) for a given trial
+* **cond** (factor): Specifies the condition under which a given trial was performed
+* **resp** (numeric): Specifies the binary coded response property of a study 
+* **time** (numeric): Indicates the time (in rounded ms) for a given trial
 
-The naming convention inside the **cond** coulmn is free, however you have to make sure that the factor labels correspond to the **model** inside the `DDRep()` function, meaning that the conditions specified in the **model** need to match those in your data! **resp** on the other hand follows a unified coding scheme: The value 0 represents a trial that resulted in an error (i.e. wrong response) and the value 1 represents a trial that resulted in a success (i.e. correct response). **time** has to be in the format of rounded milliseconds, meaning only natural numbers are allowed. 
+The naming convention within the **cond** could be free, but you must ensure that the factor names match the **model** within the `DDRep()` function, which means that the conditions specified in the **model** must match those in your data! **resp** on the other hand follows a uniform coding scheme: The value 0 represents an attempt that led to an error (i.e. wrong answer) and the value 1 represents an attempt that led to a success (i.e. correct answer). The **time** must be given in rounded millisecond format, i.e. only natural numbers are allowed. 
 
-For demonstration purposes DDModeling comes equipped with a predefined dataset **FLANKER_DATA**, which constitutes 64 datasets (i.e. subjects) of a flanker task experiment with 320 trials per condition. If you want to import data into DDModeling your data should look something like this
+For demonstration purposes, DDModeling comes with a predefined data set **FLANKER_DATA** representing 64 data sets (i.e. subjects) of a flanker task experiment with 320 experiments per condition. If you want to import data into DDModeling, your data should look like this
+
 
 ```{r}
 library(DDModeling)

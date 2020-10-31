@@ -12,26 +12,27 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 # Requirements
-In order to garanty trust and functionality of the DDModeling package it is recommended to use an up to date installation of Windows 10 as the operating system of choice. While it may be possible to use the package under Linux or macOS, there was no testing for these platforms (or any other not directly named here) undertaken.
+To ensure the full functionality of DDModeling it is recommended to use it with an updated installation of Windows 10. Although it is possible to use the package under Linux or macOS, no tests have been conducted regarding usability and trustworthiness under these operating systems.
 
 # Installation prerequisites
-DDModeling will be distributed through means of GitHub. While a submission to CRAN is planned, it is rather low priority and may take some time. The most straightforward way of installing packages of GitHub is to use the _install_github_ function found in the **devtools** package. Therefore an installation of the **devtools** package is needed:
+DDModeling is distributed through GitHub. Although a submission to CRAN is planned, it has a low priority and may take some time. The easiest way to install packages from GitHub is to use the _install_github_ function found in the **devtools** package. Therefore, installation of the **devtools** package is required:
 
 ```{r eval= FALSE}
 install.packages("devtools")
 ```
 
-However, because the DDModeling package heavily relies on the use of C++ code, it will need to compile some of this code through the process of the installation. Therefore a C++ compiler is also needed. It is suggested to install the latest release version of [Rtools](https://cran.r-project.org/bin/windows/Rtools/) and adhere to a default installtion. This should garanty successfull c++ compilation not only for the DDModeling package, but for any other R package that uses C++ code.
+However, since the DDModeling package relies heavily on the use of C++ code, some of this code must be compiled during the installation process. Therefore a C++ compiler is also required. It is recommended to install the latest version of [Rtools](https://cran.r-project.org/bin/windows/Rtools/) and to stick to the standard installation. This should guarantee a successful C++ compilation not only for the DDModeling package but also for any other R package that uses C++ code.
 
 # Installation
-With all this set and done there is but one more line to be entered:
+When all this is done, there is only one more line to enter:
 
 ```{r eval= FALSE}
 devtools::install_github("Pelzer402/DDModeling")
 ```
 
-If the installation was successfull you are all setup to engage in all sorts of fancy modeling! Feel free to take a look at the tutorials tab at the top of this website to learn more about the usage of the DDModeling package.
+If the installation was successful, you are ready to start using all kinds of fancy model definitions and fit procedures! Take a look at the Tutorials tab at the top of this website to learn more about using the DDModeling package.
 
 # Updating
 
-If you which to update your version of DDModeling you can do so by simply doing the above though I would advice to delete your former installation of DDModeling beforehand!
+If you want to update your version of DDModeling, you can do so simply by following the steps above. However, I would advise you to delete your previous installation of DDModeling first!
+

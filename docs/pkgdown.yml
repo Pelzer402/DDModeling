@@ -1,12 +1,13 @@
-pandoc: 2.7.2
-pkgdown: 1.4.1
+pandoc: 2.9.2.1
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   Setup: Setup.html
-  Applying_DL: Tutorials/Applying_DL.html
-  Fitting_models: Tutorials/Fitting_models.html
-  Generate_GRIDs: Tutorials/Generate_GRIDs.html
-  Import_data: Tutorials/Import_data.html
-  Model_definition: Tutorials/Model_definition.html
-  Model_simulation: Tutorials/Model_simulation.html
+  Tutorials/Applying_DL: Applying_DL.html
+  Tutorials/Fitting_models: Fitting_models.html
+  Tutorials/Generate_GRIDs: Generate_GRIDs.html
+  Tutorials/Import_data: Import_data.html
+  Tutorials/Model_definition: Model_definition.html
+  Tutorials/Model_simulation: Model_simulation.html
+last_built: 2020-10-31T14:35Z
 

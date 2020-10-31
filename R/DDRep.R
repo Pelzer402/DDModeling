@@ -135,34 +135,52 @@ setMethod("show", "DDRep", function(object) {
 #' @rdname plot-methods
 #' @aliases plot
 #' @exportMethod plot
-setMethod("plot", signature(x = "DDRep"), function(x) {
-  perc <- cond <- acc <- NULL
-  CAF <- c()
-  CDF <- c()
-  for (i in 1:length(x@RAW))
-  {
-    CAF <- rbind(CAF, x@REP$CAF[[i]])
-    CDF <- rbind(CDF, x@REP$CDF[[i]])
-  }
-  CAF_time <- ggplot2::ggplot(CAF, ggplot2::aes(x = perc, y = time, linetype = cond)) +
-    ggplot2::geom_line() +
-    ggplot2::geom_point() +
-    ggplot2::labs(title = "CAF time", x = "percentile", y = "reaction time [ms]", linetype = "Condition") +
-    ggplot2::theme(legend.position = "bottom")
-  L <- cowplot::get_legend(CAF_time)
-  CAF_time <- CAF_time + ggplot2::theme(legend.position = "none")
-  CAF_acc <- ggplot2::ggplot(CAF, ggplot2::aes(x = perc, y = acc, linetype = cond)) +
-    ggplot2::geom_line() +
-    ggplot2::geom_point() +
-    ggplot2::labs(title = "CAF acc", x = "percentile", y = "accuracy") +
-    ggplot2::theme(legend.position = "none")
-  CDF <- ggplot2::ggplot(CDF, ggplot2::aes(x = perc, y = time, linetype = cond)) +
-    ggplot2::geom_line() +
-    ggplot2::geom_point() +
-    ggplot2::labs(title = "CDF time", x = "percentile", y = "reaction time [ms]") +
-    ggplot2::theme(legend.position = "none")
-  C1 <- cowplot::plot_grid(CAF_time, CAF_acc, CDF, nrow = 1, ncol = 3, rel_heights = c(1, 1, 1))
-  cowplot::plot_grid(C1, L, nrow = 2, ncol = 1, rel_heights = c(9, 1))
+setMethod("plot", signature(x = "DDRep"), function(x,type ="simple") {
+  switch(type,
+         simple = {
+           perc <- cond <- acc <- NULL
+           CAF <- rbindlist(x@REP$CAF)
+           CDF <- rbindlist(x@REP$CDF)
+           CAF_time <- ggplot2::ggplot(CAF, ggplot2::aes(x = perc, y = time, color = cond)) +
+             ggplot2::geom_line() +
+             ggplot2::geom_point() +
+             ggplot2::labs(title = "CAF time", x = "percentile", y = "reaction time [ms]", linetype = "Condition") +
+             ggplot2::theme(legend.position = "bottom")
+           L <- cowplot::get_legend(CAF_time)
+           CAF_time <- CAF_time + ggplot2::theme(legend.position = "none")
+           CAF_acc <- ggplot2::ggplot(CAF, ggplot2::aes(x = perc, y = acc, color = cond)) +
+             ggplot2::geom_line() +
+             ggplot2::geom_point() +
+             ggplot2::labs(title = "CAF acc", x = "percentile", y = "accuracy") +
+             ggplot2::theme(legend.position = "none")
+           CDF <- ggplot2::ggplot(CDF, ggplot2::aes(x = perc, y = time, color = cond)) +
+             ggplot2::geom_line() +
+             ggplot2::geom_point() +
+             ggplot2::labs(title = "CDF time", x = "percentile", y = "reaction time [ms]") +
+             ggplot2::theme(legend.position = "none")
+           C1 <- cowplot::plot_grid(CAF_time, CAF_acc, CDF, nrow = 1, ncol = 3, rel_heights = c(1, 1, 1))
+           cowplot::plot_grid(C1, L, nrow = 2, ncol = 1, rel_heights = c(9, 1))
+         },
+         research = {
+           perc <- cond <- acc <- NULL
+           CAF <- rbindlist(x@REP$CAF)
+           CDF <- rbindlist(x@REP$CDF)
+           CAF_P <- ggplot2::ggplot(CAF, ggplot2::aes(x = time, y = acc, color = cond)) +
+             ggplot2::geom_line() +
+             ggplot2::geom_point() +
+             ggplot2::labs(title = "CAF", x = "reaction time [ms]", y = "accuracy", color = "Condition") +
+             ggplot2::theme(legend.position = "bottom")
+           L <- cowplot::get_legend(CAF_P)
+           CAF_P <- CAF_P + ggplot2::theme(legend.position = "none")
+           CDF_P <- ggplot2::ggplot(CDF, ggplot2::aes(x = perc, y = time, linetype = cond)) +
+             ggplot2::geom_line() +
+             ggplot2::geom_point() +
+             ggplot2::labs(title = "CDF (correct response)", x = "percentile", y = "reaction time [ms]") +
+             ggplot2::theme(legend.position = "none")
+           C1 <- cowplot::plot_grid(CDF_P, CAF_P, nrow = 1, ncol = 2, rel_heights = c(1, 1))
+           cowplot::plot_grid(C1, L, nrow = 2, ncol = 1, rel_heights = c(9, 1))
+         }
+         )
 })
 
 #' @rdname Compare-methods
