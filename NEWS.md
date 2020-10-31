@@ -1,5 +1,5 @@
 # DDModeling 0.0.2.0
-* Added functionality to perform modeling using the classic drift diffusion model (see [here](https://doi.org/10.1037/0033-295X.85.2.59))
+* Added functionality to perform modelling using the classic drift diffusion model (see [here](https://doi.org/10.1037/0033-295X.85.2.59))
   * set 'model="DDM_classic"' in DDModel
 * In addition to the above the lexical decision and repetition memory task were introduced to the package (only for DDM_classic for now)
   * set 'task="RMT_LDT"' in DDModel
@@ -9,12 +9,15 @@
 * Several performance improvements
 
 ## DDModeling 0.0.1.4
-* Several performace improvements (especially to GRID_Import)
+* Several performance improvements (especially to GRID_Import)
 * Added ability to tune SIMPLEX parameters in Fit_DDModel (see new argument simplex_coef)
 * Added a Compare generic method to DDRep
 
 ## DDModeling 0.0.1.3
-* Added functionality for fitting with deep learning networks in Fit_DDModel
+* Added multi thread support to several functions!
+  * Defaults to k-1 threads where k is the maximum number of threads available to the system
+* Added functionality for fitting with deep learning methods in Fit_DDModel
+* Added functionality to easily convert GRIDs into datasets suitable for the training of neural networks using deep learning methods
 
 ## DDModeling 0.0.1.2
 * Optimization
