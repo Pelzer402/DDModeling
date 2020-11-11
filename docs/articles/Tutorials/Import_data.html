@@ -110,7 +110,7 @@
 
     
     
-<p>Importing data into DDModeling is done by calling the function <code><a href="../../reference/DDRep.html">DDRep()</a></code> which takes two arguments <strong>model</strong> and <strong>data</strong>. <strong>model</strong> represents a <strong>DDModel</strong> object (see <a href="Model_definition.html">here</a> for a tutorial). <strong>raw</strong> specifies the raw data from a given experiment. For a successful import, <strong>raw</strong> must follow a formatting convention. This convention is examined in the following section.</p>
+<p>Importing data into DDModeling is done by calling the function <code><a href="../../reference/DDRep.html">DDRep()</a></code> which takes two arguments <strong>model</strong> and <strong>raw</strong>. <strong>model</strong> represents a <strong>DDModel</strong> object (see <a href="Model_definition.html">here</a> for a tutorial). <strong>raw</strong> specifies the raw data from a given experiment. For a successful import, <strong>raw</strong> must follow a formatting convention. This convention is examined in the following section.</p>
 <div id="how-to-format-raw-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-to-format-raw-data" class="anchor"></a>How to format RAW data</h1>
@@ -123,8 +123,8 @@
 <li>
 <strong>time</strong> (numeric): Indicates the time (in rounded ms) for a given trial</li>
 </ul>
-<p>The naming convention within the <strong>cond</strong> could be free, but you must ensure that the factor names match the <strong>model</strong> within the <code><a href="../../reference/DDRep.html">DDRep()</a></code> function, which means that the conditions specified in the <strong>model</strong> must match those in your data! <strong>resp</strong> on the other hand follows a uniform coding scheme: The value 0 represents an attempt that led to an error (i.e. wrong answer) and the value 1 represents an attempt that led to a success (i.e. correct answer). The <strong>time</strong> must be given in rounded millisecond format, i.e. only natural numbers are allowed.</p>
-<p>For demonstration purposes, DDModeling comes with a predefined data set <strong>FLANKER_DATA</strong> representing 64 data sets (i.e. subjects) of a flanker task experiment with 320 experiments per condition. If you want to import data into DDModeling, your data should look like this</p>
+<p>The naming convention within the <strong>cond</strong> can be chosen freely, but you must ensure that the factor names match the <strong>model</strong> within the <code><a href="../../reference/DDRep.html">DDRep()</a></code> function, which means that the conditions specified in the <strong>model</strong> must match those in your data! <strong>resp</strong> on the other hand follows a uniform coding scheme: The value 0 represents a trial that led to an error (i.e. wrong answer) and the value 1 represents a trial that led to a success (i.e. correct answer). The <strong>time</strong> must be given in rounded millisecond (only natural numbers are allowed).</p>
+<p>For demonstration purposes, DDModeling comes with a predefined dataset <strong>FLANKER_DATA</strong> representing 64 datasets (i.e. subjects) of a flanker task experiment with 320 trials per condition. If you want to import data into DDModeling, your data should look like this</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Pelzer402/DDModeling">DDModeling</a></span><span class="op">)</span>
 <span class="co">#&gt; Lade nötiges Paket: data.table</span>
@@ -140,7 +140,7 @@
 <div id="how-to-import-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-to-import-data" class="anchor"></a>How to import data</h1>
-<p>After you formated your data according to the above conventions and constructed an according <strong>DDModel</strong> importing it is rather simple.</p>
+<p>After you formatted your data according to the above conventions and constructed an according <strong>DDModel</strong> importing it is rather simple.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="va">DSTP</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/DDModel.html">DDModel</a></span><span class="op">(</span>model<span class="op">=</span><span class="st">"DSTP"</span>,task <span class="op">=</span> <span class="st">"flanker"</span>,CDF_perc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.9</span><span class="op">)</span>, CAF_perc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.0</span>,<span class="fl">0.2</span>,<span class="fl">0.4</span>,<span class="fl">0.6</span>,<span class="fl">0.8</span>,<span class="fl">1.0</span><span class="op">)</span><span class="op">)</span>
 <span class="va">Subj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/DDRep.html">DDRep</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">DSTP</span>,raw <span class="op">=</span> <span class="va">FLANKER_DATA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></pre></div>

@@ -182,14 +182,14 @@
 Depending on the input the return value will be either a <code>DDRep</code>, <code>list</code> or <code>list</code> of <code>lists</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># Define a Model</span>
+    <pre class="examples"><div class='input'><span class='co'># Define a Model</span>
 <span class='va'>M1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='DDModel.html'>DDModel</a></span><span class='op'>(</span>model<span class='op'>=</span><span class='st'>"DSTP"</span>,task <span class='op'>=</span> <span class='st'>"flanker"</span>,
           CDF_perc <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>,<span class='fl'>0.3</span>,<span class='fl'>0.5</span>,<span class='fl'>0.7</span>,<span class='fl'>0.9</span><span class='op'>)</span>,CAF_perc <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.0</span>,<span class='fl'>0.2</span>,<span class='fl'>0.4</span>,<span class='fl'>0.6</span>,<span class='fl'>0.8</span>,<span class='fl'>1.0</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># Simulate some Data with randomly generated parameters in the domain of M1</span>
 <span class='va'>R1</span> <span class='op'>&lt;-</span> <span class='fu'>Sim_DDModel</span><span class='op'>(</span><span class='va'>M1</span>,<span class='fl'>10000L</span><span class='op'>)</span>
 <span class='co'># If you want to reuse the randomly drawn parameters (or any other) simply insert them</span>
 <span class='va'>R2</span> <span class='op'>&lt;-</span> <span class='fu'>Sim_DDModel</span><span class='op'>(</span><span class='va'>M1</span>,<span class='fl'>10000L</span>,parameter <span class='op'>=</span> <span class='va'>R1</span><span class='op'>@</span><span class='va'>PAR</span><span class='op'>)</span>
-</pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

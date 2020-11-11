@@ -113,7 +113,7 @@
 <div id="setup" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setup" class="anchor"></a>Setup</h1>
-<p>In order to fit something with DDModeling , you need at least your model definition in the form of a <strong>DDModel</strong> object (see <a href="Model_definition.html">here</a> for a tutorial) and some data in the form of a <strong>DDRep</strong> object (see <a href="Import_data.html">here</a> for a tutorial on data import or <a href="Model_simulation.html">here</a> for one on data simulation). This allows you to perform a rather simple SIMPLEX downhill optimization. However, DDModeling allows you to use a wide range of additional features! In the following, most of them are presented, starting with the least complex ones and ending with deep learning-based adaptation.</p>
+<p>In order to fit something with DDModeling, you need at least your model definition in the form of a <strong>DDModel</strong> object (see <a href="Model_definition.html">here</a> for a tutorial) and some data in the form of a <strong>DDRep</strong> object (see <a href="Import_data.html">here</a> for a tutorial on data import or <a href="Model_simulation.html">here</a> for one on data simulation). This allows you to perform a rather simple SIMPLEX downhill optimization. However, DDModeling allows you to use a wide range of additional features! In the following, most of them are presented, starting with the least complex ones and ending with deep learning-based procedures</p>
 <p>All of the following examples use the same <strong>DDModel</strong> and <strong>DDRep</strong>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Pelzer402/DDModeling">DDModeling</a></span><span class="op">)</span>
@@ -124,8 +124,8 @@
 <div id="random-simplex" class="section level1">
 <h1 class="hasAnchor">
 <a href="#random-simplex" class="anchor"></a>Random SIMPLEX</h1>
-<p>Let’s start with a random SIMPLEX routine! A SIMPLEX routine is a quite common and established downhill algorithm. The adjective Random indicates that the algorithm is initialized randomly (i.e. its starting values).</p>
-<p>All following examples use the <code><a href="../../reference/Fit_DDModel.html">Fit_DDModel()</a></code> function, which you will see in the course of this tutorial is a heavily overloaded and flexible function! For the task at hand it needs only five arguments: <strong>model</strong>, <strong>data</strong>, <strong>s_sampling</strong>, <strong>trials</strong> and <strong>simplex_struc</strong>. While the first two arguments should be intuitive and refer to the <strong>DDModel</strong> or the data to be adapted, the last three need further explanation. <strong>s_sampling</strong> makes a logical specification of whether to use super-sampling during the fitting. Existing research will choose <code>s_sampling = FALSE</code> in most, if not all cases, but I have found (in as yet unpublished research) that it may prove beneficial! With <code>s_sampling = FALSE</code> SIMPLEX simulates with the given number of <strong>trials</strong> for each calculation. If you choose <code>s_sampling = TRUE</code>, the function determines the number of trials per condition in your data (let’s call it t_data) and instructs SIMPLEX to simulate <strong>trials</strong>/t_data times with t_data. The best resulting fit of these samples is used for the downhill algorithm. You will probably have noticed that depending on <strong>s_sampling</strong> the function of <strong>trials</strong> changes, but the general computational effort of experiments remains constant. Finally, <strong>simplex_struc</strong> takes a numerical vector as argument, which represents a structure of successive SIMPLEXes. For example, <code>simplex_struc = c(1L)</code> will initialize one SIMPLEX, <code>simplex_struc = c(2L)</code> two and so on. <code>simplex_struc = c(10L,1L)</code> will initialize 10 SIMPLEXes and then one more with the best parameters resulting from the 10 before. In the same way <code>simplex_struc = c(10L,2L)</code> initializes two more SIMPLEXes with the two best results of the 10 before. Note that you may only use natural numbers in descending order! For example, <code>simplex_struc = c(1L,10L)</code> leads to an error, because there are no 10 results which the second iteration may refer to.</p>
+<p>Let us start with a random SIMPLEX routine! A SIMPLEX routine is a quite common and established downhill algorithm. The adjective Random indicates that the algorithm is initialized randomly (i.e. its starting values).</p>
+<p>All following examples use the <code><a href="../../reference/Fit_DDModel.html">Fit_DDModel()</a></code> function, which you will see in the course of this tutorial is a heavily overloaded and flexible function! For the task at hand it needs only five arguments: <strong>model</strong>, <strong>data</strong>, <strong>s_sampling</strong>, <strong>trials</strong> and <strong>simplex_struc</strong>. While the first two arguments should be intuitive and refer to the <strong>DDModel</strong> or the data to be fit, the last three need further explanation. <strong>s_sampling</strong> is a logical specification of whether to use super-sampling during the fitting. Existing research will choose <code>s_sampling = FALSE</code> in most, if not all cases, but I have found (in as yet unpublished research) that it may proof beneficial! With <code>s_sampling = FALSE</code> SIMPLEX simulates with the given number of <strong>trials</strong> for each calculation. If you choose <code>s_sampling = TRUE</code>, the function determines the number of trials per condition in your data (let’s call it t_data) and instructs SIMPLEX to simulate <strong>trials</strong>/t_data times with t_data. The best resulting fit of these samples is used for the downhill algorithm. You will probably have noticed that depending on <strong>s_sampling</strong> the function of <strong>trials</strong> changes, but the general computational cost of experiments remains constant. Finally, <strong>simplex_struc</strong> takes a numerical vector as argument, which represents a structure of successive SIMPLEXes. For example, <code>simplex_struc = c(1L)</code> will initialize one SIMPLEX, <code>simplex_struc = c(2L)</code> two and so on. <code>simplex_struc = c(10L,1L)</code> will initialize 10 SIMPLEXes and then one more with the best parameters resulting from the 10 before. In the same way <code>simplex_struc = c(10L,2L)</code> initializes two more SIMPLEXes with the two best results of the 10 before. Note that you may only use natural numbers in descending order! For example, <code>simplex_struc = c(1L,10L)</code> leads to an error, because there are no 10 results which the second iteration may refer to.</p>
 <p>With all this said and done, let us fit some!</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="va">Fit_rand_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/Fit_DDModel.html">Fit_DDModel</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">DSTP</span>, data <span class="op">=</span> <span class="va">DATA</span>, s_sampling <span class="op">=</span> <span class="cn">FALSE</span>, trials <span class="op">=</span> <span class="fl">2000L</span>, simplex_struc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span><span class="op">)</span>
@@ -136,41 +136,41 @@
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="../../reference/summary,DDFit-method.html">summary</a></span><span class="op">(</span><span class="va">Fit_rand_1</span><span class="op">)</span>
 <span class="co">#&gt; $INPUT_Par</span>
-<span class="co">#&gt;         Ter         a         c      mu_t      mu_f    mu_RS2     mu_SS</span>
-<span class="co">#&gt; 1 0.4242641 0.3480561 0.2003661 0.1497606 0.1814789 0.5145595 0.5873838</span>
+<span class="co">#&gt;         Ter         a         c      mu_t      mu_f    mu_RS2   mu_SS</span>
+<span class="co">#&gt; 1 0.2336057 0.2065998 0.2886497 0.1042351 0.2252235 0.4136228 0.63632</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $FIT_Par</span>
-<span class="co">#&gt;         Ter         a         c      mu_t      mu_f mu_RS2     mu_SS</span>
-<span class="co">#&gt; 1 0.3944843 0.3278884 0.3374542 0.0698164 0.1080059   0.55 0.7627485</span>
+<span class="co">#&gt;         Ter         a         c      mu_t     mu_f    mu_RS2     mu_SS</span>
+<span class="co">#&gt; 1 0.2650207 0.1576541 0.2848453 0.1279097 0.157591 0.2957905 0.5630794</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Eta</span>
-<span class="co">#&gt;          Ter          a         c     mu_t     mu_f    mu_RS2     mu_SS</span>
-<span class="co">#&gt; 1 0.09926594 0.08403182 0.5712004 0.799442 0.367365 0.1181351 0.2192058</span>
+<span class="co">#&gt;         Ter         a          c      mu_t      mu_f    mu_RS2      mu_SS</span>
+<span class="co">#&gt; 1 0.1047168 0.2039401 0.01585164 0.2367468 0.3381628 0.3927742 0.09155082</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $mean_Eta</span>
-<span class="co">#&gt; [1] 0.3226637</span>
+<span class="co">#&gt; [1] 0.1976776</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Fit</span>
-<span class="co">#&gt; [1] 0.01019478</span>
+<span class="co">#&gt; [1] 0.04991885</span>
 <span class="fu"><a href="../../reference/plot,DDRep,ANY-method.html">plot</a></span><span class="op">(</span><span class="va">Fit_rand_1</span><span class="op">)</span>
-<span class="co">#&gt; Fit: 0.01019478</span></pre></div>
+<span class="co">#&gt; Fit: 0.04991885</span></pre></div>
 <p><img src="Fitting_models_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 
 <span class="va">Fit_rand_1</span><span class="op">@</span><span class="va">FIT</span><span class="op">@</span><span class="va">FIT_V</span>
-<span class="co">#&gt; [1] 0.01019478</span>
+<span class="co">#&gt; [1] 0.04991885</span>
 <span class="va">Fit_rand_2</span><span class="op">@</span><span class="va">FIT</span><span class="op">@</span><span class="va">FIT_V</span>
-<span class="co">#&gt; [1] 0.01245212</span>
+<span class="co">#&gt; [1] 0.007508278</span>
 <span class="va">Fit_rand_3</span><span class="op">@</span><span class="va">FIT</span><span class="op">@</span><span class="va">FIT_V</span>
-<span class="co">#&gt; [1] 0.001489637</span>
+<span class="co">#&gt; [1] 0.009350927</span>
 <span class="va">Fit_rand_4</span><span class="op">@</span><span class="va">FIT</span><span class="op">@</span><span class="va">FIT_V</span>
-<span class="co">#&gt; [1] 0.008842603</span></pre></div>
-<p>Note how the fit gets better the more sophisticated the SIMPLEX structure gets! However DDModeling does not stop here, let us take a look at more complex solutions for the starting values!</p>
+<span class="co">#&gt; [1] 0.006638774</span></pre></div>
+<p>Note how the fit gets better the more sophisticated the SIMPLEX structure gets! However DDModeling does not stop here, let us take a look at more complex solutions!</p>
 </div>
 <div id="grid-simplex" class="section level1">
 <h1 class="hasAnchor">
 <a href="#grid-simplex" class="anchor"></a>GRID SIMPLEX</h1>
-<p>The GRID SIMPLEX is analogue to the Random SIMPLEX only that the SIMPLEX will be initialized based upon a allready calculated GRID (see <a href="Generate_GRIDs.html">here</a> for a tutorial). The GRID simply needs to be specified under the <strong>grid_path</strong> argument.</p>
+<p>The GRID SIMPLEX is analogue to the Random SIMPLEX only that the SIMPLEX will be initialized based upon a already calculated GRID (see <a href="Generate_GRIDs.html">here</a> for a tutorial). The GRID simply needs to be specified under the <strong>grid_path</strong> argument.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">Grid_DSTP</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/Generate_GRID.html">Generate_GRID</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">DSTP</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html">getwd</a></span><span class="op">(</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"DSTP_Flanker"</span>, eval_pts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">DSTP</span><span class="op">@</span><span class="va">DM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">Fit_grid_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/Fit_DDModel.html">Fit_DDModel</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">DSTP</span>, data <span class="op">=</span> <span class="va">DATA</span>, grid_path <span class="op">=</span> <span class="va">Grid_DSTP</span>, s_sampling <span class="op">=</span> <span class="cn">FALSE</span>, trials <span class="op">=</span> <span class="fl">2000L</span>, simplex_struc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span><span class="op">)</span>
@@ -181,7 +181,7 @@
 <div id="grid-search" class="section level1">
 <h1 class="hasAnchor">
 <a href="#grid-search" class="anchor"></a>GRID Search</h1>
-<p>Of course you do not need to use an additionl SIMPLEX after the GRID search! Simply set <code>simplex_struc = c(0)</code>!</p>
+<p>Of course you do not need to use an additional SIMPLEX after the GRID search! Simply set <code>simplex_struc = c(0)</code> to only use the GRID in itself as a fitting procedure!</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="va">Fit_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/Fit_DDModel.html">Fit_DDModel</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">DSTP</span>, data <span class="op">=</span> <span class="va">DATA</span>, grid_path <span class="op">=</span> <span class="va">Grid_DSTP</span>, s_sampling <span class="op">=</span> <span class="cn">FALSE</span>, trials <span class="op">=</span> <span class="fl">2000L</span>, simplex_struc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0L</span><span class="op">)</span><span class="op">)</span></pre></div>
 </div>

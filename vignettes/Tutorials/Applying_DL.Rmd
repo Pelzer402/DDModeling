@@ -10,7 +10,7 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-One, if not the central problem in fitting drift-diffusion models is given by their random nature, namely their diffusion. Thus, no functional relation between the domain (i.e. the model parameters) and the codomain (i.e. the data) can be established. However, this does not inherently predict that there is no pattern in the connection between the two. One way to address such problems is through deep learning. However, such an endeavor would require a lot of data. Fortunately, DDModeling has got you covered!
+One, if not the central, problem in fitting drift-diffusion models is given by their random nature, namely their diffusion. Thus, no functional relation between the domain (i.e. the model parameters) and the codomain (i.e. the data/representation) can be established. However, this does not inherently predict that there is no pattern in the connection between the two. One way to address such problems is through deep learning. However, such an endeavour would require a lot of data. Fortunately, DDModeling has got you covered!
 
 You can easily convert GRIDs into learning data (see [here](Generate_GRIDs.html) for a tutorial on GRID generation).
 
@@ -25,13 +25,13 @@ The function `Import_GRID()` needs two arguments **grid path** and **to**. The f
 
 DDModeling uses Tensorflow and Keras for deep learning, so make sure you install them before!
 
-With the data setup you can quickly create a model!
+With the data setup correctly you can quickly create a model!
 
 ```{r eval=FALSE}
-# General note: You should allways scale INPUT and OUTPUT!
+# General note: You should always scale INPUT and OUTPUT!
 DATA$INPUT <- scale(DATA$INPUT)
 DATA$OUTPUT <- scale(DATA$OUPUT)
-# DDModeling give you a handy function to extracted the scaling information!
+# DDModeling gives you a handy function to extracted the scaling information!
 DATA_scale <- Scale_DL_Data(data = DATA)
 
 library(keras)
@@ -63,5 +63,5 @@ model %>% fit(
 )
 ```
 
-You can either use this in your own code in any way you like or further integrate it for customization with DDModeling!
+You can either use this in your own code in any way you like or further integrate it with DDModeling!
 

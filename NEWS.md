@@ -20,7 +20,7 @@
 * Added functionality to easily convert GRIDs into datasets suitable for the training of neural networks using deep learning methods
 
 ## DDModeling 0.0.1.2
-* Optimization
+* Optimizations
 * Added reference methods to DDFit objects:
   * plot: plots CAF and CDF distributions for a given DDFit object
   * summary: displays eta values (see [here](https://doi.org/10.3758/s13428-020-01366-8)) and booth input and fitted parameters
@@ -29,11 +29,10 @@
 
 ## DDModeling 0.0.1.1
 * Minor restructuring of some classes in order to increase efficiency
-* Added a parameter slot to the DDRep-class
 * Added information to several documentations
 * Added functionality to the Sim_DDModel function:
   * ability to calculate multiple simulations
-  * ability to initialize a simulation with manually choosen parameters
+  * ability to initialize a simulation with manually chosen parameters
 
 # DDModeling 0.0.1.0  
 First package setup, including:

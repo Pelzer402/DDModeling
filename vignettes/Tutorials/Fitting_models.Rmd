@@ -12,7 +12,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 # Setup
 
-In order to fit something with DDModeling , you need at least your model definition in the form of a **DDModel** object (see [here](Model_definition.html) for a tutorial) and some data in the form of a **DDRep** object (see [here](Import_data.html) for a tutorial on data import or [here](Model_simulation.html) for one on data simulation). This allows you to perform a rather simple SIMPLEX downhill optimization. However, DDModeling allows you to use a wide range of additional features! In the following, most of them are presented, starting with the least complex ones and ending with deep learning-based adaptation.
+In order to fit something with DDModeling, you need at least your model definition in the form of a **DDModel** object (see [here](Model_definition.html) for a tutorial) and some data in the form of a **DDRep** object (see [here](Import_data.html) for a tutorial on data import or [here](Model_simulation.html) for one on data simulation). This allows you to perform a rather simple SIMPLEX downhill optimization. However, DDModeling allows you to use a wide range of additional features! In the following, most of them are presented, starting with the least complex ones and ending with deep learning-based procedures
 
 All of the following examples use the same **DDModel** and **DDRep**:
 
@@ -24,9 +24,9 @@ DATA <- Sim_DDModel(model = DSTP, trials = 2000L, simulations = 1L)
 
 # Random SIMPLEX
 
-Let's start with a random SIMPLEX routine! A SIMPLEX routine is a quite common and established downhill algorithm. The adjective Random indicates that the algorithm is initialized randomly (i.e. its starting values). 
+Let us start with a random SIMPLEX routine! A SIMPLEX routine is a quite common and established downhill algorithm. The adjective Random indicates that the algorithm is initialized randomly (i.e. its starting values). 
 
-All following examples use the `Fit_DDModel()` function, which you will see in the course of this tutorial is a heavily overloaded and flexible function! For the task at hand it needs only five arguments: **model**, **data**, **s_sampling**, **trials** and **simplex_struc**. While the first two arguments should be intuitive and refer to the **DDModel** or the data to be adapted, the last three need further explanation. **s_sampling** makes a logical specification of whether to use super-sampling during the fitting. Existing research will choose `s_sampling = FALSE` in most, if not all cases, but I have found (in as yet unpublished research) that it may prove beneficial! With `s_sampling = FALSE` SIMPLEX simulates with the given number of **trials** for each calculation. If you choose `s_sampling = TRUE`, the function determines the number of trials per condition in your data (let's call it t_data) and instructs SIMPLEX to simulate **trials**/t_data times with t_data. The best resulting fit of these samples is used for the downhill algorithm. You will probably have noticed that depending on **s_sampling** the function of **trials** changes, but the general computational effort of experiments remains constant. Finally, **simplex_struc** takes a numerical vector as argument, which represents a structure of successive SIMPLEXes. For example, `simplex_struc = c(1L)` will initialize one SIMPLEX, `simplex_struc = c(2L)` two and so on. `simplex_struc = c(10L,1L)` will initialize 10 SIMPLEXes and then one more with the best parameters resulting from the 10 before. In the same way `simplex_struc = c(10L,2L)` initializes two more SIMPLEXes with the two best results of the 10 before. Note that you may only use natural numbers in descending order! For example, `simplex_struc = c(1L,10L)` leads to an error, because there are no 10 results which the second iteration may refer to.
+All following examples use the `Fit_DDModel()` function, which you will see in the course of this tutorial is a heavily overloaded and flexible function! For the task at hand it needs only five arguments: **model**, **data**, **s_sampling**, **trials** and **simplex_struc**. While the first two arguments should be intuitive and refer to the **DDModel** or the data to be fit, the last three need further explanation. **s_sampling** is a logical specification of whether to use super-sampling during the fitting. Existing research will choose `s_sampling = FALSE` in most, if not all cases, but I have found (in as yet unpublished research) that it may proof beneficial! With `s_sampling = FALSE` SIMPLEX simulates with the given number of **trials** for each calculation. If you choose `s_sampling = TRUE`, the function determines the number of trials per condition in your data (let's call it t_data) and instructs SIMPLEX to simulate **trials**/t_data times with t_data. The best resulting fit of these samples is used for the downhill algorithm. You will probably have noticed that depending on **s_sampling** the function of **trials** changes, but the general computational cost of experiments remains constant. Finally, **simplex_struc** takes a numerical vector as argument, which represents a structure of successive SIMPLEXes. For example, `simplex_struc = c(1L)` will initialize one SIMPLEX, `simplex_struc = c(2L)` two and so on. `simplex_struc = c(10L,1L)` will initialize 10 SIMPLEXes and then one more with the best parameters resulting from the 10 before. In the same way `simplex_struc = c(10L,2L)` initializes two more SIMPLEXes with the two best results of the 10 before. Note that you may only use natural numbers in descending order! For example, `simplex_struc = c(1L,10L)` leads to an error, because there are no 10 results which the second iteration may refer to.
 
 With all this said and done, let us fit some!
 
@@ -49,11 +49,11 @@ Fit_rand_3@FIT@FIT_V
 Fit_rand_4@FIT@FIT_V
 ```
 
-Note how the fit gets better the more sophisticated the SIMPLEX structure gets! However DDModeling does not stop here, let us take a look at more complex solutions for the starting values!
+Note how the fit gets better the more sophisticated the SIMPLEX structure gets! However DDModeling does not stop here, let us take a look at more complex solutions!
 
 # GRID SIMPLEX
 
-The GRID SIMPLEX is analogue to the Random SIMPLEX only that the SIMPLEX will be initialized based upon a allready calculated GRID (see [here](Generate_GRIDs.html) for a tutorial). The GRID simply needs to be specified under the **grid_path** argument.
+The GRID SIMPLEX is analogue to the Random SIMPLEX only that the SIMPLEX will be initialized based upon a already calculated GRID (see [here](Generate_GRIDs.html) for a tutorial). The GRID simply needs to be specified under the **grid_path** argument.
 
 ```{r eval=FALSE}
 Grid_DSTP <- Generate_GRID(model = DSTP, path = getwd(), name = "DSTP_Flanker", eval_pts = rep(2,ncol(DSTP@DM)))
@@ -65,7 +65,7 @@ Fit_grid_4 <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sa
 
 # GRID Search
 
-Of course you do not need to use an additionl SIMPLEX after the GRID search! Simply set `simplex_struc = c(0)`!
+Of course you do not need to use an additional SIMPLEX after the GRID search! Simply set `simplex_struc = c(0)` to only use the GRID in itself as a fitting procedure!
 
 ```{r eval=FALSE}
 Fit_grid <- Fit_DDModel(model = DSTP, data = DATA, grid_path = Grid_DSTP, s_sampling = FALSE, trials = 2000L, simplex_struc = c(0L))
